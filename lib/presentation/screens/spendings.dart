@@ -1,7 +1,10 @@
+import 'package:coinwatcher/constants/themes.dart';
 import 'package:flutter/material.dart';
 
 class Spendings extends StatefulWidget {
-  const Spendings({super.key});
+  Spendings({super.key, required this.lightMode});
+
+  LightMode lightMode;
 
   @override
   State<Spendings> createState() => _SpendingsState();
@@ -10,6 +13,9 @@ class Spendings extends StatefulWidget {
 class _SpendingsState extends State<Spendings> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      backgroundColor: widget.lightMode.mainBackground,
+      body: Container(),
+    );
   }
 }

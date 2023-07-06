@@ -1,7 +1,10 @@
+import 'package:coinwatcher/constants/themes.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  Dashboard({super.key, required this.theme});
+
+  LightMode theme;
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -10,6 +13,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(backgroundColor: widget.theme.mainBackground);
   }
 }
