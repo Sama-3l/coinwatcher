@@ -1,16 +1,18 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:coinwatcher/presentation/screens/dashboard.dart';
+import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/presentation/screens/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
-  // This widget is the root of your application.
+  LightMode theme = LightMode();
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Dashboard()
+      home: Home(theme: theme)
     );
   }
 }
