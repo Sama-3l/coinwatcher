@@ -1,4 +1,5 @@
 import 'package:coinwatcher/alogrithms/method.dart';
+import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class ExpenseBox extends StatefulWidget {
 
 class _ExpenseBoxState extends State<ExpenseBox> {
   Methods func = Methods();
+  WidgetDecider wd = WidgetDecider();
 
   @override
   Widget build(BuildContext context) {
@@ -86,14 +88,9 @@ class _ExpenseBoxState extends State<ExpenseBox> {
             ),
             Expanded(
                 child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(widget.currentExpense.amount.toString(),
-                  style: widget.font.getPoppinsTextStyle(
-                      color: widget.theme.textSecondary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -0.41)),
-            ))
+                    alignment: Alignment.centerRight,
+                    child: wd.showAmount(
+                        widget.currentExpense, widget.font, widget.theme)))
           ]),
         ),
       ),

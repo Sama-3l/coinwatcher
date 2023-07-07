@@ -10,4 +10,8 @@ class Methods {
         ? DateFormat('MMMM, yyyy').format(date)
         : DateFormat('MMMM d').format(date);
   }
+
+  String decimalPart(double amount){
+    return ".${(amount.ceilToDouble() - amount).toInt().toString().padLeft(2, '0')}";
+  }
 }

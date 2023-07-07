@@ -3,6 +3,7 @@
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/expenseBox.dart';
@@ -27,9 +28,9 @@ class WidgetDecider {
           ));
 
           columnChildren.add(Padding(
-            padding: const EdgeInsets.only(left: 8, top: 12, bottom: 12),
+            padding: const EdgeInsets.only(left: 8, bottom: 12),
             child: Text(
-              func.getMonthandYear(date: recentExpenses.recentExpenses[0].date, commaReq: false),
+              func.getMonthandYear(date: recentExpenses.recentExpenses[0].date),
               style: font.getPoppinsTextStyle(
                   color: theme.textSecondary,
                   fontSize: 18,
@@ -44,6 +45,22 @@ class WidgetDecider {
             theme: theme,
             font: font));
       } else {
+        if (i != 0) {
+          if (allExpenses.allExpenses[i - 1].date.month !=
+              allExpenses.allExpenses[i].date.month) {
+            columnChildren.add(Padding(
+              padding: const EdgeInsets.only(left: 8, top: 0, bottom: 12),
+              child: Text(
+                func.getMonthandYear(date: allExpenses.allExpenses[i].date),
+                style: font.getPoppinsTextStyle(
+                    color: theme.textSecondary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1),
+              ),
+            ));
+          }
+        }
         columnChildren.add(ExpenseBox(
             currentExpense: allExpenses.allExpenses[i],
             theme: theme,
@@ -52,5 +69,38 @@ class WidgetDecider {
     }
 
     return columnChildren;
+  }
+
+  Widget showAmount(Expense expense, FontFamily font, LightMode theme) {
+    Methods func = Methods();
+    return Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            '\u20B9',
+            style: font.getPoppinsTextStyle(
+                color: theme.textSecondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1),
+          ),
+          Text(
+            expense.amount.ceil().toString(),
+            style: font.getPoppinsTextStyle(
+                color: theme.textPrimary,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.41),
+          ),
+          Text(
+            func.decimalPart(expense.amount),
+            style: font.getPoppinsTextStyle(
+                color: theme.textSecondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.41),
+          ),
+        ]);
   }
 }

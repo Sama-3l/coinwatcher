@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../widgets/bottomNavBar.dart';
+import '../widgets/fab.dart';
 import 'dashboard.dart';
 
 class Home extends StatefulWidget {
@@ -32,6 +33,7 @@ class _HomeState extends State<Home> {
             extendBody: true,
             body: BottomNavBarTabs(theme: theme, font: font),
             bottomNavigationBar: BottomNavBar(theme: theme, font: font),
+            floatingActionButton: Fab(font: font, theme: theme),
           )),
     );
   }

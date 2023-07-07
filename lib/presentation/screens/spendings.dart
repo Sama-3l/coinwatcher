@@ -24,23 +24,17 @@ class _SpendingsState extends State<Spendings> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: widget.theme.mainBackground,
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.only(top: 50, left: 21, right: 21),
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: wd.getSpendingsWidgets(
-                allExpenses, recentExpenses, widget.theme, widget.font)),
-      )),
-      // body: ListView.builder(
-      //     itemCount: allExpenses.allExpenses.length,
-      //     itemBuilder: (context, index) {
-      //       Column(
-      //         children: [Container(color: Colors.black, height: 20, width: 50,)],
-      //       );
-      //       // wd.getSpendingsWidgets(
-      //       //     allExpenses, recentExpenses, index, widget.theme, widget.font);
-      //     }),
+      body: SafeArea(
+        child: SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.only(top: 30, left: 21, right: 21),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: wd.getSpendingsWidgets(
+                  allExpenses, recentExpenses, widget.theme, widget.font)),
+        )),
+      ),
     );
   }
 }
