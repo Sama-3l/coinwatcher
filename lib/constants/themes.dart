@@ -10,6 +10,7 @@ class LightMode{
   final Color borderColor = Color(0xff000000);
   final Color inactiveNavBarButton = Color(0xffa9a9a9);
   final Color activeNavBarButton = Color(0xffffffff);
+  final Color iconBackground = Color(0xffd9d9d9);
 
   final Color foodNDrinks = Color(0xffA6D8A9);
   final Color hnF = Color(0xff94B8FA);
