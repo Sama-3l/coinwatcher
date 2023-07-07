@@ -1,10 +1,12 @@
+import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:flutter/material.dart';
 
 class Spendings extends StatefulWidget {
-  Spendings({super.key, required this.theme});
+  Spendings({super.key, required this.theme, required this.font});
 
   LightMode theme;
+  FontFamily font;
 
   @override
   State<Spendings> createState() => _SpendingsState();

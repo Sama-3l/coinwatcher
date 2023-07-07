@@ -76,9 +76,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
 }
 
 class BottomNavBarTabs extends StatefulWidget {
-  BottomNavBarTabs({super.key, required this.theme});
+  BottomNavBarTabs({super.key, required this.theme, required this.font});
 
   LightMode theme;
+  FontFamily font;
 
   @override
   State<BottomNavBarTabs> createState() => _BottomNavBarTabsState();
@@ -88,9 +89,9 @@ class _BottomNavBarTabsState extends State<BottomNavBarTabs> {
   @override
   Widget build(BuildContext context) {
     return TabBarView(children: [
-      Dashboard(theme: widget.theme),
-      Spendings(theme: widget.theme),
-      Analytics(theme: widget.theme)
+      Dashboard(theme: widget.theme, font: widget.font),
+      Spendings(theme: widget.theme, font: widget.font),
+      Analytics(theme: widget.theme, font: widget.font)
     ]);
   }
 }

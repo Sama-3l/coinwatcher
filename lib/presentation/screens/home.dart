@@ -1,4 +1,3 @@
-
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/presentation/screens/analytics.dart';
@@ -31,7 +30,7 @@ class _HomeState extends State<Home> {
             backgroundColor: theme.mainBackground,
             resizeToAvoidBottomInset: false,
             extendBody: true,
-            body: BottomNavBarTabs(theme: theme),
+            body: BottomNavBarTabs(theme: theme, font: font),
             bottomNavigationBar: BottomNavBar(theme: theme, font: font),
           )),
     );
