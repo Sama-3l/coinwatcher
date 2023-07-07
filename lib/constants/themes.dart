@@ -5,6 +5,7 @@ class LightMode{
   final Color primaryAccent1 = Color(0xffCCDAEC);
   final Color primaryAccent2 = Color(0xff9AB8DE);
   final Color primaryAccent3 = Color(0xff475ABD);
+  final Color primaryAccent4 = Color(0xffA4C1E5);
   final Color textPrimary = Color(0xff313131);
   final Color textSecondary = Color(0xff575757);
   final Color borderColor = Color(0xff000000);
