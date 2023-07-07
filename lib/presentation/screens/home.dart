@@ -1,7 +1,10 @@
+
+import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/presentation/screens/analytics.dart';
 import 'package:coinwatcher/presentation/screens/spendings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../widgets/bottomNavBar.dart';
 import 'dashboard.dart';
@@ -14,8 +17,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   LightMode theme = LightMode();
+  FontFamily font = FontFamily();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class _HomeState extends State<Home> {
             resizeToAvoidBottomInset: false,
             extendBody: true,
             body: BottomNavBarTabs(theme: theme),
-            bottomNavigationBar: BottomNavBar(theme: theme),
+            bottomNavigationBar: BottomNavBar(theme: theme, font: font),
           )),
     );
   }
