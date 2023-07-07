@@ -6,12 +6,13 @@ class FontFamily {
       {required Color color,
       required double fontSize,
       required FontWeight fontWeight,
-      required double letterSpacing}) {
+      required double letterSpacing,
+      double? height}) {
     return GoogleFonts.poppins(
-      color: color,
-      fontSize: fontSize,
-      fontWeight: fontWeight,
-      letterSpacing: letterSpacing
-    );
+        color: color,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        letterSpacing: letterSpacing,
+        height: height);
   }
 }
