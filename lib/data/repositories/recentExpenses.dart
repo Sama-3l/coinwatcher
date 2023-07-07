@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class RecentExpenses{
   List<Expense> recentExpenses = [
-    Expense(expenseName: "My Protein", amount: 1500.00, date: DateTime(2023, 7, 7), category: "Health n Fitness"),
     Expense(expenseName: "HnM", amount: 3000.00, date: DateTime(2023, 7, 8), category: "Clothing"),
+    Expense(expenseName: "My Protein", amount: 1500.00, date: DateTime(2023, 7, 7), category: "Health n Fitness"),
   ];
 }
