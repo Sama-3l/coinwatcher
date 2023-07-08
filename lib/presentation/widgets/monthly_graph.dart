@@ -1,6 +1,6 @@
 import 'package:coinwatcher/data/model/bar_data.dart';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter_new/flutter.dart' as charts;
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class monthlyGraph extends StatelessWidget {
   final List<barDataMonthly> data;
