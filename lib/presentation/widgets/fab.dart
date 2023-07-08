@@ -14,6 +14,6 @@ class Fab extends StatelessWidget {
     return FloatingActionButton(
         onPressed: () {},
         backgroundColor: theme.primaryAccent4,
-        child: Icon(CarbonIcons.add, size: 20, color: theme.textPrimary));
+        child: Icon(CarbonIcons.add, size: 30, color: theme.textPrimary));
   }
 }

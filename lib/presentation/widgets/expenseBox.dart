@@ -69,7 +69,7 @@ class _ExpenseBoxState extends State<ExpenseBox> {
                             height: 4,
                             width: 4,
                             decoration: BoxDecoration(
-                                color: Color(0xff575757),
+                                color: widget.theme.textSecondary,
                                 borderRadius: BorderRadius.circular(4)),
                           ),
                         ),
