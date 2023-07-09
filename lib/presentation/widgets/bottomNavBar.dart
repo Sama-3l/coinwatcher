@@ -9,16 +9,36 @@ import 'package:flutter/material.dart';
 import 'package:carbon_icons/carbon_icons.dart';
 
 class BottomNavBar extends StatefulWidget {
-  BottomNavBar({super.key, required this.theme, required this.font});
+  BottomNavBar(
+      {super.key,
+      required this.theme,
+      required this.font,
+      required this.tabController});
 
   LightMode theme;
   FontFamily font;
+  TabController tabController;
 
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+  int currentIndex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.tabController.addListener(() {
+      if (currentIndex != widget.tabController.index) {
+        setState(() {
+          currentIndex = widget.tabController.index;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -29,6 +49,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25), topRight: Radius.circular(25))),
           child: TabBar(
+              controller: widget.tabController,
               labelColor: widget.theme.activeNavBarButton,
               indicator: BoxDecoration(),
               unselectedLabelColor: widget.theme.inactiveNavBarButton,
@@ -40,7 +61,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     iconMargin: EdgeInsets.only(bottom: 6),
                     child: Text('Home',
                         style: widget.font.getPoppinsTextStyle(
-                            color: widget.theme.textSecondary,
+                            color: currentIndex == 0 ? widget.theme.activeNavBarButton : widget.theme.textSecondary,
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             letterSpacing: 0)),
@@ -53,7 +74,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       iconMargin: EdgeInsets.only(bottom: 6),
                       child: Text('Spendings',
                           style: widget.font.getPoppinsTextStyle(
-                              color: widget.theme.textSecondary,
+                              color: currentIndex == 1 ? widget.theme.activeNavBarButton : widget.theme.textSecondary,
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0))),
@@ -65,7 +86,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       iconMargin: EdgeInsets.only(bottom: 6),
                       child: Text('Analytics',
                           style: widget.font.getPoppinsTextStyle(
-                              color: widget.theme.textSecondary,
+                              color: currentIndex == 2 ? widget.theme.activeNavBarButton : widget.theme.textSecondary,
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0))),
@@ -76,10 +97,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
 }
 
 class BottomNavBarTabs extends StatefulWidget {
-  BottomNavBarTabs({super.key, required this.theme, required this.font});
+  BottomNavBarTabs(
+      {super.key,
+      required this.theme,
+      required this.font,
+      required this.tabController});
 
   LightMode theme;
   FontFamily font;
+  TabController tabController;
 
   @override
   State<BottomNavBarTabs> createState() => _BottomNavBarTabsState();
@@ -88,7 +114,7 @@ class BottomNavBarTabs extends StatefulWidget {
 class _BottomNavBarTabsState extends State<BottomNavBarTabs> {
   @override
   Widget build(BuildContext context) {
-    return TabBarView(children: [
+    return TabBarView(controller: widget.tabController, children: [
       Dashboard(theme: widget.theme, font: widget.font),
       Spendings(theme: widget.theme, font: widget.font),
       Analytics(theme: widget.theme, font: widget.font)
