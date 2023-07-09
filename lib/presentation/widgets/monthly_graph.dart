@@ -2,10 +2,15 @@ import 'package:coinwatcher/data/model/bar_data.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class monthlyGraph extends StatelessWidget {
+class monthlyGraph extends StatefulWidget {
   final List<barDataMonthly> data;
   const monthlyGraph({required this.data});
 
+  @override
+  State<monthlyGraph> createState() => _monthlyGraphState();
+}
+
+class _monthlyGraphState extends State<monthlyGraph> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -13,7 +18,7 @@ class monthlyGraph extends StatelessWidget {
     List<charts.Series<barDataMonthly, String>> series = [
       charts.Series(
           id: "monthly Expenses",
-          data: data,
+          data: widget.data,
           domainFn: (barDataMonthly series, _) => series.month,
           measureFn: (barDataMonthly series, _) => series.spent,
           colorFn: (barDataMonthly series, _) => series.color)

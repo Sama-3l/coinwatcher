@@ -74,18 +74,19 @@ class expenseGraph extends StatefulWidget {
 }
 
 class _expenseGraphState extends State<expenseGraph> {
-  late var _colorMonthly = widget.theme.primaryAccent1;
-  late var _colorDaily = widget.theme.mainBackground;
+  late Color _colorMonthly = widget.theme.primaryAccent1;
+  late Color _colorDaily = widget.theme.mainBackground;
+  int index = 0;
+  late final bgraph = [
+    monthlyGraph(data: widget.monthly),
+    dailyGraph(data: widget.daily),
+  ];
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    final bgraph = [
-      monthlyGraph(data: widget.monthly),
-      dailyGraph(data: widget.daily),
-    ];
-    int index = 0;
+
     return Container(
       height: 0.25 * height,
       width: 0.9 * width,
@@ -107,7 +108,6 @@ class _expenseGraphState extends State<expenseGraph> {
                     _colorMonthly = widget.theme.primaryAccent1;
                     _colorDaily = widget.theme.mainBackground;
                     index = 0;
-                    newprint(index);
                   });
                 },
                 child: Container(
@@ -140,7 +140,6 @@ class _expenseGraphState extends State<expenseGraph> {
                     _colorMonthly = widget.theme.mainBackground;
                     _colorDaily = widget.theme.primaryAccent1;
                     index = 1;
-                    newprint(index);
                   });
                 },
                 child: Container(
@@ -172,8 +171,4 @@ class _expenseGraphState extends State<expenseGraph> {
       ),
     );
   }
-}
-
-void newprint(int i) {
-  print(i);
 }

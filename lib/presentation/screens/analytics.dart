@@ -20,8 +20,8 @@ class _AnalyticsState extends State<Analytics> {
     return Align(
       alignment: Alignment.center,
       child: expenseGraph(
-        theme: LightMode(),
-        font: FontFamily(),
+        theme: widget.theme,
+        font: widget.font,
       ),
     );
   }
