@@ -18,54 +18,54 @@ class expenseGraph extends StatefulWidget {
     barDataMonthly(
       month: "jan",
       spent: 4000,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     ),
     barDataMonthly(
       month: "feb",
       spent: 2000,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     ),
     barDataMonthly(
       month: "march",
       spent: 3500,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     ),
     barDataMonthly(
       month: "apr",
       spent: 3700,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     ),
     barDataMonthly(
       month: "may",
       spent: 4500,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     ),
   ];
   final List<barDataDaily> daily = [
     barDataDaily(
       day: "1",
       spent: 300,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     ),
     barDataDaily(
       day: "2",
       spent: 350,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     ),
     barDataDaily(
       day: "3",
       spent: 200,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     ),
     barDataDaily(
       day: "4",
       spent: 270,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     ),
     barDataDaily(
       day: "5",
       spent: 320,
-      color: charts.ColorUtil.fromDartColor(Color(0xA6D8A9)),
+      color: charts.ColorUtil.fromDartColor(Colors.green),
     )
   ];
 
