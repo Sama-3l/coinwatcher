@@ -19,7 +19,7 @@ class WidgetDecider {
       if (i < recentExpenses.recentExpenses.length) {
         if (i == 0) {
           columnChildren.add(Text(
-            "Recent Spendings",
+            "Recent spendings",
             style: font.getPoppinsTextStyle(
                 color: theme.textPrimary,
                 fontSize: 20,
@@ -102,5 +102,18 @@ class WidgetDecider {
                 letterSpacing: -0.41),
           ),
         ]);
+  }
+
+  List<Widget> getRecentSpendings(
+      RecentExpenses recentExpenses, LightMode theme, FontFamily font) {
+    List<Widget> children = [];
+    for (int i = 0; i < recentExpenses.recentExpenses.length; i++) {
+      children.add(ExpenseBox(
+          currentExpense: recentExpenses.recentExpenses[i],
+          theme: theme,
+          font: font,
+          forDashboard: true));
+    }
+    return children;
   }
 }

@@ -10,11 +10,13 @@ class ExpenseBox extends StatefulWidget {
       {super.key,
       required this.currentExpense,
       required this.theme,
-      required this.font});
+      required this.font,
+      this.forDashboard = false});
 
   Expense currentExpense;
   LightMode theme;
   FontFamily font;
+  bool forDashboard;
 
   @override
   State<ExpenseBox> createState() => _ExpenseBoxState();
@@ -63,25 +65,30 @@ class _ExpenseBoxState extends State<ExpenseBox> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: -0.41)),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: Container(
-                            height: 4,
-                            width: 4,
-                            decoration: BoxDecoration(
-                                color: widget.theme.textSecondary,
-                                borderRadius: BorderRadius.circular(4)),
-                          ),
-                        ),
-                        Text(
-                            func.getMonthandYear(
-                                date: widget.currentExpense.date,
-                                commaReq: false),
-                            style: widget.font.getPoppinsTextStyle(
-                                color: widget.theme.textSecondary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: -0.41)),
+                        widget.forDashboard
+                            ? Container()
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, right: 5),
+                                child: Container(
+                                  height: 4,
+                                  width: 4,
+                                  decoration: BoxDecoration(
+                                      color: widget.theme.textSecondary,
+                                      borderRadius: BorderRadius.circular(4)),
+                                ),
+                              ),
+                        widget.forDashboard
+                            ? Container()
+                            : Text(
+                                func.getMonthandYear(
+                                    date: widget.currentExpense.date,
+                                    commaReq: false),
+                                style: widget.font.getPoppinsTextStyle(
+                                    color: widget.theme.textSecondary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: -0.41)),
                       ],
                     )
                   ]),

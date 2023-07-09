@@ -41,6 +41,7 @@ dependencies:
   bloc: ^8.1.2
   intl: ^0.18.1
   simple_icons: ^7.10.0
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
