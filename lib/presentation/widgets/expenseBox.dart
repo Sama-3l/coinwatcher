@@ -1,4 +1,5 @@
 import 'package:coinwatcher/alogrithms/method.dart';
+import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,13 @@ class ExpenseBox extends StatefulWidget {
       {super.key,
       required this.currentExpense,
       required this.theme,
-      required this.font});
+      required this.font,
+      this.forDashboard = false});
 
   Expense currentExpense;
   LightMode theme;
   FontFamily font;
+  bool forDashboard;
 
   @override
   State<ExpenseBox> createState() => _ExpenseBoxState();
@@ -21,6 +24,7 @@ class ExpenseBox extends StatefulWidget {
 
 class _ExpenseBoxState extends State<ExpenseBox> {
   Methods func = Methods();
+  WidgetDecider wd = WidgetDecider();
 
   @override
   Widget build(BuildContext context) {
@@ -61,39 +65,39 @@ class _ExpenseBoxState extends State<ExpenseBox> {
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: -0.41)),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: Container(
-                            height: 4,
-                            width: 4,
-                            decoration: BoxDecoration(
-                                color: Color(0xff575757),
-                                borderRadius: BorderRadius.circular(4)),
-                          ),
-                        ),
-                        Text(
-                            func.getMonthandYear(
-                                date: widget.currentExpense.date,
-                                commaReq: false),
-                            style: widget.font.getPoppinsTextStyle(
-                                color: widget.theme.textSecondary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: -0.41)),
+                        widget.forDashboard
+                            ? Container()
+                            : Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, right: 5),
+                                child: Container(
+                                  height: 4,
+                                  width: 4,
+                                  decoration: BoxDecoration(
+                                      color: widget.theme.textSecondary,
+                                      borderRadius: BorderRadius.circular(4)),
+                                ),
+                              ),
+                        widget.forDashboard
+                            ? Container()
+                            : Text(
+                                func.getMonthandYear(
+                                    date: widget.currentExpense.date,
+                                    commaReq: false),
+                                style: widget.font.getPoppinsTextStyle(
+                                    color: widget.theme.textSecondary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: -0.41)),
                       ],
                     )
                   ]),
             ),
             Expanded(
                 child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(widget.currentExpense.amount.toString(),
-                  style: widget.font.getPoppinsTextStyle(
-                      color: widget.theme.textSecondary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: -0.41)),
-            ))
+                    alignment: Alignment.centerRight,
+                    child: wd.showAmount(
+                        widget.currentExpense, widget.font, widget.theme)))
           ]),
         ),
       ),

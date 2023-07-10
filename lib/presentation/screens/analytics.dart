@@ -1,6 +1,7 @@
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/presentation/widgets/expense_graph.dart';
+import 'package:coinwatcher/presentation/widgets/piechart.dart';
 
 import 'package:flutter/material.dart';
 
@@ -19,9 +20,18 @@ class _AnalyticsState extends State<Analytics> {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.center,
-      child: expenseGraph(
-        theme: widget.theme,
-        font: widget.font,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          expenseGraph(
+            theme: widget.theme,
+            font: widget.font,
+          ),
+          PieChart(
+            theme: widget.theme,
+            font: widget.font,
+          )
+        ],
       ),
     );
   }
