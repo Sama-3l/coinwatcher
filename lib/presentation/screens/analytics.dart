@@ -23,6 +23,15 @@ class _AnalyticsState extends State<Analytics> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          Text(
+            "Analytics",
+            style: widget.font.getPoppinsTextStyle(
+              color: widget.theme.textPrimary,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0,
+            ),
+          ),
           expenseGraph(
             theme: widget.theme,
             font: widget.font,

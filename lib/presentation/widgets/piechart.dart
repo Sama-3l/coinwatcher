@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class PieChart extends StatefulWidget {
   PieChart({super.key, required this.theme, required this.font});
-  late LightMode theme;
+  LightMode theme;
   FontFamily font;
 
   final List<PieData> data = [
@@ -25,13 +25,23 @@ class _PieChartState extends State<PieChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: SfCircularChart(series: <CircularSeries>[
+      child: SfCircularChart(annotations: [
+        CircularChartAnnotation(
+            widget: Container(
+                child: Text('\u{20B9}${10300}',
+                    style: widget.font.getPoppinsTextStyle(
+                        color: widget.theme.textPrimary,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 0))))
+      ], series: <CircularSeries>[
         // Render pie chart
         DoughnutSeries<PieData, String>(
             dataSource: widget.data,
             pointColorMapper: (PieData data, _) => data.color,
             xValueMapper: (PieData data, _) => data.category,
-            yValueMapper: (PieData data, _) => data.spent)
+            yValueMapper: (PieData data, _) => data.spent,
+            radius: '50%'),
       ]),
     );
   }
