@@ -1,6 +1,7 @@
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/presentation/widgets/expense_graph.dart';
+import 'package:coinwatcher/presentation/widgets/legend.dart';
 import 'package:coinwatcher/presentation/widgets/piechart.dart';
 
 import 'package:flutter/material.dart';
@@ -18,11 +19,15 @@ class Analytics extends StatefulWidget {
 class _AnalyticsState extends State<Analytics> {
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Align(
       alignment: Alignment.center,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          SizedBox(
+            height: 35,
+          ),
           Text(
             "Analytics",
             style: widget.font.getPoppinsTextStyle(
@@ -32,6 +37,9 @@ class _AnalyticsState extends State<Analytics> {
               letterSpacing: 0,
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
           expenseGraph(
             theme: widget.theme,
             font: widget.font,
@@ -39,7 +47,10 @@ class _AnalyticsState extends State<Analytics> {
           PieChart(
             theme: widget.theme,
             font: widget.font,
-          )
+          ),
+
+          // Legend
+          legend(theme: widget.theme, font: widget.font)
         ],
       ),
     );
