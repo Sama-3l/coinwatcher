@@ -2,16 +2,22 @@ import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/spendingsTracker.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({super.key, required this.theme, required this.font});
+  Dashboard(
+      {super.key,
+      required this.theme,
+      required this.font,
+      required this.currentUser});
 
   LightMode theme;
   FontFamily font;
+  User currentUser;
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -47,7 +53,10 @@ class _DashboardState extends State<Dashboard> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 25),
                     child: SpendingsTracker(
-                        theme: widget.theme, font: widget.font),
+                      theme: widget.theme,
+                      font: widget.font,
+                      currentUser: widget.currentUser,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
@@ -76,7 +85,9 @@ class _DashboardState extends State<Dashboard> {
                   Column(
                       mainAxisSize: MainAxisSize.min,
                       children: wd.getRecentSpendings(
-                          RecentExpenses(), widget.theme, widget.font))
+                          widget.currentUser.recentExpenses,
+                          widget.theme,
+                          widget.font))
                 ]),
           ),
         ),

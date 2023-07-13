@@ -44,4 +44,12 @@ class AllExpenses {
         date: DateTime(2023, 6, 20),
         category: "Food"),
   ];
+
+  Map<String, dynamic> toJSON(){
+    Map<String, dynamic> map = {};
+    for(int i = 0; i < allExpenses.length; i++){
+      map['expense$i'] = allExpenses[i].toJSON();
+    }
+    return map;
+  }
 }

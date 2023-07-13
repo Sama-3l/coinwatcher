@@ -1,23 +1,23 @@
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:flutter/material.dart';
 
 class Spendings extends StatefulWidget {
-  Spendings({super.key, required this.theme, required this.font});
+  Spendings({super.key, required this.theme, required this.font, required this.currentUser});
 
   LightMode theme;
   FontFamily font;
+  User currentUser;
 
   @override
   State<Spendings> createState() => _SpendingsState();
 }
 
 class _SpendingsState extends State<Spendings> {
-  AllExpenses allExpenses = AllExpenses();
-  RecentExpenses recentExpenses = RecentExpenses();
   WidgetDecider wd = WidgetDecider();
 
   @override
@@ -32,7 +32,7 @@ class _SpendingsState extends State<Spendings> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: wd.getSpendingsWidgets(
-                  allExpenses, recentExpenses, widget.theme, widget.font)),
+                  widget.currentUser, widget.theme, widget.font)),
         )),
       ),
     );

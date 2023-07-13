@@ -3,6 +3,7 @@
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/trackerText.dart';
@@ -10,21 +11,20 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class SpendingsTracker extends StatefulWidget {
-  SpendingsTracker({super.key, required this.theme, required this.font});
+  SpendingsTracker({super.key, required this.theme, required this.font, required this.currentUser});
 
   LightMode theme;
   FontFamily font;
+  User currentUser;
 
   @override
   State<SpendingsTracker> createState() => _SpendingsTrackerState();
 }
 
 class _SpendingsTrackerState extends State<SpendingsTracker> {
-  AllExpenses allExpenses = AllExpenses();
-  RecentExpenses recentExpenses = RecentExpenses();
   Methods func = Methods();
-  late double currentAmount = func.getCurrentMonthAmount(recentExpenses);
-  double totalBudget = 50000;
+  late double currentAmount = func.getCurrentMonthAmount(widget.currentUser.recentExpenses);
+  late double totalBudget = func.monthlyBudget(widget.currentUser.dailyBudget);
 
   @override
   Widget build(BuildContext context) {
