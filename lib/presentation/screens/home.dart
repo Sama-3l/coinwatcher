@@ -38,9 +38,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print(currentUser.toJSON());
     tabController = TabController(length: 3, vsync: this);
   }
 
