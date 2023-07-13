@@ -13,6 +13,9 @@ class monthlyGraph extends StatefulWidget {
 }
 
 class _monthlyGraphState extends State<monthlyGraph> {
+
+  double threshold = 5000;
+  
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -24,13 +27,27 @@ class _monthlyGraphState extends State<monthlyGraph> {
           measureFn: (barDataMonthly series, _) => series.spent,
           colorFn: (barDataMonthly series, _) => series.color)
     ];
+
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Container(
+      child: SizedBox(
           height: 0.156 * height,
           child: charts.BarChart(
             series,
             animate: true,
+            primaryMeasureAxis: charts.NumericAxisSpec(
+              tickProviderSpec:
+                  charts.BasicNumericTickProviderSpec(desiredTickCount: 5),
+            ),
+            barRendererDecorator: charts.BarLabelDecorator<String>(),
+            defaultRenderer: charts.BarRendererConfig(minBarLengthPx: 2),
+            behaviors: [
+              charts.RangeAnnotation([
+                charts.LineAnnotationSegment(
+                    threshold, charts.RangeAnnotationAxisType.measure,
+                    color: charts.MaterialPalette.gray.shade500),
+              ]),
+            ],
           )),
     );
   }
