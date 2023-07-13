@@ -27,7 +27,7 @@ class ExpenseGraph extends StatefulWidget {
       color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
     ),
     barDataMonthly(
-      month: "march",
+      month: "mar",
       spent: 3500,
       color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
     ),
@@ -39,6 +39,31 @@ class ExpenseGraph extends StatefulWidget {
     barDataMonthly(
       month: "may",
       spent: 4500,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
+    barDataMonthly(
+      month: "june",
+      spent: 6000,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
+    barDataMonthly(
+      month: "jul",
+      spent: 1200,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
+    barDataMonthly(
+      month: "aug",
+      spent: 4500,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
+    barDataMonthly(
+      month: "sep",
+      spent: 9000,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
+    barDataMonthly(
+      month: "oct",
+      spent: 1200,
       color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
     ),
   ];
@@ -67,7 +92,32 @@ class ExpenseGraph extends StatefulWidget {
       day: "5",
       spent: 320,
       color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
-    )
+    ),
+    barDataDaily(
+      day: "6",
+      spent: 500,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
+    barDataDaily(
+      day: "7",
+      spent: 120,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
+    barDataDaily(
+      day: "8",
+      spent: 350,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
+    barDataDaily(
+      day: "9",
+      spent: 252,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
+    barDataDaily(
+      day: "10",
+      spent: 520,
+      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+    ),
   ];
 
   @override
