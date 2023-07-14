@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, must_be_immutable
 
-import 'package:coinwatcher/business_logic/blocs/bloc/tab_text_color_bloc.dart';
+import 'package:coinwatcher/business_logic/blocs/tabTextBloc/tab_text_color_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';

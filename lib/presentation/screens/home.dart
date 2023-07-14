@@ -1,4 +1,5 @@
 import 'package:coinwatcher/alogrithms/method.dart';
+import 'package:coinwatcher/business_logic/blocs/dropDownMenu/drop_down_menu_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
@@ -9,7 +10,7 @@ import 'package:coinwatcher/presentation/screens/spendings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../business_logic/blocs/bloc/tab_text_color_bloc.dart';
+import '../../business_logic/blocs/tabTextBloc/tab_text_color_bloc.dart';
 import '../widgets/bottomNavBar.dart';
 import '../widgets/fab.dart';
 import 'dashboard.dart';
@@ -45,7 +46,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => TabTextColorBloc())],
+      providers: [
+        BlocProvider(create: (context) => TabTextColorBloc()),
+        BlocProvider(create: (context) => DropDownMenuBloc())
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
