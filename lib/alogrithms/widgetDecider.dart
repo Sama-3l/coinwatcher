@@ -116,4 +116,37 @@ class WidgetDecider {
     }
     return children;
   }
+
+  Widget showLegendAmounts(double amount, FontFamily font, LightMode theme) {
+    Methods func = Methods();
+    return Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            '\u20B9',
+            style: font.getPoppinsTextStyle(
+                color: theme.textSecondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1),
+          ),
+          Text(
+            amount.ceil().toString(),
+            style: font.getPoppinsTextStyle(
+                color: theme.textPrimary,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.41),
+          ),
+          Text(
+            func.decimalPart(amount),
+            style: font.getPoppinsTextStyle(
+                color: theme.textSecondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.41),
+          ),
+        ]);
+  }
 }

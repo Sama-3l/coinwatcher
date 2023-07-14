@@ -26,7 +26,10 @@ class _dailyGraphState extends State<dailyGraph> {
     return Container(
       height: 0.156 * height,
       width: 0.78 * width,
-      child: charts.BarChart(series, animate: true),
+      child: charts.BarChart(
+        series,
+        animate: true,
+      ),
     );
   }
 }

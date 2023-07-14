@@ -24,16 +24,29 @@ class PieChart extends StatefulWidget {
 class _PieChartState extends State<PieChart> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.25,
       child: SfCircularChart(annotations: [
         CircularChartAnnotation(
-            widget: Container(
-                child: Text('\u{20B9}${10300}',
-                    style: widget.font.getPoppinsTextStyle(
-                        color: widget.theme.textPrimary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 0))))
+            widget: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '\u20B9',
+              style: widget.font.getPoppinsTextStyle(
+                  color: widget.theme.textSecondary,
+                  fontSize: 21,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1),
+            ),
+            Text('${10300}',
+                style: widget.font.getPoppinsTextStyle(
+                    color: widget.theme.textPrimary,
+                    fontSize: 23,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0)),
+          ],
+        ))
       ], series: <CircularSeries>[
         // Render pie chart
         DoughnutSeries<PieData, String>(
@@ -41,7 +54,7 @@ class _PieChartState extends State<PieChart> {
             pointColorMapper: (PieData data, _) => data.color,
             xValueMapper: (PieData data, _) => data.category,
             yValueMapper: (PieData data, _) => data.spent,
-            radius: '50%'),
+            radius: '80%'),
       ]),
     );
   }
