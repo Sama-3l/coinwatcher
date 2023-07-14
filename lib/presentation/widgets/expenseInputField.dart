@@ -10,12 +10,14 @@ class ExpenseInputField extends StatefulWidget {
       required this.textEditingController,
       required this.hintText,
       required this.theme,
-      required this.font});
+      required this.font,
+      this.readOnly = false});
 
   TextEditingController textEditingController;
   String hintText;
   LightMode theme;
   FontFamily font;
+  bool readOnly;
 
   @override
   State<ExpenseInputField> createState() => _ExpenseInputFieldState();
@@ -30,6 +32,8 @@ class _ExpenseInputFieldState extends State<ExpenseInputField> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: TextField(
+        controller: widget.textEditingController,
+        readOnly: widget.readOnly,
         textCapitalization: TextCapitalization.sentences,
         style: widget.font.getPoppinsTextStyle(
             color: widget.theme.textPrimary,

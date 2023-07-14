@@ -1,36 +1,42 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'package:coinwatcher/alogrithms/method.dart';
+import 'package:coinwatcher/business_logic/blocs/updateExpense/update_expense_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/data/model/expense.dart';
+import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/expenseBox.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
+import '../../business_logic/blocs/datePicker/date_picker_bloc.dart';
 import '../../business_logic/blocs/dropDownMenu/drop_down_menu_bloc.dart';
 
 class ExpenseAdd extends StatelessWidget {
   ExpenseAdd(
       {super.key,
-      required this.allExpenses,
+      required this.currentUser,
       required this.theme,
       required this.font});
 
-  AllExpenses allExpenses;
+  User currentUser;
   LightMode theme;
   FontFamily font;
   TextEditingController expenseName = TextEditingController();
   TextEditingController amount = TextEditingController();
-  TextEditingController date = TextEditingController();
-  TextEditingController category = TextEditingController();
   String dropDownValue = 'Food n Drinks';
+  Methods func = Methods();
+  DateTime picked =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   @override
   Widget build(BuildContext context) {
     return Hero(
-        tag: allExpenses,
+        tag: currentUser.allExpenses,
         child: Padding(
           padding: const EdgeInsets.all(0),
           child: Material(
@@ -99,11 +105,62 @@ class ExpenseAdd extends StatelessWidget {
                                           Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 30),
-                                            child: ExpenseInputField(
-                                                textEditingController: date,
-                                                hintText: '23 June, 2023',
-                                                font: font,
-                                                theme: theme),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              child: BlocBuilder<DatePickerBloc,
+                                                  DatePickerState>(
+                                                builder: (context, state) {
+                                                  return TextField(
+                                                    readOnly: true,
+                                                    onTap: () async {
+                                                      picked =
+                                                          (await func.editDate(
+                                                              context,
+                                                              DateTime.now()
+                                                                  .add(Duration(
+                                                                      days: 2)),
+                                                              theme))!;
+                                                    },
+                                                    textCapitalization:
+                                                        TextCapitalization
+                                                            .sentences,
+                                                    style: font
+                                                        .getPoppinsTextStyle(
+                                                            color: theme
+                                                                .textPrimary,
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            letterSpacing:
+                                                                -0.41),
+                                                    decoration: InputDecoration(
+                                                      hintStyle: font
+                                                          .getPoppinsTextStyle(
+                                                              color: theme
+                                                                  .textPrimary,
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              letterSpacing:
+                                                                  -0.41),
+                                                      hintText: DateFormat(
+                                                              'dd MMMM, yyyy')
+                                                          .format(picked),
+                                                      border: InputBorder.none,
+                                                      fillColor:
+                                                          Colors.transparent,
+                                                      filled: true,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
                                           ),
                                         ]),
                                   ),
@@ -122,7 +179,7 @@ class ExpenseAdd extends StatelessWidget {
                                         color: theme.borderColor,
                                         width: 1.0,
                                       ),
-                                      borderRadius: BorderRadius.circular(4.0),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
                                     child: Row(
                                       children: [
@@ -130,6 +187,7 @@ class ExpenseAdd extends StatelessWidget {
                                           child: DropdownButton<String>(
                                             value: dropDownValue,
                                             icon: Container(),
+                                            underline: Container(),
                                             onChanged: (String? newValue) {
                                               dropDownValue = newValue!;
                                               BlocProvider.of<DropDownMenuBloc>(
@@ -191,7 +249,19 @@ class ExpenseAdd extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(50))),
                                   onPressed: () {
-                                    print(dropDownValue);
+                                    currentUser.allExpenses.allExpenses.insert(
+                                        0,
+                                        Expense(
+                                            expenseName: expenseName.text,
+                                            amount: double.parse(amount.text),
+                                            date: picked,
+                                            category: dropDownValue));
+                                    currentUser.recentExpenses =
+                                        func.getRecentExpenses(
+                                            currentUser.allExpenses);
+                                    Navigator.of(context).pop();
+                                    BlocProvider.of<UpdateExpenseBloc>(context)
+                                        .add(ExpenseChangedEvent());
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(

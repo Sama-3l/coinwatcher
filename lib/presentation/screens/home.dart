@@ -1,5 +1,7 @@
 import 'package:coinwatcher/alogrithms/method.dart';
+import 'package:coinwatcher/business_logic/blocs/datePicker/date_picker_bloc.dart';
 import 'package:coinwatcher/business_logic/blocs/dropDownMenu/drop_down_menu_bloc.dart';
+import 'package:coinwatcher/business_logic/blocs/updateExpense/update_expense_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
@@ -48,7 +50,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => TabTextColorBloc()),
-        BlocProvider(create: (context) => DropDownMenuBloc())
+        BlocProvider(create: (context) => DropDownMenuBloc()),
+        BlocProvider(create: (context) => DatePickerBloc()),
+        BlocProvider(create: (context) => UpdateExpenseBloc()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -57,15 +61,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           backgroundColor: theme.mainBackground,
           resizeToAvoidBottomInset: false,
           extendBody: true,
-          body: BottomNavBarTabs(
-            theme: theme,
-            font: font,
-            tabController: tabController,
-            currentUser: currentUser,
+          body: BlocBuilder<UpdateExpenseBloc, UpdateExpenseState>(
+            builder: (context, state) {
+              return BottomNavBarTabs(
+                theme: theme,
+                font: font,
+                tabController: tabController,
+                currentUser: currentUser,
+              );
+            },
           ),
           bottomNavigationBar: BottomNavBar(
               theme: theme, font: font, tabController: tabController),
-          floatingActionButton: Fab(font: font, theme: theme),
+          floatingActionButton:
+              Fab(font: font, theme: theme, currentUser: currentUser),
         ),
       ),
     );
