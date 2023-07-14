@@ -24,7 +24,7 @@ class _AnalyticsState extends State<Analytics> {
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(left: 21, right: 21, top: 25),
+        padding: const EdgeInsets.only(left: 21, right: 21, top: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -46,9 +46,16 @@ class _AnalyticsState extends State<Analytics> {
                 font: widget.font,
               ),
             ),
-            Menu(
-              theme: widget.theme,
-              font: widget.font,
+            Padding(
+              padding: const EdgeInsets.only(left: 4, top: 10),
+              child: Row(
+                children: [
+                  Menu(
+                    theme: widget.theme,
+                    font: widget.font,
+                  ),
+                ],
+              ),
             ),
             PieChart(
               theme: widget.theme,
@@ -58,7 +65,7 @@ class _AnalyticsState extends State<Analytics> {
             // Legend
             Expanded(
                 child: Padding(
-              padding: const EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 5),
               child: Legend(theme: widget.theme, font: widget.font),
             ))
           ],

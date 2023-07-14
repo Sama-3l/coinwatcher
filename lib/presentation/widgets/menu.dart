@@ -7,7 +7,7 @@ class Menu extends StatefulWidget {
   Menu({super.key, required this.theme, required this.font});
   FontFamily font;
   LightMode theme;
-  List<String> list = <String>['Jan 2023', 'Feb 2023', 'Mar 2023', 'Apr 2023'];
+  List<String> list = <String>['Jan, 2023', 'Feb, 2023', 'Mar, 2023', 'Apr, 2023'];
   @override
   State<Menu> createState() => _MenuState();
 }
@@ -18,7 +18,8 @@ class _MenuState extends State<Menu> {
   Widget build(BuildContext context) {
     return DropdownButton<String>(
       value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
+      underline: Container(),
+      icon: Icon(Icons.arrow_drop_down_sharp, color: widget.theme.borderColor),
       elevation: 16,
       style: widget.font.getPoppinsTextStyle(
           color: widget.theme.textPrimary,

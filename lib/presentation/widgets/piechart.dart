@@ -54,7 +54,7 @@ class _PieChartState extends State<PieChart> {
             pointColorMapper: (PieData data, _) => data.color,
             xValueMapper: (PieData data, _) => data.category,
             yValueMapper: (PieData data, _) => data.spent,
-            radius: '80%'),
+            radius: '100%'),
       ]),
     );
   }
