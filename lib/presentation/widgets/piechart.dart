@@ -9,13 +9,13 @@ class PieChart extends StatefulWidget {
   LightMode theme;
   FontFamily font;
 
-  final List<PieData> data = [
-    PieData(category: "foodnDrinks", spent: 2500, color: Color(0xffA6D8A9)),
-    PieData(category: "hnf", spent: 1000, color: Color(0xff94B8FA)),
-    PieData(category: "personalcare", spent: 2000, color: Color(0xffF29DAA)),
-    PieData(category: "essentials", spent: 1500, color: Color(0xffCAAAE3)),
-    PieData(category: "education", spent: 1700, color: Color(0xff9498F1)),
-    PieData(category: "misc", spent: 1600, color: Color(0xffEFA68F)),
+  late final List<PieData> data = [
+    PieData(category: "foodnDrinks", spent: 2500, color: theme.foodNDrinks),
+    PieData(category: "hnf", spent: 1000, color: theme.hnF),
+    PieData(category: "personalcare", spent: 2000, color: theme.personalCare),
+    PieData(category: "essentials", spent: 1500, color: theme.essentials),
+    PieData(category: "education", spent: 1700, color: theme.education),
+    PieData(category: "misc", spent: 1600, color: theme.misc),
   ];
   @override
   State<PieChart> createState() => _PieChartState();

@@ -24,30 +24,31 @@ class _AnalyticsState extends State<Analytics> {
     double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.only(left: 21, right: 21),
+        padding: const EdgeInsets.only(left: 21, right: 21, top: 25),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "Analytics",
-              style: widget.font.getPoppinsTextStyle(
-                color: widget.theme.textPrimary,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Text(
+                "Analytics",
+                style: widget.font.getPoppinsTextStyle(
+                  color: widget.theme.textPrimary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0,
+                ),
               ),
             ),
-
-            ExpenseGraph(
-              theme: widget.theme,
-              font: widget.font,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Menu(
+            Expanded(
+              child: ExpenseGraph(
                 theme: widget.theme,
                 font: widget.font,
               ),
+            ),
+            Menu(
+              theme: widget.theme,
+              font: widget.font,
             ),
             PieChart(
               theme: widget.theme,
@@ -55,7 +56,11 @@ class _AnalyticsState extends State<Analytics> {
             ),
 
             // Legend
-            Legend(theme: widget.theme, font: widget.font)
+            Expanded(
+                child: Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: Legend(theme: widget.theme, font: widget.font),
+            ))
           ],
         ),
       ),
