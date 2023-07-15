@@ -28,7 +28,7 @@ class ExpenseAdd extends StatelessWidget {
   FontFamily font;
   TextEditingController expenseName = TextEditingController();
   TextEditingController amount = TextEditingController();
-  String dropDownValue = 'Food n Drinks';
+  String dropDownValue = 'Food n drinks';
   Methods func = Methods();
   DateTime picked =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -195,7 +195,7 @@ class ExpenseAdd extends StatelessWidget {
                                                   .add(UpdateMenuEvent());
                                             },
                                             items: <String>[
-                                              'Food n Drinks',
+                                              'Food n drinks',
                                               'Health n Fitness',
                                               'Personal care',
                                               'Essentials',
@@ -249,19 +249,12 @@ class ExpenseAdd extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(50))),
                                   onPressed: () {
-                                    currentUser.allExpenses.allExpenses.insert(
-                                        0,
-                                        Expense(
+                                    Expense thisExpense = Expense(
                                             expenseName: expenseName.text,
                                             amount: double.parse(amount.text),
                                             date: picked,
-                                            category: dropDownValue));
-                                    currentUser.recentExpenses =
-                                        func.getRecentExpenses(
-                                            currentUser.allExpenses);
-                                    Navigator.of(context).pop();
-                                    BlocProvider.of<UpdateExpenseBloc>(context)
-                                        .add(ExpenseChangedEvent());
+                                            category: dropDownValue);
+                                    func.addExpenseFab(currentUser, thisExpense, context);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(

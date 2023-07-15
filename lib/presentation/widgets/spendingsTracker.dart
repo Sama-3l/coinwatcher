@@ -11,7 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class SpendingsTracker extends StatefulWidget {
-  SpendingsTracker({super.key, required this.theme, required this.font, required this.currentUser});
+  SpendingsTracker(
+      {super.key,
+      required this.theme,
+      required this.font,
+      required this.currentUser});
 
   LightMode theme;
   FontFamily font;
@@ -23,8 +27,6 @@ class SpendingsTracker extends StatefulWidget {
 
 class _SpendingsTrackerState extends State<SpendingsTracker> {
   Methods func = Methods();
-  late double currentAmount = func.getCurrentMonthAmount(widget.currentUser.recentExpenses);
-  late double totalBudget = func.monthlyBudget(widget.currentUser.dailyBudget);
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +42,12 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TrackerText(
-                  amount: totalBudget,
+                  amount: func.monthlyBudget(widget.currentUser.dailyBudget),
                   isTotal: true,
                   theme: widget.theme,
                   font: widget.font),
               TrackerText(
-                  amount: currentAmount,
+                  amount: widget.currentUser.thisMonthSpent,
                   isTotal: false,
                   theme: widget.theme,
                   font: widget.font)
@@ -56,7 +58,18 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
             child: LinearPercentIndicator(
               padding: EdgeInsets.zero,
               lineHeight: 14.0,
-              percent: currentAmount / totalBudget,
+              percent: (widget.currentUser.thisMonthSpent /
+                          (func.monthlyBudget(widget.currentUser.dailyBudget) ==
+                                  0
+                              ? 1
+                              : func.monthlyBudget(
+                                  widget.currentUser.dailyBudget))) ==
+                      1
+                  ? 1
+                  : widget.currentUser.thisMonthSpent /
+                      (func.monthlyBudget(widget.currentUser.dailyBudget) == 0
+                          ? 1
+                          : func.monthlyBudget(widget.currentUser.dailyBudget)),
               barRadius: Radius.circular(7),
               backgroundColor: widget.theme.mainBackground,
               progressColor: widget.theme.primaryAccent3,

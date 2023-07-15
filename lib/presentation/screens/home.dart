@@ -31,9 +31,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   late TabController tabController;
   late User currentUser = User(
       name: 'Samael',
-      dailyBudget: 200.0,
-      thisMonthSpent: 2500,
-      thisDaySpent: 250,
+      dailyBudget: 250,
+      thisMonthSpent: 0.0,
       allExpenses: AllExpenses(),
       recentExpenses: func.getRecentExpenses(AllExpenses()),
       monthsDB: Months(),
@@ -43,6 +42,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(length: 3, vsync: this);
+    func.loadMonths(currentUser);
+    func.printBetterJson("${currentUser.toJSON()}");
   }
 
   @override

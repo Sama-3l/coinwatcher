@@ -10,7 +10,6 @@ class User {
       {required this.name,
       required this.dailyBudget,
       required this.thisMonthSpent,
-      required this.thisDaySpent,
       required this.allExpenses,
       required this.recentExpenses,
       required this.monthsDB,
@@ -19,7 +18,6 @@ class User {
   String name;
   double dailyBudget;
   double thisMonthSpent;
-  double thisDaySpent;
   AllExpenses allExpenses;
   RecentExpenses recentExpenses;
   Months monthsDB;
@@ -30,7 +28,6 @@ class User {
       'name' : name,
       'dailyBudget': dailyBudget.toString(),
       'thisMonthSpent': thisMonthSpent.toString(),
-      'thisDaySpent': thisDaySpent.toString(),
       'allExpenses': allExpenses.toJSON(),
       'eachMonthDb': monthsDB.allMonthsJSON(),
       'eachDaySpent': eachDaySpent
