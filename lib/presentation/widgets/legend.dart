@@ -48,8 +48,9 @@ class _LegendState extends State<Legend> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              widget.categories.forEach((key, value) { 
-                LegendItems(category: value, theme: widget.theme, font: widget.font)
+              widget.categories.forEach((key, value) {
+                LegendItems(
+                    category: value, theme: widget.theme, font: widget.font);
               })
             ],
           ),
