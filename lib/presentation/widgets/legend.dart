@@ -1,20 +1,34 @@
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/data/model/brandCategory.dart';
+import 'package:coinwatcher/presentation/widgets/legendItems.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Legend extends StatefulWidget {
   Legend({super.key, required this.theme, required this.font});
   LightMode theme;
   FontFamily font;
+  late Map<String, BrandCategory> categories = {
+    'Food n drinks': BrandCategory(
+        color: theme.foodNDrinks, name: 'Food n drinks', amount: 0.0),
+    'Health n Fitness':
+        BrandCategory(color: theme.hnF, name: 'Health n Fitness', amount: 0.0),
+    'Personal care': BrandCategory(
+        color: theme.personalCare, name: 'Personal care', amount: 0.0),
+    'Essentials':
+        BrandCategory(color: theme.essentials, name: 'Essentials', amount: 0.0),
+    'Education':
+        BrandCategory(color: theme.education, name: 'Education', amount: 0.0),
+    'Misc': BrandCategory(color: theme.misc, name: 'Misc', amount: 0.0),
+  };
 
   @override
   State<Legend> createState() => _LegendState();
 }
 
 class _LegendState extends State<Legend> {
-
-
   WidgetDecider wd = WidgetDecider();
 
   @override
@@ -34,130 +48,9 @@ class _LegendState extends State<Legend> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    height: 11,
-                    width: 11,
-                    decoration: BoxDecoration(
-                      color: widget.theme.foodNDrinks,
-                      borderRadius: BorderRadius.circular(5.5),
-                    ),
-                  ),
-                  Container(
-                    height: 11,
-                    width: 11,
-                    decoration: BoxDecoration(
-                      color: widget.theme.hnF,
-                      borderRadius: BorderRadius.circular(5.5),
-                    ),
-                  ),
-                  Container(
-                    height: 11,
-                    width: 11,
-                    decoration: BoxDecoration(
-                      color: widget.theme.personalCare,
-                      borderRadius: BorderRadius.circular(5.5),
-                    ),
-                  ),
-                  Container(
-                    height: 11,
-                    width: 11,
-                    decoration: BoxDecoration(
-                      color: widget.theme.essentials,
-                      borderRadius: BorderRadius.circular(5.5),
-                    ),
-                  ),
-                  Container(
-                    height: 11,
-                    width: 11,
-                    decoration: BoxDecoration(
-                      color: widget.theme.education,
-                      borderRadius: BorderRadius.circular(5.5),
-                    ),
-                  ),
-                  Container(
-                    height: 11,
-                    width: 11,
-                    decoration: BoxDecoration(
-                      color: widget.theme.misc,
-                      borderRadius: BorderRadius.circular(5.5),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Food and drinks",
-                      style: widget.font.getPoppinsTextStyle(
-                          color: widget.theme.textPrimary,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0),
-                    ),
-                    Text(
-                      "Health n Fitness",
-                      style: widget.font.getPoppinsTextStyle(
-                          color: widget.theme.textPrimary,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0),
-                    ),
-                    Text(
-                      "Personal care",
-                      style: widget.font.getPoppinsTextStyle(
-                          color: widget.theme.textPrimary,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0),
-                    ),
-                    Text(
-                      "Essentials",
-                      style: widget.font.getPoppinsTextStyle(
-                          color: widget.theme.textPrimary,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0),
-                    ),
-                    Text(
-                      "Education",
-                      style: widget.font.getPoppinsTextStyle(
-                          color: widget.theme.textPrimary,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0),
-                    ),
-                    Text(
-                      "Misc",
-                      style: widget.font.getPoppinsTextStyle(
-                          color: widget.theme.textPrimary,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 70,
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  wd.showLegendAmounts(2500.00, widget.font, widget.theme),
-                  wd.showLegendAmounts(2500.00, widget.font, widget.theme),
-                  wd.showLegendAmounts(2500.00, widget.font, widget.theme),
-                  wd.showLegendAmounts(2500.00, widget.font, widget.theme),
-                  wd.showLegendAmounts(2500.00, widget.font, widget.theme),
-                  wd.showLegendAmounts(2500.00, widget.font, widget.theme),
-                ],
-              )
+              widget.categories.forEach((key, value) { 
+                LegendItems(category: value, theme: widget.theme, font: widget.font)
+              })
             ],
           ),
         ));
