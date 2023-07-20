@@ -17,7 +17,7 @@ class LegendItems extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
             height: 11,
@@ -27,18 +27,21 @@ class LegendItems extends StatelessWidget {
               borderRadius: BorderRadius.circular(5.5),
             ),
           ),
-          Text(
-            "Food and drinks",
-            style: font.getPoppinsTextStyle(
-                color: theme.textPrimary,
-                fontSize: 17,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0),
-          ),
-          Text('${category.amount}',
+          Padding(
+            padding: const EdgeInsets.only(left: 9.5, right: 133.5),
+            child: Text(
+              "Food and drinks",
               style: font.getPoppinsTextStyle(
                   color: theme.textPrimary,
-                  fontSize: 23,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0),
+            ),
+          ),
+          Text('\u{20B9}${category.amount}',
+              style: font.getPoppinsTextStyle(
+                  color: theme.textPrimary,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500,
                   letterSpacing: 0))
         ],

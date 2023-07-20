@@ -30,6 +30,16 @@ class Legend extends StatefulWidget {
 
 class _LegendState extends State<Legend> {
   WidgetDecider wd = WidgetDecider();
+  List<Widget> generateLegendItems() {
+    List<Widget> children = [];
+
+    widget.categories.forEach((key, value) {
+      children.add(
+          LegendItems(category: value, theme: widget.theme, font: widget.font));
+    });
+
+    return children;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +55,9 @@ class _LegendState extends State<Legend> {
         child: Padding(
           padding:
               const EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              widget.categories.forEach((key, value) {
-                LegendItems(
-                    category: value, theme: widget.theme, font: widget.font);
-              })
-            ],
+            children: generateLegendItems(),
           ),
         ));
   }
