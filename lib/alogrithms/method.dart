@@ -109,8 +109,6 @@ class Methods {
 
   void addMonthnCategories(User currentUser, Expense expense) {
     // Check if month exists
-    print(currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!
-        .categories.categories[expense.category]);
     if (currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] != null) {
       currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.totalSpent =
           currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!
@@ -159,7 +157,6 @@ class Methods {
               .totalSpent = currentUser.monthsDB
                   .allMonths[monthCommaYear(allExpenses[i].date)]!.totalSpent +
               allExpenses[i].amount;
-          print(allExpenses[i].expenseName);
           loadCategories(currentUser, allExpenses[i]);
         } else {
           currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] =
@@ -184,7 +181,6 @@ class Methods {
 
   void addToMonthDB(User currentUser, Expense expense) {
     if (currentUser.monthsDB.allMonths.isNotEmpty) {
-      // print(currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]);
       if (currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] !=
           null) {
         currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!
@@ -208,29 +204,26 @@ class Methods {
     }
   }
 
-  void printBetterJson(String json) {
-    String d = "";
-    for (int i = 0; i < json.length; i++) {
-      if (json[i] != ',') {
-        d = d + json[i];
-      } else {
-        print("$d,");
-        d = "";
-      }
-    }
-  }
+  // void printBetterJson(String json) {
+  //   String d = "";
+  //   for (int i = 0; i < json.length; i++) {
+  //     if (json[i] != ',') {
+  //       d = d + json[i];
+  //     } else {
+  //       print("$d,");
+  //       d = "";
+  //     }
+  //   }
+  // }
 
   void addExpenseFab(
       User currentUser, Expense thisExpense, BuildContext context) {
     if(DateTime.now().month == thisExpense.date.month){
       currentUser.thisMonthSpent = currentUser.thisMonthSpent + thisExpense.amount;
     }
-    print('\n\n');
     currentUser.allExpenses.allExpenses.insert(0, thisExpense);
     currentUser.recentExpenses = getRecentExpenses(currentUser.allExpenses);
     addToMonthDB(currentUser, thisExpense);
-    printBetterJson(
-        "${currentUser.toJSON()}");
     Navigator.of(context).pop();
     BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
   }
