@@ -54,7 +54,7 @@ class _LegendState extends State<Legend> {
         ),
         child: Padding(
           padding:
-              const EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
+              const EdgeInsets.only(left: 20, top: 26, right: 20, bottom: 24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: generateLegendItems(),
