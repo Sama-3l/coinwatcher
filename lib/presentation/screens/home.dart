@@ -7,8 +7,6 @@ import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/months.dart';
-import 'package:coinwatcher/presentation/screens/analytics.dart';
-import 'package:coinwatcher/presentation/screens/spendings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

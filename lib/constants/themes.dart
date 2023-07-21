@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LightMode{
+class LightMode {
   final Color mainBackground = Color(0xffF5EDC9);
   final Color primaryAccent1 = Color(0xffCCDAEC);
   final Color primaryAccent2 = Color(0xff9AB8DE);
@@ -19,4 +19,5 @@ class LightMode{
   final Color personalCare = Color(0xffF29DAA);
   final Color essentials = Color(0xffCAAAE3);
   final Color education = Color(0xff9498F1);
+  final Color misc = Color(0xffEFA68F);
 }
