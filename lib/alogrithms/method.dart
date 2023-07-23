@@ -315,4 +315,12 @@ class Methods {
     });
     return pieData;
   }
+
+  String getTotalAmount(Categories categories){
+    double totalAmount = 0;
+    categories.categories.forEach((key, value) { 
+      totalAmount = totalAmount + value.amount;
+    });
+    return totalAmount.ceil().toString();
+  }
 }

@@ -19,14 +19,6 @@ class PieChart extends StatefulWidget {
 class _PieChartState extends State<PieChart> {
 
   Methods func = Methods();
-  late final List<PieData> data = func.generatePieGraphData(widget.currentMonthCategories, widget.theme);
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print(widget.currentMonthCategories.toJSON());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +37,7 @@ class _PieChartState extends State<PieChart> {
                   fontWeight: FontWeight.w600,
                   letterSpacing: 1),
             ),
-            Text('${10300}',
+            Text(func.getTotalAmount(widget.currentMonthCategories),
                 style: widget.font.getPoppinsTextStyle(
                     color: widget.theme.textPrimary,
                     fontSize: 23,
@@ -56,7 +48,7 @@ class _PieChartState extends State<PieChart> {
       ], series: <CircularSeries>[
         // Render pie chart
         DoughnutSeries<PieData, String>(
-            dataSource: data,
+            dataSource: func.generatePieGraphData(widget.currentMonthCategories, widget.theme),
             pointColorMapper: (PieData data, _) => data.color,
             xValueMapper: (PieData data, _) => data.category,
             yValueMapper: (PieData data, _) => data.spent,
