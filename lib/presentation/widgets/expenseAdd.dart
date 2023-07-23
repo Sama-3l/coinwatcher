@@ -250,7 +250,7 @@ class ExpenseAdd extends StatelessWidget {
                                         date: picked,
                                         category: dropDownValue);
                                     func.addExpenseFab(
-                                        currentUser, thisExpense, context);
+                                        currentUser, thisExpense, context, theme);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(

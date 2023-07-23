@@ -3,7 +3,7 @@ import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/presentation/widgets/expense_graph.dart';
 import 'package:coinwatcher/presentation/widgets/legend.dart';
-import 'package:coinwatcher/presentation/widgets/menu.dart';
+import 'package:coinwatcher/presentation/widgets/pieChartMenu.dart';
 import 'package:coinwatcher/presentation/widgets/piechart.dart';
 
 import 'package:flutter/material.dart';
@@ -51,20 +51,12 @@ class _AnalyticsState extends State<Analytics> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 4, top: 10),
-              child: Row(
-                children: [
-                  Menu(
-                    theme: widget.theme,
-                    font: widget.font,
-                  ),
-                ],
+              child: PieChartMenu(
+                theme: widget.theme,
+                font: widget.font,
+                currentUser: widget.currentUser,
               ),
             ),
-            PieChart(
-              theme: widget.theme,
-              font: widget.font,
-            ),
-
             // Legend
             Expanded(
                 child: Padding(

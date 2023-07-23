@@ -9,6 +9,7 @@ import 'package:coinwatcher/data/model/bar_data.dart';
 import 'package:coinwatcher/data/model/dayExpense.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/month.dart';
+import 'package:coinwatcher/data/model/pieData.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/categories.dart';
@@ -110,7 +111,7 @@ class Methods {
     return DateFormat('MMMM, yyyy').format(date);
   }
 
-  void addMonthnCategories(User currentUser, Expense expense) {
+  void addMonthnCategories(User currentUser, Expense expense,LightMode theme) {
     // Check if month exists
     if (currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] != null) {
       currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.totalSpent =
@@ -130,7 +131,7 @@ class Methods {
       currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] = Month(
           date: DateTime(expense.date.year, expense.date.month),
           totalSpent: expense.amount,
-          categories: Categories());
+          categories: Categories(theme: theme));
     }
   }
 
@@ -146,7 +147,7 @@ class Methods {
   }
 
   //To initialize months can remove later it's better to just add a single entry as we actually need to do.
-  void loadMonths(User currentUser) {
+  void loadMonths(User currentUser, LightMode theme) {
     List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
     for (int i = allExpenses.length - 1; i >= 0; i--) {
       if (DateTime.now().month == allExpenses[i].date.month) {
@@ -168,8 +169,8 @@ class Methods {
                   date: DateTime(
                       allExpenses[i].date.year, allExpenses[i].date.month),
                   totalSpent: allExpenses[i].amount,
-                  categories: Categories());
-          addMonthnCategories(currentUser, allExpenses[i]);
+                  categories: Categories(theme: theme));
+          addMonthnCategories(currentUser, allExpenses[i], theme);
         }
       } else {
         currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] =
@@ -177,13 +178,13 @@ class Methods {
                 date: DateTime(
                     allExpenses[i].date.year, allExpenses[i].date.month),
                 totalSpent: allExpenses[i].amount,
-                categories: Categories());
-        addMonthnCategories(currentUser, allExpenses[i]);
+                categories: Categories(theme: theme));
+        addMonthnCategories(currentUser, allExpenses[i], theme);
       }
     }
   }
 
-  void addToMonthDB(User currentUser, Expense expense) {
+  void addToMonthDB(User currentUser, Expense expense, LightMode theme) {
     if (currentUser.monthsDB.allMonths.isNotEmpty) {
       if (currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] !=
           null) {
@@ -196,15 +197,15 @@ class Methods {
         currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] = Month(
             date: DateTime(expense.date.year, expense.date.month),
             totalSpent: expense.amount,
-            categories: Categories());
-        addMonthnCategories(currentUser, expense);
+            categories: Categories(theme: theme));
+        addMonthnCategories(currentUser, expense, theme);
       }
     } else {
       currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] = Month(
           date: DateTime(expense.date.year, expense.date.month),
           totalSpent: expense.amount,
-          categories: Categories());
-      addMonthnCategories(currentUser, expense);
+          categories: Categories(theme: theme));
+      addMonthnCategories(currentUser, expense, theme);
     }
   }
 
@@ -232,7 +233,8 @@ class Methods {
                 .daysDB
                 .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
                 .date
-                .difference(allExpenses[i].date).inDays ==
+                .difference(allExpenses[i].date)
+                .inDays ==
             0) {
           currentUser.daysDB
                   .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] =
@@ -241,31 +243,17 @@ class Methods {
         }
       }
     }
-    print(currentUser.daysDB.allDays);
-    print(currentUser.daysDB.allDaysToJSON());
   }
 
-  // void printBetterJson(String json) {
-  //   String d = "";
-  //   for (int i = 0; i < json.length; i++) {
-  //     if (json[i] != ',') {
-  //       d = d + json[i];
-  //     } else {
-  //       print("$d,");
-  //       d = "";
-  //     }
-  //   }
-  // }
-
   void addExpenseFab(
-      User currentUser, Expense thisExpense, BuildContext context) {
+      User currentUser, Expense thisExpense, BuildContext context, LightMode theme) {
     if (DateTime.now().month == thisExpense.date.month) {
       currentUser.thisMonthSpent =
           currentUser.thisMonthSpent + thisExpense.amount;
     }
     currentUser.allExpenses.allExpenses.insert(0, thisExpense);
     currentUser.recentExpenses = getRecentExpenses(currentUser.allExpenses);
-    addToMonthDB(currentUser, thisExpense);
+    addToMonthDB(currentUser, thisExpense, theme);
     Navigator.of(context).pop();
     BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
   }
@@ -286,23 +274,45 @@ class Methods {
   List<barDataDaily> initializeDailyGraphDatabase(
       User currentUser, LightMode theme) {
     List<barDataDaily> data = [];
-    currentUser.daysDB.allDays.forEach((key, value) { 
-      data.add(barDataDaily(
-      day: key,
-      spent: value.amount.ceil(),
-      color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
-    ),);
+    currentUser.daysDB.allDays.forEach((key, value) {
+      data.add(
+        barDataDaily(
+          day: key,
+          spent: value.amount.ceil(),
+          color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+        ),
+      );
     });
     return data.reversed.toList();
   }
 
   List<String> categoryMenu() {
-    Categories categories = Categories();
+    Categories categories = Categories(theme: LightMode());
     List<String> list = [];
     categories.categories.forEach((key, value) {
       list.add(key);
     });
 
     return list;
+  }
+
+  List<String> analyticsMenu(User currentUser) {
+    List<String> list = [];
+
+    currentUser.monthsDB.allMonths.forEach((key, value) {
+      list.add(DateFormat('MMMM, y').format(value.date));
+    });
+    return list;
+  }
+
+  List<PieData> generatePieGraphData(Categories categories, LightMode theme) {
+    List<PieData> pieData = [];
+    categories.categories.forEach((key, value) {
+      pieData.add(PieData(
+          category: value.name,
+          spent: value.amount.ceil(),
+          color: value.color));
+    });
+    return pieData;
   }
 }
