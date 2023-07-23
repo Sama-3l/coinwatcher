@@ -1,6 +1,6 @@
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
-import 'package:coinwatcher/data/model/brandCategory.dart';
+import 'package:coinwatcher/data/model/category.dart';
 import 'package:flutter/material.dart';
 
 class LegendItems extends StatelessWidget {

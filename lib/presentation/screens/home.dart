@@ -11,6 +11,7 @@ import 'package:coinwatcher/data/repositories/months.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../business_logic/blocs/changeMonth/change_month_bloc.dart';
 import '../../business_logic/blocs/tabTextBloc/tab_text_color_bloc.dart';
 import '../widgets/bottomNavBar.dart';
 import '../widgets/fab.dart';
@@ -53,6 +54,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         BlocProvider(create: (context) => DropDownMenuBloc()),
         BlocProvider(create: (context) => DatePickerBloc()),
         BlocProvider(create: (context) => UpdateExpenseBloc()),
+        BlocProvider(create: (context) => ChangeMonthBloc())
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

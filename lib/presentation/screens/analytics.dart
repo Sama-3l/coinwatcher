@@ -58,11 +58,7 @@ class _AnalyticsState extends State<Analytics> {
               ),
             ),
             // Legend
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Legend(theme: widget.theme, font: widget.font),
-            ))
+            
           ],
         ),
       ),

@@ -12,14 +12,6 @@ class PieChart extends StatefulWidget {
   FontFamily font;
   Categories currentMonthCategories;
 
-  late final List<PieData> data = [
-    PieData(category: "foodnDrinks", spent: 2500, color: theme.foodNDrinks),
-    PieData(category: "hnf", spent: 1000, color: theme.hnF),
-    PieData(category: "personalcare", spent: 2000, color: theme.personalCare),
-    PieData(category: "essentials", spent: 1500, color: theme.essentials),
-    PieData(category: "education", spent: 1700, color: theme.education),
-    PieData(category: "misc", spent: 1600, color: theme.misc),
-  ];
   @override
   State<PieChart> createState() => _PieChartState();
 }
@@ -28,6 +20,13 @@ class _PieChartState extends State<PieChart> {
 
   Methods func = Methods();
   late final List<PieData> data = func.generatePieGraphData(widget.currentMonthCategories, widget.theme);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print(widget.currentMonthCategories.toJSON());
+  }
 
   @override
   Widget build(BuildContext context) {

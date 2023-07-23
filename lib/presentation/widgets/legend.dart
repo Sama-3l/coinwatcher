@@ -1,28 +1,17 @@
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
-import 'package:coinwatcher/data/model/brandCategory.dart';
+import 'package:coinwatcher/data/model/category.dart';
+import 'package:coinwatcher/data/repositories/categories.dart';
 import 'package:coinwatcher/presentation/widgets/legendItems.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Legend extends StatefulWidget {
-  Legend({super.key, required this.theme, required this.font});
+  Legend({super.key, required this.theme, required this.font, required this.categories});
   LightMode theme;
   FontFamily font;
-  late Map<String, BrandCategory> categories = {
-    'Food n drinks': BrandCategory(
-        color: theme.foodNDrinks, name: 'Food n drinks', amount: 0.0),
-    'Health n Fitness':
-        BrandCategory(color: theme.hnF, name: 'Health n Fitness', amount: 0.0),
-    'Personal care': BrandCategory(
-        color: theme.personalCare, name: 'Personal care', amount: 0.0),
-    'Essentials':
-        BrandCategory(color: theme.essentials, name: 'Essentials', amount: 0.0),
-    'Education':
-        BrandCategory(color: theme.education, name: 'Education', amount: 0.0),
-    'Misc': BrandCategory(color: theme.misc, name: 'Misc', amount: 0.0),
-  };
+  Categories categories;
 
   @override
   State<Legend> createState() => _LegendState();
@@ -33,7 +22,7 @@ class _LegendState extends State<Legend> {
   List<Widget> generateLegendItems() {
     List<Widget> children = [];
 
-    widget.categories.forEach((key, value) {
+    widget.categories.categories.forEach((key, value) {
       children.add(
           LegendItems(category: value, theme: widget.theme, font: widget.font));
     });
