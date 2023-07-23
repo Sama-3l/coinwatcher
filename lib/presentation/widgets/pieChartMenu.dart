@@ -57,7 +57,6 @@ class _PieChartMenuState extends State<PieChartMenu> {
                   onChanged: (String? value) {
                     // This is called when the user selects an item.
                     dropdownValue = value!;
-                    print(dropdownValue);
                     BlocProvider.of<ChangeMonthBloc>(context).add(UpdateMonthEvent());
                   },
                   items: list.map<DropdownMenuItem<String>>((String value) {
