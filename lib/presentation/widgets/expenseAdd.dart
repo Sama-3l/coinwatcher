@@ -28,8 +28,9 @@ class ExpenseAdd extends StatelessWidget {
   FontFamily font;
   TextEditingController expenseName = TextEditingController();
   TextEditingController amount = TextEditingController();
-  String dropDownValue = 'Food n drinks';
   Methods func = Methods();
+  late List<String> categoryMenu = func.categoryMenu();
+  late String dropDownValue = categoryMenu.first;
   DateTime picked =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
@@ -194,15 +195,9 @@ class ExpenseAdd extends StatelessWidget {
                                                       context)
                                                   .add(UpdateMenuEvent());
                                             },
-                                            items: <String>[
-                                              'Food n drinks',
-                                              'Health n Fitness',
-                                              'Personal care',
-                                              'Essentials',
-                                              'Education',
-                                              'Misc',
-                                            ].map<DropdownMenuItem<String>>(
-                                                (String value) {
+                                            items: categoryMenu
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
                                               return DropdownMenuItem<String>(
                                                 value: value,
                                                 child: Padding(
@@ -250,11 +245,12 @@ class ExpenseAdd extends StatelessWidget {
                                               BorderRadius.circular(50))),
                                   onPressed: () {
                                     Expense thisExpense = Expense(
-                                            expenseName: expenseName.text,
-                                            amount: double.parse(amount.text),
-                                            date: picked,
-                                            category: dropDownValue);
-                                    func.addExpenseFab(currentUser, thisExpense, context);
+                                        expenseName: expenseName.text,
+                                        amount: double.parse(amount.text),
+                                        date: picked,
+                                        category: dropDownValue);
+                                    func.addExpenseFab(
+                                        currentUser, thisExpense, context);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(

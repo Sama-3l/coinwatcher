@@ -6,6 +6,7 @@ import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
+import 'package:coinwatcher/data/repositories/days.dart';
 import 'package:coinwatcher/data/repositories/months.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,13 +35,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       allExpenses: AllExpenses(),
       recentExpenses: func.getRecentExpenses(AllExpenses()),
       monthsDB: Months(),
-      eachDaySpent: {});
+      daysDB: Days());
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     func.loadMonths(currentUser);
+    func.loadDays(currentUser);
   }
 
   @override

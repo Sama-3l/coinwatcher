@@ -137,7 +137,10 @@ class _BottomNavBarTabsState extends State<BottomNavBarTabs> {
           theme: widget.theme,
           font: widget.font,
           currentUser: widget.currentUser),
-      Analytics(theme: widget.theme, font: widget.font)
+      Analytics(
+          theme: widget.theme,
+          font: widget.font,
+          currentUser: widget.currentUser)
     ]);
   }
 }

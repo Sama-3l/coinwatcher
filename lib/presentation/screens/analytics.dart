@@ -1,5 +1,6 @@
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/presentation/widgets/expense_graph.dart';
 import 'package:coinwatcher/presentation/widgets/legend.dart';
 import 'package:coinwatcher/presentation/widgets/menu.dart';
@@ -8,10 +9,11 @@ import 'package:coinwatcher/presentation/widgets/piechart.dart';
 import 'package:flutter/material.dart';
 
 class Analytics extends StatefulWidget {
-  Analytics({super.key, required this.theme, required this.font});
+  Analytics({super.key, required this.theme, required this.font, required this.currentUser});
 
   LightMode theme;
   FontFamily font;
+  User currentUser;
 
   @override
   State<Analytics> createState() => _AnalyticsState();
@@ -44,6 +46,7 @@ class _AnalyticsState extends State<Analytics> {
               child: ExpenseGraph(
                 theme: widget.theme,
                 font: widget.font,
+                currentUser: widget.currentUser,
               ),
             ),
             Padding(

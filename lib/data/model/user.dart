@@ -5,6 +5,8 @@ import 'package:coinwatcher/data/repositories/months.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:flutter/material.dart';
 
+import '../repositories/days.dart';
+
 class User {
   User(
       {required this.name,
@@ -13,7 +15,7 @@ class User {
       required this.allExpenses,
       required this.recentExpenses,
       required this.monthsDB,
-      required this.eachDaySpent});
+      required this.daysDB});
 
   String name;
   double dailyBudget;
@@ -21,7 +23,7 @@ class User {
   AllExpenses allExpenses;
   RecentExpenses recentExpenses;
   Months monthsDB;
-  Map<String, double> eachDaySpent;
+  Days daysDB;
 
   Map<String, dynamic> toJSON(){
     Map<String, dynamic> map = {
@@ -30,7 +32,7 @@ class User {
       'thisMonthSpent': thisMonthSpent.toString(),
       'allExpenses': allExpenses.toJSON(),
       'eachMonthDb': monthsDB.allMonthsJSON(),
-      'eachDaySpent': eachDaySpent
+      'eachDayDb': daysDB.allDays,
     };
     return map;
   }

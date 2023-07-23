@@ -5,7 +5,6 @@ import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/user.dart';
-import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/expenseBox.dart';
 import 'package:flutter/material.dart';
