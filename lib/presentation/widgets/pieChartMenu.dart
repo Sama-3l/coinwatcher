@@ -30,12 +30,6 @@ class _PieChartMenuState extends State<PieChartMenu> {
   late String dropdownValue = DateFormat('MMMM, y').format(DateTime.now());
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChangeMonthBloc, ChangeMonthState>(
       builder: (context, state) {
