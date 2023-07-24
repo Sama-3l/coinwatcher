@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:coinwatcher/data/repositories/categories.dart';
 import 'package:flutter/material.dart';
 
@@ -10,9 +12,9 @@ class Month{
 
   Map<String, dynamic> toJSON(){
     Map<String, dynamic> month = {
-      'month' : "${date.month}, ${date.year}",
-      'totalSpent': totalSpent,
-      'categories' : categories.toJSON()
+      "month" : "${date.month}, ${date.year}",
+      "totalSpent": totalSpent.toString(),
+      "categories" : categories.toJSON()
     };
     return month;
   }

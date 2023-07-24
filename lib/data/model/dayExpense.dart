@@ -8,8 +8,8 @@ class DayExpense{
 
   Map<String, String> toJSON(){
     return {
-      'date' : date.toString(),
-      'amount': amount.toString()
+      "date" : date.toString(),
+      "amount" : amount.toString()
     };
   }
 }

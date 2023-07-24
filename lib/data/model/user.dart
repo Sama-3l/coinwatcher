@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:coinwatcher/data/model/month.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/categories.dart';
@@ -19,9 +21,9 @@ class User {
 
   String name;
   double dailyBudget;
-  double thisMonthSpent;
+  double thisMonthSpent;  //remove this
   AllExpenses allExpenses;
-  RecentExpenses recentExpenses;
+  RecentExpenses recentExpenses;  //DB entry not req
   Months monthsDB;
   Days daysDB;
 
@@ -32,7 +34,7 @@ class User {
       'thisMonthSpent': thisMonthSpent.toString(),
       'allExpenses': allExpenses.toJSON(),
       'eachMonthDb': monthsDB.allMonthsJSON(),
-      'eachDayDb': daysDB.allDays,
+      'eachDayDb': daysDB.allDaysToJSON(),
     };
     return map;
   }

@@ -9,6 +9,7 @@ import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/expenseBox.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
+import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -249,6 +250,10 @@ class ExpenseAdd extends StatelessWidget {
                                         amount: double.parse(amount.text),
                                         date: picked,
                                         category: dropDownValue);
+
+                                    ServerAccess sa = ServerAccess();
+                                    sa.fetchDataFromServer(currentUser);
+
                                     func.addExpenseFab(
                                         currentUser, thisExpense, context, theme);
                                   },
