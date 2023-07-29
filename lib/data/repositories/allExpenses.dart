@@ -45,11 +45,11 @@ class AllExpenses {
         category: "Food n drinks"),
   ];
 
-  Map<String, dynamic> toJSON(){
-    Map<String, dynamic> map = {};
+  List<Map<String, dynamic>> toJSON(){
+    List<Map<String, dynamic>> list = [];
     for(int i = 0; i < allExpenses.length; i++){
-      map['expense$i'] = allExpenses[i].toJSON();
+      list.add(allExpenses[i].toJSON());
     }
-    return map;
+    return list;
   }
 }

@@ -9,9 +9,10 @@ import 'package:http/http.dart' as http;
 class ServerAccess {
   void fetchDataFromServer(User currentUser) async {
     final url = Uri.parse(
-        'http://172.17.1.107:3000/post'); // Replace with your server URL
+        'http://172.17.2.25:3000/post'); // Replace with your server URL
     try {
       var regBody = currentUser.toJSON();
+      print(regBody);
       final response = await http.post(url, headers: {'Content-Type' : 'application/json'}, body: jsonEncode(regBody));
 
       if (response.statusCode == 200) {

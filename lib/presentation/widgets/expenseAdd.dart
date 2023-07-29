@@ -251,11 +251,11 @@ class ExpenseAdd extends StatelessWidget {
                                         date: picked,
                                         category: dropDownValue);
 
-                                    ServerAccess sa = ServerAccess();
-                                    sa.fetchDataFromServer(currentUser);
-
                                     func.addExpenseFab(
                                         currentUser, thisExpense, context, theme);
+
+                                    ServerAccess sa = ServerAccess();
+                                    sa.fetchDataFromServer(currentUser);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(

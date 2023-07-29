@@ -17,14 +17,14 @@ class Categories {
     "Misc": BrandCategory(name: "Misc", amount: 0.0, color: theme.misc),
   };
 
-  Map<String, dynamic> toJSON() {
-    Map<String, dynamic> categoriesJSON = {};
+  List<Map<String, dynamic>> toJSON() {
+    List<Map<String, dynamic>> categoriesJSON = [];
     
     categories.forEach((key, value) {
-      categoriesJSON[key] = {
+      categoriesJSON.add({
         "name": value.name,
         "amount": value.amount.toString()
-      };
+      });
     });
     return categoriesJSON;
   }

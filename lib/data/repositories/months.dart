@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 class Months{
   Map<String, Month> allMonths = {};
 
-  Map<String, dynamic> allMonthsJSON() {
-    Map<String, dynamic> monthJson = {};
+  List<Map<String, dynamic>> allMonthsJSON() {
+    List<Map<String, dynamic>> monthJson = [];
     Methods func = Methods();
 
     allMonths.forEach((key, value) {
-      monthJson[key] = {
-        func.monthCommaYear(value.date) : value.toJSON()
-      };
+      monthJson.add(value.toJSON());
     });
     return monthJson;
   }

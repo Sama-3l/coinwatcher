@@ -16,7 +16,7 @@ class Expense {
     Map<String, dynamic> map = {
       'name' : expenseName,
       'amount' : amount.toString(),
-      'date' : '${date.day},${date.month},${date.year}',
+      'date' : '${date.year}-${date.month}-${date.day}',
       'category' : category
     };
     return map;
