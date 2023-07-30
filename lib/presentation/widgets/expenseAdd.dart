@@ -254,8 +254,8 @@ class ExpenseAdd extends StatelessWidget {
                                     func.addExpenseFab(
                                         currentUser, thisExpense, context, theme);
 
-                                    ServerAccess sa = ServerAccess();
-                                    sa.fetchDataFromServer(currentUser);
+                                    // ServerAccess sa = ServerAccess();
+                                    // sa.fetchDataFromServer(currentUser);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.only(

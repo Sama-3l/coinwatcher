@@ -4,6 +4,7 @@
 
 import 'dart:math';
 
+import 'package:coinwatcher/business_logic/blocs/barGraphChange/bar_graph_change_bloc.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/bar_data.dart';
 import 'package:coinwatcher/data/model/dayExpense.dart';
@@ -111,7 +112,7 @@ class Methods {
     return DateFormat('MMMM, yyyy').format(date);
   }
 
-  void addMonthnCategories(User currentUser, Expense expense,LightMode theme) {
+  void addMonthnCategories(User currentUser, Expense expense, LightMode theme) {
     // Check if month exists
     if (currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] != null) {
       currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.totalSpent =
@@ -245,8 +246,46 @@ class Methods {
     }
   }
 
-  void addExpenseFab(
-      User currentUser, Expense thisExpense, BuildContext context, LightMode theme) {
+  void addToDayDb(User currentUser) {
+    List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
+    currentUser.daysDB.allDays.clear();
+    for (int i = 0; i < 10; i++) {
+      currentUser.daysDB.allDays[allExpenses[0]
+              .date
+              .subtract(Duration(days: i))
+              .day
+              .toString()
+              .padLeft(2, '0')] =
+          DayExpense(
+              date: allExpenses[0].date.subtract(Duration(days: i)),
+              amount: 0.0);
+    }
+    for (int i = 0; i < allExpenses.length; i++) {
+      if (currentUser.daysDB
+              .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] !=
+          null) {
+        if (currentUser
+                .daysDB
+                .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
+                .date
+                .difference(allExpenses[i].date)
+                .inDays ==
+            0) {
+          currentUser
+              .daysDB
+              .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
+              .amount = currentUser
+                  .daysDB
+                  .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
+                  .amount +
+              allExpenses[i].amount;
+        }
+      }
+    }
+  }
+
+  void addExpenseFab(User currentUser, Expense thisExpense,
+      BuildContext context, LightMode theme) {
     if (DateTime.now().month == thisExpense.date.month) {
       currentUser.thisMonthSpent =
           currentUser.thisMonthSpent + thisExpense.amount;
@@ -254,6 +293,8 @@ class Methods {
     currentUser.allExpenses.allExpenses.insert(0, thisExpense);
     currentUser.recentExpenses = getRecentExpenses(currentUser.allExpenses);
     addToMonthDB(currentUser, thisExpense, theme);
+    addToDayDb(currentUser);
+    print(currentUser.daysDB.allDaysToJSON());
     Navigator.of(context).pop();
     BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
   }
@@ -316,9 +357,9 @@ class Methods {
     return pieData;
   }
 
-  String getTotalAmount(Categories categories){
+  String getTotalAmount(Categories categories) {
     double totalAmount = 0;
-    categories.categories.forEach((key, value) { 
+    categories.categories.forEach((key, value) {
       totalAmount = totalAmount + value.amount;
     });
     return totalAmount.ceil().toString();
