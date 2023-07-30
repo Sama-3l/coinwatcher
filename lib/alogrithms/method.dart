@@ -294,7 +294,6 @@ class Methods {
     currentUser.recentExpenses = getRecentExpenses(currentUser.allExpenses);
     addToMonthDB(currentUser, thisExpense, theme);
     addToDayDb(currentUser);
-    print(currentUser.daysDB.allDaysToJSON());
     Navigator.of(context).pop();
     BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
   }
