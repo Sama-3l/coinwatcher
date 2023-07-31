@@ -12,6 +12,8 @@ import '../repositories/days.dart';
 class User {
   User(
       {required this.name,
+      required this.email,
+      required this.password,
       required this.dailyBudget,
       required this.thisMonthSpent,
       required this.allExpenses,
@@ -20,6 +22,8 @@ class User {
       required this.daysDB});
 
   String name;
+  String email;
+  String password;
   double dailyBudget;
   double thisMonthSpent;  //remove this
   AllExpenses allExpenses;
@@ -30,6 +34,8 @@ class User {
   Map<String, dynamic> toJSON(){
     Map<String, dynamic> map = {
       'name' : name,
+      'email' : email,
+      'password' : password,
       'dailyBudget': dailyBudget.toString(),
       'thisMonthSpent': thisMonthSpent.toString(),
       'allExpenses': allExpenses.toJSON(),

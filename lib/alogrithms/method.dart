@@ -46,7 +46,8 @@ class Methods {
 
   RecentExpenses getRecentExpenses(AllExpenses allExpenses) {
     RecentExpenses recentExpenses = RecentExpenses();
-    if (allExpenses.allExpenses[0].date.month == DateTime.now().month) {
+    if(allExpenses.allExpenses.isNotEmpty){
+      if (allExpenses.allExpenses[0].date.month == DateTime.now().month) {
       for (int i = 0; i < allExpenses.allExpenses.length; i++) {
         if (allExpenses.allExpenses[i].date.month == DateTime.now().month) {
           recentExpenses.recentExpenses.add(allExpenses.allExpenses[i]);
@@ -54,6 +55,7 @@ class Methods {
           break;
         }
       }
+    }
     }
 
     return recentExpenses;
@@ -150,20 +152,33 @@ class Methods {
   //To initialize months can remove later it's better to just add a single entry as we actually need to do.
   void loadMonths(User currentUser, LightMode theme) {
     List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
-    for (int i = allExpenses.length - 1; i >= 0; i--) {
-      if (DateTime.now().month == allExpenses[i].date.month) {
-        currentUser.thisMonthSpent =
-            currentUser.thisMonthSpent + allExpenses[i].amount;
-      }
-      if (currentUser.monthsDB.allMonths.isNotEmpty) {
-        if (currentUser
-                .monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] !=
-            null) {
-          currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)]!
-              .totalSpent = currentUser.monthsDB
-                  .allMonths[monthCommaYear(allExpenses[i].date)]!.totalSpent +
-              allExpenses[i].amount;
-          loadCategories(currentUser, allExpenses[i]);
+    if (allExpenses.isNotEmpty) {
+      for (int i = allExpenses.length - 1; i >= 0; i--) {
+        if (DateTime.now().month == allExpenses[i].date.month) {
+          currentUser.thisMonthSpent =
+              currentUser.thisMonthSpent + allExpenses[i].amount;
+        }
+        if (currentUser.monthsDB.allMonths.isNotEmpty) {
+          if (currentUser
+                  .monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] !=
+              null) {
+            currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)]!
+                .totalSpent = currentUser
+                    .monthsDB
+                    .allMonths[monthCommaYear(allExpenses[i].date)]!
+                    .totalSpent +
+                allExpenses[i].amount;
+            loadCategories(currentUser, allExpenses[i]);
+          } else {
+            currentUser
+                    .monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] =
+                Month(
+                    date: DateTime(
+                        allExpenses[i].date.year, allExpenses[i].date.month),
+                    totalSpent: allExpenses[i].amount,
+                    categories: Categories(theme: theme));
+            addMonthnCategories(currentUser, allExpenses[i], theme);
+          }
         } else {
           currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] =
               Month(
@@ -173,16 +188,8 @@ class Methods {
                   categories: Categories(theme: theme));
           addMonthnCategories(currentUser, allExpenses[i], theme);
         }
-      } else {
-        currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] =
-            Month(
-                date: DateTime(
-                    allExpenses[i].date.year, allExpenses[i].date.month),
-                totalSpent: allExpenses[i].amount,
-                categories: Categories(theme: theme));
-        addMonthnCategories(currentUser, allExpenses[i], theme);
       }
-    }
+    } else {}
   }
 
   void addToMonthDB(User currentUser, Expense expense, LightMode theme) {
@@ -212,7 +219,8 @@ class Methods {
 
   void loadDays(User currentUser) {
     List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
-    currentUser.daysDB
+    if(allExpenses.isNotEmpty){
+      currentUser.daysDB
             .allDays[allExpenses[0].date.day.toString().padLeft(2, '0')] =
         DayExpense(date: allExpenses[0].date, amount: allExpenses[0].amount);
     for (int i = 0; i < 10; i++) {
@@ -244,6 +252,7 @@ class Methods {
         }
       }
     }
+    }  
   }
 
   void addToDayDb(User currentUser) {

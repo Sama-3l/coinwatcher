@@ -61,8 +61,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Tab(
-                        icon: Icon(CarbonIcons.home, size: 20),
-                        iconMargin: EdgeInsets.only(bottom: 6),
+                        icon: Icon(CarbonIcons.home, size: 24),
+                        iconMargin: EdgeInsets.only(bottom: 8),
                         child: Text('Home',
                             style: widget.font.getPoppinsTextStyle(
                                 color: currentIndex == 0
@@ -76,8 +76,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Tab(
-                          icon: Icon(CarbonIcons.repeat, size: 20),
-                          iconMargin: EdgeInsets.only(bottom: 6),
+                          icon: Icon(CarbonIcons.repeat, size: 24),
+                          iconMargin: EdgeInsets.only(bottom: 8),
                           child: Text('Spendings',
                               style: widget.font.getPoppinsTextStyle(
                                   color: currentIndex == 1
@@ -90,8 +90,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
                       child: Tab(
-                          icon: Icon(CarbonIcons.chart_cluster_bar, size: 20),
-                          iconMargin: EdgeInsets.only(bottom: 6),
+                          icon: Icon(CarbonIcons.chart_cluster_bar, size: 24),
+                          iconMargin: EdgeInsets.only(bottom: 8),
                           child: Text('Analytics',
                               style: widget.font.getPoppinsTextStyle(
                                   color: currentIndex == 2

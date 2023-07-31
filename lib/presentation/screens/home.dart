@@ -30,12 +30,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   FontFamily font = FontFamily();
   Methods func = Methods();
   late TabController tabController;
+  AllExpenses allExpenses = AllExpenses();
   late User currentUser = User(
       name: 'Samael',
+      email: 'raghvendramishra2002@gmail.com',
+      password: 'pswd',
       dailyBudget: 250,
       thisMonthSpent: 0.0,
-      allExpenses: AllExpenses(),
-      recentExpenses: func.getRecentExpenses(AllExpenses()),
+      allExpenses: allExpenses,
+      recentExpenses: func.getRecentExpenses(allExpenses),
       monthsDB: Months(),
       daysDB: Days());
 
