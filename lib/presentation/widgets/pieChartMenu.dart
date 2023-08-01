@@ -26,8 +26,7 @@ class PieChartMenu extends StatefulWidget {
 
 class _PieChartMenuState extends State<PieChartMenu> {
   Methods func = Methods();
-  late List<String> list = func.analyticsMenu(widget.currentUser);
-  late String dropdownValue = DateFormat('MMMM, y').format(DateTime.now());
+  late String dropdownValue = func.getDropDownDefaultValue(widget.currentUser.recentExpenses);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class _PieChartMenuState extends State<PieChartMenu> {
                     dropdownValue = value!;
                     BlocProvider.of<ChangeMonthBloc>(context).add(UpdateMonthEvent());
                   },
-                  items: list.map<DropdownMenuItem<String>>((String value) {
+                  items: func.analyticsMenu(widget.currentUser).map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),

@@ -46,16 +46,25 @@ class Methods {
 
   RecentExpenses getRecentExpenses(AllExpenses allExpenses) {
     RecentExpenses recentExpenses = RecentExpenses();
-    if(allExpenses.allExpenses.isNotEmpty){
+    if (allExpenses.allExpenses.isNotEmpty) {
       if (allExpenses.allExpenses[0].date.month == DateTime.now().month) {
-      for (int i = 0; i < allExpenses.allExpenses.length; i++) {
-        if (allExpenses.allExpenses[i].date.month == DateTime.now().month) {
-          recentExpenses.recentExpenses.add(allExpenses.allExpenses[i]);
-        } else {
-          break;
+        for (int i = 0; i < allExpenses.allExpenses.length; i++) {
+          if (allExpenses.allExpenses[i].date.month == DateTime.now().month) {
+            recentExpenses.recentExpenses.add(allExpenses.allExpenses[i]);
+          } else {
+            break;
+          }
+        }
+      } else if (allExpenses.allExpenses.length > 1) {
+        var currentMonth = allExpenses.allExpenses[0].date.month;
+        for (int i = 0; i < allExpenses.allExpenses.length; i++) {
+          if (allExpenses.allExpenses[i].date.month == currentMonth) {
+            recentExpenses.recentExpenses.add(allExpenses.allExpenses[i]);
+          } else {
+            break;
+          }
         }
       }
-    }
     }
 
     return recentExpenses;
@@ -219,40 +228,40 @@ class Methods {
 
   void loadDays(User currentUser) {
     List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
-    if(allExpenses.isNotEmpty){
+    if (allExpenses.isNotEmpty) {
       currentUser.daysDB
-            .allDays[allExpenses[0].date.day.toString().padLeft(2, '0')] =
-        DayExpense(date: allExpenses[0].date, amount: allExpenses[0].amount);
-    for (int i = 0; i < 10; i++) {
-      currentUser.daysDB.allDays[allExpenses[0]
-              .date
-              .subtract(Duration(days: i))
-              .day
-              .toString()
-              .padLeft(2, '0')] =
-          DayExpense(
-              date: allExpenses[0].date.subtract(Duration(days: i)),
-              amount: 0.0);
-    }
-    for (int i = 0; i < allExpenses.length; i++) {
-      if (currentUser.daysDB
-              .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] !=
-          null) {
-        if (currentUser
-                .daysDB
-                .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
+              .allDays[allExpenses[0].date.day.toString().padLeft(2, '0')] =
+          DayExpense(date: allExpenses[0].date, amount: allExpenses[0].amount);
+      for (int i = 0; i < 10; i++) {
+        currentUser.daysDB.allDays[allExpenses[0]
                 .date
-                .difference(allExpenses[i].date)
-                .inDays ==
-            0) {
-          currentUser.daysDB
-                  .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] =
-              DayExpense(
-                  date: allExpenses[i].date, amount: allExpenses[i].amount);
+                .subtract(Duration(days: i))
+                .day
+                .toString()
+                .padLeft(2, '0')] =
+            DayExpense(
+                date: allExpenses[0].date.subtract(Duration(days: i)),
+                amount: 0.0);
+      }
+      for (int i = 0; i < allExpenses.length; i++) {
+        if (currentUser.daysDB
+                .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] !=
+            null) {
+          if (currentUser
+                  .daysDB
+                  .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
+                  .date
+                  .difference(allExpenses[i].date)
+                  .inDays ==
+              0) {
+            currentUser.daysDB.allDays[
+                    allExpenses[i].date.day.toString().padLeft(2, '0')] =
+                DayExpense(
+                    date: allExpenses[i].date, amount: allExpenses[i].amount);
+          }
         }
       }
     }
-    }  
   }
 
   void addToDayDb(User currentUser) {
@@ -371,5 +380,15 @@ class Methods {
       totalAmount = totalAmount + value.amount;
     });
     return totalAmount.ceil().toString();
+  }
+
+  String getDropDownDefaultValue(RecentExpenses recentExpenses) {
+    if (recentExpenses.recentExpenses[0].date.month == DateTime.now().month &&
+        recentExpenses.recentExpenses[0].date.year == DateTime.now().year) {
+      return DateFormat('MMMM, y').format(DateTime.now());
+    } else {
+      return DateFormat('MMMM, y')
+          .format(recentExpenses.recentExpenses[0].date);
+    }
   }
 }

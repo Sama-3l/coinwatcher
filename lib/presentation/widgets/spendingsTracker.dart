@@ -76,7 +76,7 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
                                   0
                               ? 1
                               : func.monthlyBudget(
-                                  widget.currentUser.dailyBudget))) ==
+                                  widget.currentUser.dailyBudget))) >
                       1
                   ? 1
                   : widget.currentUser.thisMonthSpent /
@@ -85,7 +85,15 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
                           : func.monthlyBudget(widget.currentUser.dailyBudget)),
               barRadius: Radius.circular(7),
               backgroundColor: widget.theme.mainBackground,
-              progressColor: widget.theme.primaryAccent3,
+              progressColor: (widget.currentUser.thisMonthSpent /
+                          (func.monthlyBudget(widget.currentUser.dailyBudget) ==
+                                  0
+                              ? 1
+                              : func.monthlyBudget(
+                                  widget.currentUser.dailyBudget))) >
+                      1
+                  ? widget.theme.error
+                  : widget.theme.primaryAccent3,
             ),
           ),
         ]),
