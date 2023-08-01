@@ -115,4 +115,18 @@ class WidgetDecider {
     }
     return children;
   }
+
+  Padding textWidget(String text, FontFamily font, LightMode theme, double fontSize) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 7, bottom: 7),
+      child: Text(
+        text,
+        style: font.getPoppinsTextStyle(
+            color: theme.textPrimary,
+            fontSize: fontSize,
+            fontWeight: FontWeight.w600,
+            letterSpacing: -0.41),
+      ),
+    );
+  }
 }

@@ -6,7 +6,9 @@ import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
+import 'package:coinwatcher/presentation/widgets/changeMonthlyBudget.dart';
 import 'package:coinwatcher/presentation/widgets/trackerText.dart';
+import 'package:coinwatcher/routes/monthlyPopUpRoute.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -41,11 +43,22 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TrackerText(
-                  amount: func.monthlyBudget(widget.currentUser.dailyBudget),
-                  isTotal: true,
-                  theme: widget.theme,
-                  font: widget.font),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(HeroDialogPoPRoute(
+                      builder: (context) => Align(
+                          alignment: Alignment.bottomCenter,
+                          child: ChangeBudget(
+                              currentUser: widget.currentUser,
+                              theme: widget.theme,
+                              font: widget.font))));
+                },
+                child: TrackerText(
+                    amount: func.monthlyBudget(widget.currentUser.dailyBudget),
+                    isTotal: true,
+                    theme: widget.theme,
+                    font: widget.font),
+              ),
               TrackerText(
                   amount: widget.currentUser.thisMonthSpent,
                   isTotal: false,

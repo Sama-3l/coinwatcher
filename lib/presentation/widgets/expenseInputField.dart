@@ -11,13 +11,15 @@ class ExpenseInputField extends StatefulWidget {
       required this.hintText,
       required this.theme,
       required this.font,
-      this.readOnly = false});
+      this.readOnly = false,
+      this.fontSize = 18});
 
   TextEditingController textEditingController;
   String hintText;
   LightMode theme;
   FontFamily font;
   bool readOnly;
+  double fontSize;
 
   @override
   State<ExpenseInputField> createState() => _ExpenseInputFieldState();
@@ -37,13 +39,13 @@ class _ExpenseInputFieldState extends State<ExpenseInputField> {
         textCapitalization: TextCapitalization.sentences,
         style: widget.font.getPoppinsTextStyle(
             color: widget.theme.textPrimary,
-            fontSize: 18,
+            fontSize: widget.fontSize,
             fontWeight: FontWeight.w500,
             letterSpacing: -0.41),
         decoration: InputDecoration(
           hintStyle: widget.font.getPoppinsTextStyle(
               color: widget.theme.textHint,
-              fontSize: 18,
+              fontSize: widget.fontSize,
               fontWeight: FontWeight.w500,
               letterSpacing: -0.41),
           hintText: widget.hintText,
