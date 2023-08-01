@@ -1,11 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
+import 'package:coinwatcher/business_logic/blocs/updateExpense/update_expense_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'expenseInputField.dart';
 
@@ -48,22 +52,22 @@ class _ChangeBudgetState extends State<ChangeBudget> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Padding(
-                          padding: EdgeInsets.only(
-                              left: 17,
-                              right: 17,
-                              top: 24),
+                          padding:
+                              EdgeInsets.only(left: 17, right: 17, top: 24),
                           child:
                               Column(mainAxisSize: MainAxisSize.min, children: [
                             Padding(
                               padding: EdgeInsets.only(bottom: 24),
-                              child: wd.textWidget(
-                                  'Monthly Budget', widget.font, widget.theme, 20),
+                              child: wd.textWidget('Monthly Budget',
+                                  widget.font, widget.theme, 20),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 21),
                               child: ExpenseInputField(
                                   textEditingController: controller,
-                                  hintText: '\u20B9${func.monthlyBudget(widget.currentUser.dailyBudget)}',
+                                  currency: true,
+                                  hintText:
+                                      '${func.monthlyBudget(widget.currentUser.dailyBudget)}',
                                   font: widget.font,
                                   theme: widget.theme,
                                   fontSize: 24),
@@ -73,13 +77,25 @@ class _ChangeBudgetState extends State<ChangeBudget> {
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       elevation: 0,
-                                      backgroundColor: widget.theme.primaryAccent4,
+                                      backgroundColor:
+                                          widget.theme.primaryAccent4,
                                       shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(50))),
-                                  onPressed: () {},
+                                          borderRadius:
+                                              BorderRadius.circular(50))),
+                                  onPressed: () {
+                                    widget.currentUser.dailyBudget =
+                                        func.calculateDailyBudget(
+                                            double.parse(controller.text));
+                                    BlocProvider.of<UpdateExpenseBloc>(context)
+                                        .add(ExpenseChangedEvent());
+                                    Navigator.of(context).pop();
+                                  },
                                   child: Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 24, right: 24, top: 10, bottom: 10),
+                                        left: 24,
+                                        right: 24,
+                                        top: 10,
+                                        bottom: 10),
                                     child: Text(
                                       'Add',
                                       style: widget.font.getPoppinsTextStyle(

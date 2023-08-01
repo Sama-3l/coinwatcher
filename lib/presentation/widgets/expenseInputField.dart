@@ -12,6 +12,7 @@ class ExpenseInputField extends StatefulWidget {
       required this.theme,
       required this.font,
       this.readOnly = false,
+      this.currency = false,
       this.fontSize = 18});
 
   TextEditingController textEditingController;
@@ -20,6 +21,7 @@ class ExpenseInputField extends StatefulWidget {
   FontFamily font;
   bool readOnly;
   double fontSize;
+  bool currency;
 
   @override
   State<ExpenseInputField> createState() => _ExpenseInputFieldState();
@@ -43,6 +45,19 @@ class _ExpenseInputFieldState extends State<ExpenseInputField> {
             fontWeight: FontWeight.w500,
             letterSpacing: -0.41),
         decoration: InputDecoration(
+          prefix: widget.currency
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: Text(
+                    '\u20B9',
+                    style: widget.font.getPoppinsTextStyle(
+                        color: widget.theme.textPrimary,
+                        fontSize: widget.fontSize,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: -0.41),
+                  ),
+                )
+              : null,
           hintStyle: widget.font.getPoppinsTextStyle(
               color: widget.theme.textHint,
               fontSize: widget.fontSize,

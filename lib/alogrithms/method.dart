@@ -391,4 +391,9 @@ class Methods {
           .format(recentExpenses.recentExpenses[0].date);
     }
   }
+
+  double calculateDailyBudget(double monthlyBudget) {
+    return monthlyBudget /
+        DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day;
+  }
 }
