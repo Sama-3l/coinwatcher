@@ -17,6 +17,8 @@ class _PasswordTextFieldState extends State<PasswordTextField>
   late AnimationController _animationController;
   late Animation<double> _animation;
 
+  late int index = 1;
+
   bool _isPasswordVisible = false;
   bool _isPasswordValid = false;
   bool _hasUpperCase = false;
@@ -55,9 +57,11 @@ class _PasswordTextFieldState extends State<PasswordTextField>
     if (_focusNode.hasFocus) {
       _showPasswordConditions();
       _animationController.forward();
+      index = 0;
     } else {
       _hidePasswordConditions();
       _animationController.reverse();
+      index = 1;
     }
   }
 
@@ -122,6 +126,73 @@ class _PasswordTextFieldState extends State<PasswordTextField>
 
   @override
   Widget build(BuildContext context) {
+    List<String> conditions = [
+      "At least 1 uppercase letter",
+      "At least 1 lowercase letter",
+      "At least 1 numeric digit",
+      "At least 1 special character",
+      "Be at least 8 characters long",
+    ];
+    List<bool> conditionsMet = [
+      _hasUpperCase,
+      _hasLowerCase,
+      _hasNumeric,
+      _hasSpecialChar,
+      _passwordController.text.length >= 8,
+    ];
+    List condition = [
+      Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Align(
+          alignment: Alignment.center,
+          child: AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(0, -45 * (1 - _animation.value)),
+                child: Opacity(
+                  opacity: _animation.value,
+                  child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border.all(color: Color(0xFF858585)),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Password must contain:",
+                          style: TextStyle(color: Color(0xFF858585)),
+                        ),
+                        SizedBox(height: 4),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(conditions.length, (index) {
+                            return Text(
+                              "${conditionsMet[index] ? '✓' : '❌'} ${conditions[index]}",
+                              style: TextStyle(
+                                color: conditionsMet[index]
+                                    ? Colors.green
+                                    : Colors.red,
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 29,
+      )
+    ];
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Column(
@@ -150,55 +221,53 @@ class _PasswordTextFieldState extends State<PasswordTextField>
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Align(
-            alignment: Alignment.center,
-            child: AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(0, -45 * (1 - _animation.value)),
-                  child: Opacity(
-                    opacity: _animation.value,
-                    child: Container(
-                      padding: EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border.all(color: Color(0xFF858585)),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Password must contain:",
-                            style: TextStyle(color: Color(0xFF858585)),
-                          ),
-                          SizedBox(height: 4),
-                          Text(
-                            "${_hasUpperCase ? '✓' : '-'} at least 1 uppercase letter\n"
-                            "${_hasLowerCase ? '✓' : '-'} at least 1 lowercase letter\n"
-                            "${_hasNumeric ? '✓' : '-'} at least 1 numeric digit\n"
-                            "${_hasSpecialChar ? '✓' : '-'} at least 1 special character\n"
-                            "${_passwordController.text.length >= 8 ? '✓' : '-'} be at least 8 characters long",
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
+
+        condition[index],
+        // Padding(
+        //   padding: const EdgeInsets.only(top: 10),
+        //   child: Align(
+        //     alignment: Alignment.center,
+        //     child: AnimatedBuilder(
+        //       animation: _animationController,
+        //       builder: (context, child) {
+        //         return Transform.translate(
+        //           offset: Offset(0, -45 * (1 - _animation.value)),
+        //           child: Opacity(
+        //             opacity: _animation.value,
+        //             child: Container(
+        //               padding: EdgeInsets.all(10.0),
+        //               decoration: BoxDecoration(
+        //                 color: Colors.transparent,
+        //                 border: Border.all(color: Color(0xFF858585)),
+        //                 borderRadius: BorderRadius.circular(10.0),
+        //               ),
+        //               child: Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text(
+        //                     "Password must contain:",
+        //                     style: TextStyle(color: Color(0xFF858585)),
+        //                   ),
+        //                   SizedBox(height: 4),
+        //                   Text(
+        //                     "${_hasUpperCase ? '✓' : '-'} at least 1 uppercase letter\n"
+        //                     "${_hasLowerCase ? '✓' : '-'} at least 1 lowercase letter\n"
+        //                     "${_hasNumeric ? '✓' : '-'} at least 1 numeric digit\n"
+        //                     "${_hasSpecialChar ? '✓' : '-'} at least 1 special character\n"
+        //                     "${_passwordController.text.length >= 8 ? '✓' : '-'} be at least 8 characters long",
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //           ),
+        //         );
+        //       },
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
 
   late String password = _passwordController.text;
-}
-
-class ConditionWidget extends _PasswordTextFieldState {
-  ConditionWidget(password) {}
 }
