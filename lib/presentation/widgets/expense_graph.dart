@@ -98,9 +98,11 @@ class _ExpenseGraphState extends State<ExpenseGraph> {
               //  Bar Graph
               index == 0
                   ? monthlyGraph(
+                    currentUser: widget.currentUser,
                       data: func.initializeMonthlyGraphDatabase(
                           widget.currentUser, widget.theme))
                   : dailyGraph(
+                    currentUser: widget.currentUser,
                       data: func.initializeDailyGraphDatabase(
                           widget.currentUser, widget.theme))
             ],

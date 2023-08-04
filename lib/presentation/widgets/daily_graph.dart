@@ -1,19 +1,23 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/data/model/bar_data.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
+import '../../data/model/user.dart';
+
 class dailyGraph extends StatefulWidget {
   final List<barDataDaily> data;
-  const dailyGraph({required this.data});
+  User currentUser;
+  dailyGraph({required this.data, required this.currentUser});
 
   @override
   State<dailyGraph> createState() => _dailyGraphState();
 }
 
 class _dailyGraphState extends State<dailyGraph> {
-  double threshold = 600;
+  Methods func = Methods();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +47,7 @@ class _dailyGraphState extends State<dailyGraph> {
           behaviors: [
             charts.RangeAnnotation([
               charts.LineAnnotationSegment(
-                  threshold, charts.RangeAnnotationAxisType.measure,
+                  widget.currentUser.dailyBudget, charts.RangeAnnotationAxisType.measure,
                   color: charts.MaterialPalette.gray.shade500),
             ]),
           ],

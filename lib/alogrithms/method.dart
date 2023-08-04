@@ -326,6 +326,13 @@ class Methods {
         color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
       ));
     });
+    if (data.isEmpty) {
+      data.add(barDataMonthly(
+        month: DateFormat.MMM().format(DateTime.now()),
+        spent: 0,
+        color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+      ));
+    }
     return data;
   }
 
@@ -341,6 +348,21 @@ class Methods {
         ),
       );
     });
+    if (data.isEmpty) {
+      for (int i = 0; i < 10; i++) {
+        data.add(
+          barDataDaily(
+            day: DateTime.now()
+                .subtract(Duration(days: i))
+                .day
+                .toString()
+                .padLeft(2, '0'),
+            spent: 0,
+            color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+          ),
+        );
+      }
+    }
     return data.reversed.toList();
   }
 
@@ -360,6 +382,9 @@ class Methods {
     currentUser.monthsDB.allMonths.forEach((key, value) {
       list.add(DateFormat('MMMM, y').format(value.date));
     });
+    if(list.isEmpty){
+      list.add(DateFormat('MMMM, y').format(DateTime.now()));
+    }
     return list;
   }
 
@@ -383,12 +408,16 @@ class Methods {
   }
 
   String getDropDownDefaultValue(RecentExpenses recentExpenses) {
-    if (recentExpenses.recentExpenses[0].date.month == DateTime.now().month &&
-        recentExpenses.recentExpenses[0].date.year == DateTime.now().year) {
+    if (recentExpenses.recentExpenses.isEmpty) {
       return DateFormat('MMMM, y').format(DateTime.now());
     } else {
-      return DateFormat('MMMM, y')
-          .format(recentExpenses.recentExpenses[0].date);
+      if (recentExpenses.recentExpenses[0].date.month == DateTime.now().month &&
+          recentExpenses.recentExpenses[0].date.year == DateTime.now().year) {
+        return DateFormat('MMMM, y').format(DateTime.now());
+      } else {
+        return DateFormat('MMMM, y')
+            .format(recentExpenses.recentExpenses[0].date);
+      }
     }
   }
 

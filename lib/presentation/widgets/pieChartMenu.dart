@@ -2,6 +2,7 @@ import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
+import 'package:coinwatcher/data/repositories/categories.dart';
 import 'package:coinwatcher/presentation/widgets/piechart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +27,8 @@ class PieChartMenu extends StatefulWidget {
 
 class _PieChartMenuState extends State<PieChartMenu> {
   Methods func = Methods();
-  late String dropdownValue = func.getDropDownDefaultValue(widget.currentUser.recentExpenses);
+  late String dropdownValue =
+      func.getDropDownDefaultValue(widget.currentUser.recentExpenses);
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +52,12 @@ class _PieChartMenuState extends State<PieChartMenu> {
                   onChanged: (String? value) {
                     // This is called when the user selects an item.
                     dropdownValue = value!;
-                    BlocProvider.of<ChangeMonthBloc>(context).add(UpdateMonthEvent());
+                    BlocProvider.of<ChangeMonthBloc>(context)
+                        .add(UpdateMonthEvent());
                   },
-                  items: func.analyticsMenu(widget.currentUser).map<DropdownMenuItem<String>>((String value) {
+                  items: func
+                      .analyticsMenu(widget.currentUser)
+                      .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -64,12 +69,20 @@ class _PieChartMenuState extends State<PieChartMenu> {
             PieChart(
                 theme: widget.theme,
                 font: widget.font,
-                currentMonthCategories: widget
-                    .currentUser.monthsDB.allMonths[dropdownValue]!.categories),
+                currentMonthCategories:
+                    widget.currentUser.monthsDB.allMonths.isEmpty
+                        ? Categories(theme: widget.theme)
+                        : widget.currentUser.monthsDB.allMonths[dropdownValue]!
+                            .categories),
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
-              child: Legend(theme: widget.theme, font: widget.font, categories: widget
-                    .currentUser.monthsDB.allMonths[dropdownValue]!.categories),
+              child: Legend(
+                  theme: widget.theme,
+                  font: widget.font,
+                  categories: widget.currentUser.monthsDB.allMonths.isEmpty
+                      ? Categories(theme: widget.theme)
+                      : widget.currentUser.monthsDB.allMonths[dropdownValue]!
+                          .categories),
             )
           ],
         );

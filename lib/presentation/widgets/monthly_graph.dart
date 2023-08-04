@@ -1,12 +1,16 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/data/model/bar_data.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
+import '../../data/model/user.dart';
+
 class monthlyGraph extends StatefulWidget {
   final List<barDataMonthly> data;
-  const monthlyGraph({required this.data});
+  User currentUser;
+  monthlyGraph({required this.data, required this.currentUser});
 
   @override
   State<monthlyGraph> createState() => _monthlyGraphState();
@@ -14,6 +18,7 @@ class monthlyGraph extends StatefulWidget {
 
 class _monthlyGraphState extends State<monthlyGraph> {
   double threshold = 5000;
+  Methods func = Methods();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +49,7 @@ class _monthlyGraphState extends State<monthlyGraph> {
             behaviors: [
               charts.RangeAnnotation([
                 charts.LineAnnotationSegment(
-                    threshold, charts.RangeAnnotationAxisType.measure,
+                    func.monthlyBudget(widget.currentUser.dailyBudget), charts.RangeAnnotationAxisType.measure,
                     color: charts.MaterialPalette.gray.shade500),
               ]),
             ],

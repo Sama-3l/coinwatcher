@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';
@@ -5,6 +7,7 @@ import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
+import 'package:coinwatcher/presentation/widgets/expense_graph.dart';
 import 'package:coinwatcher/presentation/widgets/spendingsTracker.dart';
 import 'package:flutter/material.dart';
 
@@ -69,19 +72,29 @@ class _DashboardState extends State<Dashboard> {
                           letterSpacing: 1),
                     ),
                   ),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: ExpenseGraph(
+                          theme: widget.theme,
+                          font: widget.font,
+                          currentUser: widget.currentUser)),
                   //Analytics
                   //View more button -> Diverts to the analytics tab
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Text(
-                      'Recent spendings',
-                      style: widget.font.getPoppinsTextStyle(
-                          color: widget.theme.textSecondary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 1),
-                    ),
-                  ),
+                  widget.currentUser.recentExpenses.recentExpenses.isNotEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            'Recent spendings',
+                            style: widget.font.getPoppinsTextStyle(
+                                color: widget.theme.textSecondary,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1),
+                          ),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Container()),
                   Column(
                       mainAxisSize: MainAxisSize.min,
                       children: wd.getRecentSpendings(
