@@ -9,7 +9,11 @@ import 'package:coinwatcher/presentation/widgets/piechart.dart';
 import 'package:flutter/material.dart';
 
 class Analytics extends StatefulWidget {
-  Analytics({super.key, required this.theme, required this.font, required this.currentUser});
+  Analytics(
+      {super.key,
+      required this.theme,
+      required this.font,
+      required this.currentUser});
 
   LightMode theme;
   FontFamily font;
@@ -58,7 +62,6 @@ class _AnalyticsState extends State<Analytics> {
               ),
             ),
             // Legend
-            
           ],
         ),
       ),
