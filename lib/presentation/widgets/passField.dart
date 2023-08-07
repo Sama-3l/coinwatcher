@@ -63,7 +63,7 @@ class _PasswordTextFieldState extends State<PasswordTextField>
               child: Opacity(
                 opacity: _animation.value,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 80, right: 80),
+                  padding: const EdgeInsets.only(left: 50, right: 50),
                   child: Container(
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
