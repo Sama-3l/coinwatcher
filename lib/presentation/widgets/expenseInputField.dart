@@ -14,7 +14,7 @@ class ExpenseInputField extends StatefulWidget {
       this.readOnly = false,
       this.currency = false,
       this.fontSize = 18,
-      this.obscure = false});
+      this.passwordIcon = false});
 
   TextEditingController textEditingController;
   String hintText;
@@ -23,13 +23,22 @@ class ExpenseInputField extends StatefulWidget {
   bool readOnly;
   double fontSize;
   bool currency;
-  bool obscure;
+  bool passwordIcon;
 
   @override
   State<ExpenseInputField> createState() => _ExpenseInputFieldState();
 }
 
 class _ExpenseInputFieldState extends State<ExpenseInputField> {
+
+  bool _isPasswordVisible = false;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordVisible = !_isPasswordVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +47,7 @@ class _ExpenseInputFieldState extends State<ExpenseInputField> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: TextField(
-        obscureText: widget.obscure,
+        obscureText: _isPasswordVisible,
         controller: widget.textEditingController,
         readOnly: widget.readOnly,
         textCapitalization: TextCapitalization.sentences,
@@ -70,6 +79,15 @@ class _ExpenseInputFieldState extends State<ExpenseInputField> {
           border: InputBorder.none,
           fillColor: Colors.transparent,
           filled: true,
+          suffixIcon: widget.passwordIcon ? IconButton(
+                  icon: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                    color: widget.theme.textHint,
+                  ),
+                  onPressed: _togglePasswordVisibility,
+                ) : null,
         ),
       ),
     );

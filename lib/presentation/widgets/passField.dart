@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, use_key_in_widget_constructors, library_private_types_in_public_api
+
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:flutter/material.dart';
@@ -5,10 +7,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class PasswordTextField extends StatefulWidget {
   final void Function(bool isValid) onPasswordValidityChanged;
+  TextEditingController password;
 
-  PasswordTextField({required this.onPasswordValidityChanged});
-  late LightMode theme = LightMode();
-  late FontFamily font = FontFamily();
+  PasswordTextField(
+      {required this.onPasswordValidityChanged, required this.password});
 
   @override
   _PasswordTextFieldState createState() => _PasswordTextFieldState();
@@ -16,10 +18,12 @@ class PasswordTextField extends StatefulWidget {
 
 class _PasswordTextFieldState extends State<PasswordTextField>
     with TickerProviderStateMixin {
-  final _passwordController = TextEditingController();
+  late final _passwordController = widget.password;
   final _focusNode = FocusNode();
   late AnimationController _animationController;
   late Animation<double> _animation;
+  LightMode theme = LightMode();
+  FontFamily font = FontFamily();
 
   late int index = 1;
 
@@ -29,6 +33,98 @@ class _PasswordTextFieldState extends State<PasswordTextField>
   bool _hasLowerCase = false;
   bool _hasNumeric = false;
   bool _hasSpecialChar = false;
+
+  late List<String> conditions = [
+    "At least 1 uppercase letter",
+    "At least 1 lowercase letter",
+    "At least 1 numeric digit",
+    "At least 1 special character",
+    "Be at least 8 characters long",
+  ];
+  late List<bool> conditionsMet = [
+    _hasUpperCase,
+    _hasLowerCase,
+    _hasNumeric,
+    _hasSpecialChar,
+    _passwordController.text.length >= 8,
+  ];
+  late List condition = [
+    Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Align(
+        alignment: Alignment.center,
+        child: AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) {
+            return Transform.translate(
+              offset: Offset(0, -45 * (1 - _animation.value)),
+              child: Opacity(
+                opacity: _animation.value,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 80, right: 80),
+                  child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: theme.mainBackground,
+                      border: Border.all(color: Color(0xFF858585)),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Password must contain:",
+                          style: TextStyle(color: Color(0xFF858585)),
+                        ),
+                        SizedBox(height: 4),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: List.generate(conditions.length, (index) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    "${conditionsMet[index] ? '✓' : '❌'}",
+                                    style: TextStyle(
+                                      color: conditionsMet[index]
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 5,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      "${conditions[index]}",
+                                      style: TextStyle(
+                                        color: conditionsMet[index]
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    ),
+    SizedBox(
+      height: 29,
+    )
+  ];
 
   @override
   void initState() {
@@ -83,7 +179,7 @@ class _PasswordTextFieldState extends State<PasswordTextField>
       _hasNumeric = value.contains(RegExp(r'[0-9]'));
       _hasSpecialChar = value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
 
-      widget.onPasswordValidityChanged?.call(_isPasswordValid);
+      widget.onPasswordValidityChanged.call(_isPasswordValid);
     });
   }
 
@@ -107,256 +203,47 @@ class _PasswordTextFieldState extends State<PasswordTextField>
     });
   }
 
-  void _showPasswordValidationToast() {
-    String message = _isPasswordValid
-        ? "Password is valid."
-        : "Password must contain:\n\n" +
-            "${_hasUpperCase ? '✓' : '-'} at least 1 uppercase letter\n" +
-            "${_hasLowerCase ? '✓' : '-'} at least 1 lowercase letter\n" +
-            "${_hasNumeric ? '✓' : '-'} at least 1 numeric digit\n" +
-            "${_hasSpecialChar ? '✓' : '-'} at least 1 special character\n" +
-            "${_passwordController.text.length >= 8 ? '✓' : '-'} be at least 8 characters long";
-
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 3,
-      backgroundColor: _isPasswordValid ? Colors.green : Colors.red,
-      textColor: Colors.white,
-      fontSize: 16.0,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    List<String> conditions = [
-      "At least 1 uppercase letter",
-      "At least 1 lowercase letter",
-      "At least 1 numeric digit",
-      "At least 1 special character",
-      "Be at least 8 characters long",
-    ];
-    List<bool> conditionsMet = [
-      _hasUpperCase,
-      _hasLowerCase,
-      _hasNumeric,
-      _hasSpecialChar,
-      _passwordController.text.length >= 8,
-    ];
-    List condition = [
-      Padding(
-        padding: const EdgeInsets.only(top: 10),
-        child: Align(
-          alignment: Alignment.center,
-          child: AnimatedBuilder(
-            animation: _animationController,
-            builder: (context, child) {
-              return Transform.translate(
-                offset: Offset(0, -45 * (1 - _animation.value)),
-                child: Opacity(
-                  opacity: _animation.value,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 80, right: 80),
-                    child: Container(
-                      padding: EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        color: widget.theme.mainBackground,
-                        border: Border.all(color: Color(0xFF858585)),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Password must contain:",
-                            style: TextStyle(color: Color(0xFF858585)),
-                          ),
-                          SizedBox(height: 4),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: List.generate(conditions.length, (index) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      "${conditionsMet[index] ? '✓' : '❌'}",
-                                      style: TextStyle(
-                                        color: conditionsMet[index]
-                                            ? Colors.green
-                                            : Colors.red,
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 5,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "${conditions[index]}",
-                                        style: TextStyle(
-                                          color: conditionsMet[index]
-                                              ? Colors.green
-                                              : Colors.red,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-      SizedBox(
-        height: 29,
-      )
-    ];
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 48, left: 48),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: TextFormField(
-              controller: _passwordController,
-              focusNode: _focusNode,
-              obscureText: !_isPasswordVisible,
-              onChanged: _checkPasswordValidity,
-              decoration: InputDecoration(
-                hintText: "Enter your password",
-                hintStyle: widget.font.getPoppinsTextStyle(
-                    color: widget.theme.textHint,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: -0.41),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isPasswordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                  ),
-                  onPressed: _togglePasswordVisibility,
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: TextField(
+            controller: _passwordController,
+            focusNode: _focusNode,
+            obscureText: !_isPasswordVisible,
+            onChanged: _checkPasswordValidity,
+            style: font.getPoppinsTextStyle(
+                color: theme.textPrimary,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                letterSpacing: -0.41),
+            decoration: InputDecoration(
+              hintText: "Password",
+              border: InputBorder.none,
+              hintStyle: font.getPoppinsTextStyle(
+                  color: theme.textHint,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: -0.41),
+              fillColor: Colors.transparent,
+              filled: true,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: theme.textHint,
                 ),
+                onPressed: _togglePasswordVisibility,
               ),
             ),
           ),
         ),
-        Stack(
-          children: [
-            Column(
-              children: [
-                Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 24),
-                    child: Container(
-                      height: 0.06 * height,
-                      width: 0.779 * width,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(29))),
-                      child: ElevatedButton(
-                          style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(29)),
-                          ))),
-                          onPressed: () {},
-                          child: Text(
-                            "SIGN UP",
-                            style: widget.font.getPoppinsTextStyle(
-                                color: Color(0xff2d2d2d),
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0),
-                          )),
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Already have an account?",
-                        style: widget.font.getPoppinsTextStyle(
-                            color: Color(0xff000000),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: 0)),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Login",
-                          style: widget.font.getPoppinsTextStyle(
-                              color: Color(0xff475abd),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0),
-                        ))
-                  ],
-                )
-              ],
-            ),
-            condition[index],
-          ],
-        )
-
-        // Padding(
-        //   padding: const EdgeInsets.only(top: 10),
-        //   child: Align(
-        //     alignment: Alignment.center,
-        //     child: AnimatedBuilder(
-        //       animation: _animationController,
-        //       builder: (context, child) {
-        //         return Transform.translate(
-        //           offset: Offset(0, -45 * (1 - _animation.value)),
-        //           child: Opacity(
-        //             opacity: _animation.value,
-        //             child: Container(
-        //               padding: EdgeInsets.all(10.0),
-        //               decoration: BoxDecoration(
-        //                 color: Colors.transparent,
-        //                 border: Border.all(color: Color(0xFF858585)),
-        //                 borderRadius: BorderRadius.circular(10.0),
-        //               ),
-        //               child: Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                 children: [
-        //                   Text(
-        //                     "Password must contain:",
-        //                     style: TextStyle(color: Color(0xFF858585)),
-        //                   ),
-        //                   SizedBox(height: 4),
-        //                   Text(
-        //                     "${_hasUpperCase ? '✓' : '-'} at least 1 uppercase letter\n"
-        //                     "${_hasLowerCase ? '✓' : '-'} at least 1 lowercase letter\n"
-        //                     "${_hasNumeric ? '✓' : '-'} at least 1 numeric digit\n"
-        //                     "${_hasSpecialChar ? '✓' : '-'} at least 1 special character\n"
-        //                     "${_passwordController.text.length >= 8 ? '✓' : '-'} be at least 8 characters long",
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //           ),
-        //         );
-        //       },
-        //     ),
-        //   ),
-        // ),
+        condition[index],
       ],
     );
   }
