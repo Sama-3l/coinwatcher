@@ -89,8 +89,9 @@ class ExpenseAdd extends StatelessWidget {
                                               bottom: 30),
                                           child: ExpenseInputField(
                                               textEditingController: amount,
-                                              hintText: '\u20B91500.00',
+                                              hintText: '1500.00',
                                               font: font,
+                                              currency: true,
                                               theme: theme),
                                         ),
                                       ]),
