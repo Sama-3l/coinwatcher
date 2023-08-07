@@ -156,35 +156,59 @@ class _PasswordTextFieldState extends State<PasswordTextField>
                 offset: Offset(0, -45 * (1 - _animation.value)),
                 child: Opacity(
                   opacity: _animation.value,
-                  child: Container(
-                    padding: EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                      color: widget.theme.mainBackground,
-                      border: Border.all(color: Color(0xFF858585)),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Password must contain:",
-                          style: TextStyle(color: Color(0xFF858585)),
-                        ),
-                        SizedBox(height: 4),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: List.generate(conditions.length, (index) {
-                            return Text(
-                              "${conditionsMet[index] ? '✓' : '❌'} ${conditions[index]}",
-                              style: TextStyle(
-                                color: conditionsMet[index]
-                                    ? Colors.green
-                                    : Colors.red,
-                              ),
-                            );
-                          }),
-                        ),
-                      ],
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 80, right: 80),
+                    child: Container(
+                      padding: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        color: widget.theme.mainBackground,
+                        border: Border.all(color: Color(0xFF858585)),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Password must contain:",
+                            style: TextStyle(color: Color(0xFF858585)),
+                          ),
+                          SizedBox(height: 4),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: List.generate(conditions.length, (index) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "${conditionsMet[index] ? '✓' : '❌'}",
+                                      style: TextStyle(
+                                        color: conditionsMet[index]
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 5,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "${conditions[index]}",
+                                        style: TextStyle(
+                                          color: conditionsMet[index]
+                                              ? Colors.green
+                                              : Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -202,57 +226,90 @@ class _PasswordTextFieldState extends State<PasswordTextField>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          width: 0.776 * width,
-          height: 0.06 * height,
-          child: TextFormField(
-            controller: _passwordController,
-            focusNode: _focusNode,
-            obscureText: !_isPasswordVisible,
-            onChanged: _checkPasswordValidity,
-            decoration: InputDecoration(
-              hintText: "Enter your password",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14.0),
-                borderSide: BorderSide(color: Colors.black),
-              ),
-              suffixIcon: IconButton(
-                icon: Icon(
-                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+        Padding(
+          padding: const EdgeInsets.only(right: 48, left: 48),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: TextFormField(
+              controller: _passwordController,
+              focusNode: _focusNode,
+              obscureText: !_isPasswordVisible,
+              onChanged: _checkPasswordValidity,
+              decoration: InputDecoration(
+                hintText: "Enter your password",
+                hintStyle: widget.font.getPoppinsTextStyle(
+                    color: widget.theme.textHint,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: -0.41),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                  ),
+                  onPressed: _togglePasswordVisibility,
                 ),
-                onPressed: _togglePasswordVisibility,
               ),
             ),
           ),
         ),
         Stack(
           children: [
-            Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 24),
-                child: Container(
-                  height: 0.06 * height,
-                  width: 0.779 * width,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(29))),
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+            Column(
+              children: [
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 24),
+                    child: Container(
+                      height: 0.06 * height,
+                      width: 0.779 * width,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(29))),
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(29)),
-                      ))),
-                      onPressed: () {},
-                      child: Text(
-                        "SIGN UP",
-                        style: widget.font.getPoppinsTextStyle(
-                            color: Color(0xff2d2d2d),
-                            fontSize: 17,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 0),
-                      )),
+                            borderRadius: BorderRadius.all(Radius.circular(29)),
+                          ))),
+                          onPressed: () {},
+                          child: Text(
+                            "SIGN UP",
+                            style: widget.font.getPoppinsTextStyle(
+                                color: Color(0xff2d2d2d),
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 0),
+                          )),
+                    ),
+                  ),
                 ),
-              ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Already have an account?",
+                        style: widget.font.getPoppinsTextStyle(
+                            color: Color(0xff000000),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 0)),
+                    TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Login",
+                          style: widget.font.getPoppinsTextStyle(
+                              color: Color(0xff475abd),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0),
+                        ))
+                  ],
+                )
+              ],
             ),
             condition[index],
           ],

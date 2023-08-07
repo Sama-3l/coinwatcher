@@ -13,7 +13,8 @@ class ExpenseInputField extends StatefulWidget {
       required this.font,
       this.readOnly = false,
       this.currency = false,
-      this.fontSize = 18});
+      this.fontSize = 18,
+      this.obscure = false});
 
   TextEditingController textEditingController;
   String hintText;
@@ -22,6 +23,7 @@ class ExpenseInputField extends StatefulWidget {
   bool readOnly;
   double fontSize;
   bool currency;
+  bool obscure;
 
   @override
   State<ExpenseInputField> createState() => _ExpenseInputFieldState();
@@ -36,6 +38,7 @@ class _ExpenseInputFieldState extends State<ExpenseInputField> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: TextField(
+        obscureText: widget.obscure,
         controller: widget.textEditingController,
         readOnly: widget.readOnly,
         textCapitalization: TextCapitalization.sentences,

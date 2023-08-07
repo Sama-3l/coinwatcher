@@ -14,6 +14,7 @@ class LightMode {
   final Color iconBackground = Color(0xffd9d9d9);
   final Color textHint = Color(0xff858585);
   final Color error = Color(0xfff42626);
+  final Color ok = Color.fromARGB(255, 76, 244, 38);
 
   final Color foodNDrinks = Color(0xffA6D8A9);
   final Color hnF = Color(0xff94B8FA);
