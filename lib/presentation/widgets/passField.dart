@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, use_key_in_widget_constructors, library_private_types_in_public_api
 
+import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class PasswordTextField extends StatefulWidget {
@@ -184,9 +186,9 @@ class _PasswordTextFieldState extends State<PasswordTextField>
   }
 
   void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
+    _isPasswordVisible = !_isPasswordVisible;
+    BlocProvider.of<PasswordVisibilityBloc>(context)
+        .add(VisibilityChangedEvent());
   }
 
   void _showPasswordConditions() {

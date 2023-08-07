@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExpenseInputField extends StatefulWidget {
   ExpenseInputField(
@@ -34,9 +36,8 @@ class _ExpenseInputFieldState extends State<ExpenseInputField> {
   bool _isPasswordVisible = false;
 
   void _togglePasswordVisibility() {
-    setState(() {
-      _isPasswordVisible = !_isPasswordVisible;
-    });
+    _isPasswordVisible = !_isPasswordVisible;
+    BlocProvider.of<PasswordVisibilityBloc>(context).add(VisibilityChangedEvent());
   }
 
   @override

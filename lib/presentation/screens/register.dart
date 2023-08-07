@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/presentation/screens/login.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
 import 'package:flutter/material.dart';
 import 'package:coinwatcher/presentation/widgets/passField.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -46,11 +48,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     theme: theme,
                     font: font),
               ),
-              PasswordTextField(
-                onPasswordValidityChanged: (isValid) {
-                  // Perform any actions when the password validity changes.
+              BlocBuilder<PasswordVisibilityBloc, PasswordVisibilityState>(
+                builder: (context, state) {
+                  return PasswordTextField(
+                    onPasswordValidityChanged: (isValid) {},
+                    password: password,
+                  );
                 },
-                password: password,
               ),
               Column(
                 children: [

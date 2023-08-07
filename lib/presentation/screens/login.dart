@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/presentation/screens/register.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
 import 'package:flutter/material.dart';
 import 'package:coinwatcher/presentation/widgets/passField.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -37,14 +39,18 @@ class _LoginPageState extends State<LoginPage> {
                     theme: theme,
                     font: font),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: ExpenseInputField(
-                    passwordIcon: true,
-                    textEditingController: password,
-                    hintText: "Password",
-                    theme: theme,
-                    font: font),
+              BlocBuilder<PasswordVisibilityBloc, PasswordVisibilityState>(
+                builder: (context, state) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: ExpenseInputField(
+                        passwordIcon: true,
+                        textEditingController: password,
+                        hintText: "Password",
+                        theme: theme,
+                        font: font),
+                  );
+                },
               ),
               Center(
                 child: Row(
