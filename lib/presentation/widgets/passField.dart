@@ -1,3 +1,5 @@
+import 'package:coinwatcher/constants/font.dart';
+import 'package:coinwatcher/constants/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -5,6 +7,8 @@ class PasswordTextField extends StatefulWidget {
   final void Function(bool isValid) onPasswordValidityChanged;
 
   PasswordTextField({required this.onPasswordValidityChanged});
+  late LightMode theme = LightMode();
+  late FontFamily font = FontFamily();
 
   @override
   _PasswordTextFieldState createState() => _PasswordTextFieldState();
@@ -155,7 +159,7 @@ class _PasswordTextFieldState extends State<PasswordTextField>
                   child: Container(
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                      color: Colors.transparent,
+                      color: widget.theme.mainBackground,
                       border: Border.all(color: Color(0xFF858585)),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -221,8 +225,39 @@ class _PasswordTextFieldState extends State<PasswordTextField>
             ),
           ),
         ),
+        Stack(
+          children: [
+            Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 24),
+                child: Container(
+                  height: 0.06 * height,
+                  width: 0.779 * width,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(29))),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(29)),
+                      ))),
+                      onPressed: () {},
+                      child: Text(
+                        "SIGN UP",
+                        style: widget.font.getPoppinsTextStyle(
+                            color: Color(0xff2d2d2d),
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0),
+                      )),
+                ),
+              ),
+            ),
+            condition[index],
+          ],
+        )
 
-        condition[index],
         // Padding(
         //   padding: const EdgeInsets.only(top: 10),
         //   child: Align(

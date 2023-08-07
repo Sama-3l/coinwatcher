@@ -57,31 +57,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 // Perform any actions when the password validity changes.
               },
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 24),
-              child: Container(
-                height: 0.06 * height,
-                width: 0.779 * width,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(29))),
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(29)),
-                    ))),
-                    onPressed: () {},
-                    child: Text(
-                      "SIGN UP",
-                      style: widget.font.getPoppinsTextStyle(
-                          color: Color(0xff2d2d2d),
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0),
-                    )),
-              ),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
