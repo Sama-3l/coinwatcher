@@ -43,68 +43,65 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 500 / 80,
-      child: Container(
-          decoration: BoxDecoration(
-              color: widget.theme.textPrimary,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-          child: BlocBuilder<TabTextColorBloc, TabTextColorState>(
-            builder: (context, state) {
-              return TabBar(
-                  controller: widget.tabController,
-                  labelColor: widget.theme.activeNavBarButton,
-                  indicator: BoxDecoration(),
-                  unselectedLabelColor: widget.theme.inactiveNavBarButton,
-                  tabs: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Tab(
-                        icon: Icon(CarbonIcons.home, size: 24),
+    return Container(
+        decoration: BoxDecoration(
+            color: widget.theme.textPrimary,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25), topRight: Radius.circular(25))),
+        child: BlocBuilder<TabTextColorBloc, TabTextColorState>(
+          builder: (context, state) {
+            return TabBar(
+                controller: widget.tabController,
+                labelColor: widget.theme.activeNavBarButton,
+                indicator: BoxDecoration(),
+                unselectedLabelColor: widget.theme.inactiveNavBarButton,
+                tabs: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Tab(
+                      icon: Icon(CarbonIcons.home, size: 24),
+                      iconMargin: EdgeInsets.only(bottom: 8),
+                      child: Text('Home',
+                          style: widget.font.getPoppinsTextStyle(
+                              color: currentIndex == 0
+                                  ? widget.theme.activeNavBarButton
+                                  : widget.theme.textSecondary,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Tab(
+                        icon: Icon(CarbonIcons.repeat, size: 24),
                         iconMargin: EdgeInsets.only(bottom: 8),
-                        child: Text('Home',
+                        child: Text('Spendings',
                             style: widget.font.getPoppinsTextStyle(
-                                color: currentIndex == 0
+                                color: currentIndex == 1
                                     ? widget.theme.activeNavBarButton
                                     : widget.theme.textSecondary,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
-                                letterSpacing: 0)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Tab(
-                          icon: Icon(CarbonIcons.repeat, size: 24),
-                          iconMargin: EdgeInsets.only(bottom: 8),
-                          child: Text('Spendings',
-                              style: widget.font.getPoppinsTextStyle(
-                                  color: currentIndex == 1
-                                      ? widget.theme.activeNavBarButton
-                                      : widget.theme.textSecondary,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0))),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Tab(
-                          icon: Icon(CarbonIcons.chart_cluster_bar, size: 24),
-                          iconMargin: EdgeInsets.only(bottom: 8),
-                          child: Text('Analytics',
-                              style: widget.font.getPoppinsTextStyle(
-                                  color: currentIndex == 2
-                                      ? widget.theme.activeNavBarButton
-                                      : widget.theme.textSecondary,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0))),
-                    )
-                  ]);
-            },
-          )),
-    );
+                                letterSpacing: 0))),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Tab(
+                        icon: Icon(CarbonIcons.chart_cluster_bar, size: 24),
+                        iconMargin: EdgeInsets.only(bottom: 8),
+                        child: Text('Analytics',
+                            style: widget.font.getPoppinsTextStyle(
+                                color: currentIndex == 2
+                                    ? widget.theme.activeNavBarButton
+                                    : widget.theme.textSecondary,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0))),
+                  )
+                ]);
+          },
+        ));
   }
 }
 

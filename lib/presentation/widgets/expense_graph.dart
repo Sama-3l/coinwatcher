@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/business_logic/blocs/barGraphChange/bar_graph_change_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
@@ -42,13 +44,15 @@ class _ExpenseGraphState extends State<ExpenseGraph> {
     return BlocBuilder<BarGraphChangeBloc, BarGraphChangeState>(
       builder: (context, state) {
         return Container(
-          height: 0.25 * height,
-          width: 0.9 * width,
+          // height: 0.25 * height,
+          // width: 0.9 * width,
+          padding: EdgeInsets.only(top: 16, bottom: 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: widget.theme.borderColor),
           ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               //  navigator

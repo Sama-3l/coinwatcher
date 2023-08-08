@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(create: (context) => PasswordVisibilityBloc())
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           home: LoginPage(),
         ));
   }

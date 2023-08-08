@@ -1,5 +1,6 @@
 //Add functions that decide what widget will be there in the UI
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
@@ -84,7 +85,7 @@ class WidgetDecider {
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1),
           ),
-          Text(
+          AutoSizeText(
             expense.amount.ceil().toString(),
             style: font.getPoppinsTextStyle(
                 color: theme.textPrimary,

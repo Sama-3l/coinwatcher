@@ -46,6 +46,7 @@ dependencies:
   syncfusion_flutter_charts: ^21.2.4
   http: ^0.13.6
   crypto: ^3.0.3
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

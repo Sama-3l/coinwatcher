@@ -8,7 +8,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Legend extends StatefulWidget {
-  Legend({super.key, required this.theme, required this.font, required this.categories});
+  Legend(
+      {super.key,
+      required this.theme,
+      required this.font,
+      required this.categories});
   LightMode theme;
   FontFamily font;
   Categories categories;
@@ -32,22 +36,21 @@ class _LegendState extends State<Legend> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Container(
-        height: 0.25 * height,
-        width: 0.9 * width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: widget.theme.borderColor),
-        ),
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 20, top: 26, right: 20, bottom: 24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: generateLegendItems(),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50),
+      child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: widget.theme.borderColor),
           ),
-        ));
+          child: Padding(
+            padding:
+                const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: generateLegendItems(),
+            ),
+          )),
+    );
   }
 }

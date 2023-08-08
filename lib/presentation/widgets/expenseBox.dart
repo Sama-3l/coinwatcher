@@ -62,7 +62,7 @@ class _ExpenseBoxState extends State<ExpenseBox> {
                         Text(widget.currentExpense.category,
                             style: widget.font.getPoppinsTextStyle(
                                 color: widget.theme.textSecondary,
-                                fontSize: 14,
+                                fontSize: 10,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: -0.41)),
                         widget.forDashboard
@@ -71,8 +71,8 @@ class _ExpenseBoxState extends State<ExpenseBox> {
                                 padding:
                                     const EdgeInsets.only(left: 5, right: 5),
                                 child: Container(
-                                  height: 4,
-                                  width: 4,
+                                  height: 3,
+                                  width: 3,
                                   decoration: BoxDecoration(
                                       color: widget.theme.textSecondary,
                                       borderRadius: BorderRadius.circular(4)),
@@ -86,7 +86,7 @@ class _ExpenseBoxState extends State<ExpenseBox> {
                                     commaReq: false),
                                 style: widget.font.getPoppinsTextStyle(
                                     color: widget.theme.textSecondary,
-                                    fontSize: 14,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w600,
                                     letterSpacing: -0.41)),
                       ],

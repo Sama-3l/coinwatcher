@@ -153,7 +153,7 @@ class ExpenseAdd extends StatelessWidget {
                                                             letterSpacing:
                                                                 -0.41),
                                                     hintText: DateFormat(
-                                                            'dd MMMM, yyyy')
+                                                            'dd MMM, yy')
                                                         .format(picked),
                                                     border: InputBorder.none,
                                                     fillColor:
