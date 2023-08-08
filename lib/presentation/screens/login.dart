@@ -1,8 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/data/model/user.dart';
+import 'package:coinwatcher/data/repositories/allExpenses.dart';
+import 'package:coinwatcher/data/repositories/days.dart';
+import 'package:coinwatcher/data/repositories/months.dart';
+import 'package:coinwatcher/presentation/screens/home.dart';
 import 'package:coinwatcher/presentation/screens/register.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +71,27 @@ class _LoginPageState extends State<LoginPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(30)),
                                 )),
-                            onPressed: () {},
+                            onPressed: () {
+                              AllExpenses allExpenses = AllExpenses();
+                              Methods func = Methods();
+                              Months month = Months();
+                              Days days = Days();
+                              User currentUser = User(
+                                  name: 'Samael',
+                                  email: username.text,
+                                  password: password.text,
+                                  dailyBudget: 250,
+                                  thisMonthSpent: 0.0,
+                                  allExpenses: allExpenses,
+                                  recentExpenses:
+                                      func.getRecentExpenses(allExpenses),
+                                  monthsDB: month,
+                                  daysDB: days);
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return Home(font: font, theme: theme, currentUser: currentUser);
+                              }));
+                            },
                             child: Padding(
                               padding:
                                   const EdgeInsets.only(top: 15, bottom: 15),

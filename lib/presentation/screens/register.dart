@@ -3,11 +3,18 @@
 import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
+import 'package:coinwatcher/presentation/screens/home.dart';
 import 'package:coinwatcher/presentation/screens/login.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
 import 'package:flutter/material.dart';
 import 'package:coinwatcher/presentation/widgets/passField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../alogrithms/method.dart';
+import '../../data/model/user.dart';
+import '../../data/repositories/allExpenses.dart';
+import '../../data/repositories/days.dart';
+import '../../data/repositories/months.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -18,6 +25,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  bool isValid = false;
   LightMode theme = LightMode();
   FontFamily font = FontFamily();
   @override
@@ -51,7 +59,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
               BlocBuilder<PasswordVisibilityBloc, PasswordVisibilityState>(
                 builder: (context, state) {
                   return PasswordTextField(
-                    onPasswordValidityChanged: (isValid) {},
+                    onPasswordValidityChanged: (isValid) {
+                      this.isValid = isValid;
+                    },
                     password: password,
                   );
                 },
@@ -72,7 +82,34 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(30)),
                                     )),
-                                onPressed: () {},
+                                onPressed: () {
+                                  print(username.text);
+                                  print(email.text);
+                                  if (isValid) {
+                                    AllExpenses allExpenses = AllExpenses();
+                                    Methods func = Methods();
+                                    Months month = Months();
+                                    Days days = Days();
+                                    User currentUser = User(
+                                        name: username.text,
+                                        email: email.text,
+                                        password: password.text,
+                                        dailyBudget: 250,
+                                        thisMonthSpent: 0.0,
+                                        allExpenses: allExpenses,
+                                        recentExpenses:
+                                            func.getRecentExpenses(allExpenses),
+                                        monthsDB: month,
+                                        daysDB: days);
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(builder: (context) {
+                                      return Home(
+                                          font: font,
+                                          theme: theme,
+                                          currentUser: currentUser);
+                                    }));
+                                  }
+                                },
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       top: 15, bottom: 15),
