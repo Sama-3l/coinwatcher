@@ -83,8 +83,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                           BorderRadius.all(Radius.circular(30)),
                                     )),
                                 onPressed: () {
-                                  print(username.text);
-                                  print(email.text);
                                   if (isValid) {
                                     AllExpenses allExpenses = AllExpenses();
                                     Methods func = Methods();
