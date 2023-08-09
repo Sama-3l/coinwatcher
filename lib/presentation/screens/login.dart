@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:coinwatcher/alogrithms/crypt.dart';
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
@@ -11,6 +12,7 @@ import 'package:coinwatcher/data/repositories/months.dart';
 import 'package:coinwatcher/presentation/screens/home.dart';
 import 'package:coinwatcher/presentation/screens/register.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
+import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
 import 'package:coinwatcher/presentation/widgets/passField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +23,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController username = TextEditingController();
+  TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   LightMode theme = LightMode();
   FontFamily font = FontFamily();
@@ -40,8 +42,8 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ExpenseInputField(
-                    textEditingController: username,
-                    hintText: "Username or Email address",
+                    textEditingController: email,
+                    hintText: "Email address",
                     theme: theme,
                     font: font),
               ),
@@ -72,25 +74,32 @@ class _LoginPageState extends State<LoginPage> {
                                       BorderRadius.all(Radius.circular(30)),
                                 )),
                             onPressed: () {
-                              AllExpenses allExpenses = AllExpenses();
-                              Methods func = Methods();
-                              Months month = Months();
-                              Days days = Days();
-                              User currentUser = User(
-                                  name: 'Samael',
-                                  email: username.text,
-                                  password: password.text,
-                                  dailyBudget: 250,
-                                  thisMonthSpent: 0.0,
-                                  allExpenses: allExpenses,
-                                  recentExpenses:
-                                      func.getRecentExpenses(allExpenses),
-                                  monthsDB: month,
-                                  daysDB: days);
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return Home(font: font, theme: theme, currentUser: currentUser);
-                              }));
+                              Crypt crypt = Crypt();
+                              var cred = {
+                                "email" : email.text,
+                                "password" : crypt.encodeToSha256(password.text)
+                              };
+                              ServerAccess sa = ServerAccess();
+                              sa.login(cred);
+                              // AllExpenses allExpenses = AllExpenses();
+                              // Methods func = Methods();
+                              // Months month = Months();
+                              // Days days = Days();
+                              // User currentUser = User(
+                              //     name: 'Samael',
+                              //     email: email.text,
+                              //     password: password.text,
+                              //     dailyBudget: 250,
+                              //     thisMonthSpent: 0.0,
+                              //     allExpenses: allExpenses,
+                              //     recentExpenses:
+                              //         func.getRecentExpenses(allExpenses),
+                              //     monthsDB: month,
+                              //     daysDB: days);
+                              // Navigator.of(context)
+                              //     .push(MaterialPageRoute(builder: (context) {
+                              //   return Home(font: font, theme: theme, currentUser: currentUser);
+                              // }));
                             },
                             child: Padding(
                               padding:

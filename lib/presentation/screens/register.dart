@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:coinwatcher/alogrithms/crypt.dart';
 import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/presentation/screens/home.dart';
 import 'package:coinwatcher/presentation/screens/login.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
+import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
 import 'package:coinwatcher/presentation/widgets/passField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -88,10 +90,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     Methods func = Methods();
                                     Months month = Months();
                                     Days days = Days();
+                                    Crypt crypt = Crypt();
                                     User currentUser = User(
                                         name: username.text,
                                         email: email.text,
-                                        password: password.text,
+                                        password:
+                                            crypt.encodeToSha256(password.text),
                                         dailyBudget: 250,
                                         thisMonthSpent: 0.0,
                                         allExpenses: allExpenses,
@@ -99,13 +103,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                             func.getRecentExpenses(allExpenses),
                                         monthsDB: month,
                                         daysDB: days);
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
-                                      return Home(
-                                          font: font,
-                                          theme: theme,
-                                          currentUser: currentUser);
-                                    }));
+                                    username.clear();
+                                    email.clear();
+                                    password.clear();
+                                    ServerAccess sa = ServerAccess();
+                                    sa.register(currentUser);
+                                    // Navigator.of(context).push(
+                                    //     MaterialPageRoute(builder: (context) {
+                                    //   return Home(
+                                    //       font: font,
+                                    //       theme: theme,
+                                    //       currentUser: currentUser);
+                                    // }));
                                   }
                                 },
                                 child: Padding(
