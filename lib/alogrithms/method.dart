@@ -19,11 +19,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../business_logic/blocs/datePicker/date_picker_bloc.dart';
 import '../business_logic/blocs/updateExpense/update_expense_bloc.dart';
 import '../data/repositories/months.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+
+import '../services/server.dart';
 
 class Methods {
   String getMonthandYear({required DateTime date, bool commaReq = true}) {
@@ -382,7 +385,7 @@ class Methods {
     currentUser.monthsDB.allMonths.forEach((key, value) {
       list.add(DateFormat('MMMM, y').format(value.date));
     });
-    if(list.isEmpty){
+    if (list.isEmpty) {
       list.add(DateFormat('MMMM, y').format(DateTime.now()));
     }
     return list;
@@ -424,5 +427,40 @@ class Methods {
   double calculateDailyBudget(double monthlyBudget) {
     return monthlyBudget /
         DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day;
+  }
+
+  DateTime dateTimeObjectFormat(String date) {
+    RegExp regex = RegExp(r'\d+');
+    Iterable<Match> matches = regex.allMatches(date);
+    List<int> numbers = [];
+
+    for (Match match in matches) {
+      numbers.add(int.parse(match.group(0)!));
+    }
+    return numbers.length == 3
+        ? DateTime(numbers[0], numbers[1], numbers[2])
+        : DateTime(numbers[0], numbers[1]);
+  }
+
+  void tokenLogin(
+      Map<String, dynamic> creds, User currentUser, LightMode theme) async {
+    ServerAccess sa = ServerAccess();
+    final response = await sa.tokenLogin(creds);
+    final data = response['data'];
+    if (data != null && data['status'] == null) {
+      currentUser = User.parse(data, theme);
+      currentUser.password = creds['password']!;
+    }
+  }
+
+  bool tokenIsExpired(String token, User currentUser, LightMode theme) {
+    if (JwtDecoder.isExpired(token)) {
+      return true;
+    } else {
+      Map<String, dynamic> creds = JwtDecoder.decode(token);
+      tokenLogin(creds, currentUser, theme);
+      print(currentUser.toJSON());
+      return false;
+    }
   }
 }

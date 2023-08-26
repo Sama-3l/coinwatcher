@@ -19,6 +19,12 @@ import '../../data/repositories/days.dart';
 import '../../data/repositories/months.dart';
 
 class RegistrationPage extends StatefulWidget {
+  RegistrationPage({required this.theme, required this.font, required this.currentUser});
+  
+  LightMode theme;
+  FontFamily font;
+  User currentUser;
+
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
 }
@@ -28,14 +34,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool isValid = false;
-  LightMode theme = LightMode();
-  FontFamily font = FontFamily();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: theme.mainBackground,
+        backgroundColor: widget.theme.mainBackground,
         body: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Column(
@@ -47,16 +51,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 child: ExpenseInputField(
                     textEditingController: username,
                     hintText: "Username",
-                    theme: theme,
-                    font: font),
+                    theme: widget.theme,
+                    font: widget.font),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: ExpenseInputField(
                     textEditingController: email,
                     hintText: "Email address",
-                    theme: theme,
-                    font: font),
+                    theme: widget.theme,
+                    font: widget.font),
               ),
               BlocBuilder<PasswordVisibilityBloc, PasswordVisibilityState>(
                 builder: (context, state) {
@@ -79,7 +83,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 EdgeInsets.only(top: 24, left: 48, right: 48),
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: theme.primaryAccent2,
+                                    backgroundColor: widget.theme.primaryAccent2,
                                     shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(30)),
@@ -91,7 +95,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     Months month = Months();
                                     Days days = Days();
                                     Crypt crypt = Crypt();
-                                    User currentUser = User(
+                                    widget.currentUser = User(
                                         name: username.text,
                                         email: email.text,
                                         password:
@@ -107,7 +111,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     email.clear();
                                     password.clear();
                                     ServerAccess sa = ServerAccess();
-                                    sa.register(currentUser);
+                                    sa.register(widget.currentUser);
+                                    // username.dispose();
+                                    // password.dispose();
+                                    // email.dispose();
                                     // Navigator.of(context).push(
                                     //     MaterialPageRoute(builder: (context) {
                                     //   return Home(
@@ -122,8 +129,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       top: 15, bottom: 15),
                                   child: Text(
                                     "SIGN UP",
-                                    style: font.getPoppinsTextStyle(
-                                        color: theme.textPrimary,
+                                    style: widget.font.getPoppinsTextStyle(
+                                        color: widget.theme.textPrimary,
                                         fontSize: 17,
                                         fontWeight: FontWeight.w500,
                                         letterSpacing: 0),
@@ -140,8 +147,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("ALREADY HAVE AN ACCOUNT?",
-                            style: font.getPoppinsTextStyle(
-                                color: theme.borderColor,
+                            style: widget.font.getPoppinsTextStyle(
+                                color: widget.theme.borderColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 letterSpacing: 0)),
@@ -149,13 +156,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             onPressed: () {
                               Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
-                                return LoginPage();
+                                return LoginPage(theme: widget.theme, font: widget.font, currentUser: widget.currentUser);
                               }));
                             },
                             child: Text(
                               "LOG IN",
-                              style: font.getPoppinsTextStyle(
-                                  color: theme.primaryAccent3,
+                              style: widget.font.getPoppinsTextStyle(
+                                  color: widget.theme.primaryAccent3,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   letterSpacing: 0),

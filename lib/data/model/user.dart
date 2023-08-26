@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:coinwatcher/alogrithms/method.dart';
+import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/month.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/categories.dart';
@@ -25,17 +27,39 @@ class User {
   String email;
   String password;
   double dailyBudget;
-  double thisMonthSpent;  //remove this
+  double thisMonthSpent; //remove this
   AllExpenses allExpenses;
-  RecentExpenses recentExpenses;  //DB entry not req
+  RecentExpenses recentExpenses; //DB entry not req
   Months monthsDB;
   Days daysDB;
 
-  Map<String, dynamic> toJSON(){
+  factory User.parse(Map<String, dynamic> userInfo, LightMode theme) {
+    AllExpenses allExpenses = AllExpenses();
+    allExpenses.allExpenses = allExpenses.parse(userInfo['allExpenses']);
+    Months monthsDB = Months();
+    monthsDB.parse(userInfo['eachMonthDb'], theme);
+    Days daysDB = Days();
+
+    Methods func = Methods();
+    print("\n\n${userInfo['dailyBudget']}\n\n");
+
+    return User(
+        name: userInfo['name'],
+        email: userInfo['email'],
+        password: userInfo['password'],
+        dailyBudget: double.parse(userInfo['dailyBudget']),
+        thisMonthSpent: double.parse(userInfo['thisMonthSpent']),
+        allExpenses: allExpenses,
+        recentExpenses: func.getRecentExpenses(allExpenses),
+        monthsDB: monthsDB,
+        daysDB: daysDB);
+  }
+
+  Map<String, dynamic> toJSON() {
     Map<String, dynamic> map = {
-      'name' : name,
-      'email' : email,
-      'password' : password,
+      'name': name,
+      'email': email,
+      'password': password,
       'dailyBudget': dailyBudget.toString(),
       'thisMonthSpent': thisMonthSpent.toString(),
       'allExpenses': allExpenses.toJSON(),

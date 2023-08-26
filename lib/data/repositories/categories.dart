@@ -29,5 +29,11 @@ class Categories {
     return categoriesJSON;
   }
 
+  void parse(List<dynamic> categories){
+    for(var category in categories){
+      this.categories[category['name']]!.amount = category['amount'];
+    }
+  }
+
   Categories({required this.theme});
 }

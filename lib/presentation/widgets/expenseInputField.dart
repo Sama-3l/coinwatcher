@@ -33,7 +33,7 @@ class ExpenseInputField extends StatefulWidget {
 
 class _ExpenseInputFieldState extends State<ExpenseInputField> {
 
-  bool _isPasswordVisible = false;
+  late bool _isPasswordVisible = widget.passwordIcon;
 
   void _togglePasswordVisibility() {
     _isPasswordVisible = !_isPasswordVisible;

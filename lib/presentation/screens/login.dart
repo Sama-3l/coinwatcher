@@ -16,8 +16,15 @@ import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
 import 'package:coinwatcher/presentation/widgets/passField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
+  LoginPage({required this.theme, required this.font, required this.currentUser});
+
+  LightMode theme;
+  FontFamily font;
+  User currentUser;
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -25,14 +32,25 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  LightMode theme = LightMode();
-  FontFamily font = FontFamily();
+  late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initSharedPrefs();
+  }
+
+  void initSharedPrefs()async{
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: theme.mainBackground,
+        backgroundColor: widget.theme.mainBackground,
         body: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20),
           child: Column(
@@ -44,8 +62,8 @@ class _LoginPageState extends State<LoginPage> {
                 child: ExpenseInputField(
                     textEditingController: email,
                     hintText: "Email address",
-                    theme: theme,
-                    font: font),
+                    theme: widget.theme,
+                    font: widget.font),
               ),
               BlocBuilder<PasswordVisibilityBloc, PasswordVisibilityState>(
                 builder: (context, state) {
@@ -55,8 +73,8 @@ class _LoginPageState extends State<LoginPage> {
                         passwordIcon: true,
                         textEditingController: password,
                         hintText: "Password",
-                        theme: theme,
-                        font: font),
+                        theme: widget.theme,
+                        font: widget.font),
                   );
                 },
               ),
@@ -68,19 +86,38 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.only(top: 24, left: 48, right: 48),
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: theme.primaryAccent2,
+                                backgroundColor: widget.theme.primaryAccent2,
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(30)),
                                 )),
-                            onPressed: () {
+                            onPressed: () async {
                               Crypt crypt = Crypt();
                               var cred = {
-                                "email" : email.text,
-                                "password" : crypt.encodeToSha256(password.text)
+                                "email": email.text,
+                                "password": crypt.encodeToSha256(password.text)
                               };
                               ServerAccess sa = ServerAccess();
-                              sa.login(cred);
+                              final response = await sa.login(cred, prefs);
+                              final data = response['data'];
+                              if (data != null && data['status'] == null) {
+                                widget.currentUser = User.parse(data, widget.theme);
+                                widget.currentUser.password = cred['password']!;
+                                // prefs.setString('token', response['token']);
+                                // email.dispose();
+                                // password.dispose();
+                                // Navigator.of(context).pushReplacement(
+                                //     MaterialPageRoute(builder: (context) {
+                                //   return Home(
+                                //     font: font,
+                                //     theme: theme,
+                                //     currentUser: currentUser,
+                                //   );
+                                // }));
+                              } else {
+                                email.clear();
+                                password.clear();
+                              }
                               // AllExpenses allExpenses = AllExpenses();
                               // Methods func = Methods();
                               // Months month = Months();
@@ -106,8 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                                   const EdgeInsets.only(top: 15, bottom: 15),
                               child: Text(
                                 "LOG IN",
-                                style: font.getPoppinsTextStyle(
-                                    color: theme.textPrimary,
+                                style: widget.font.getPoppinsTextStyle(
+                                    color: widget.theme.textPrimary,
                                     fontSize: 17,
                                     fontWeight: FontWeight.w500,
                                     letterSpacing: 0),
@@ -124,8 +161,8 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text("DON'T HAVE AN ACCOUNT?",
-                        style: font.getPoppinsTextStyle(
-                            color: theme.borderColor,
+                        style: widget.font.getPoppinsTextStyle(
+                            color: widget.theme.borderColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                             letterSpacing: 0)),
@@ -133,13 +170,13 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
-                            return RegistrationPage();
+                            return RegistrationPage(theme: widget.theme, font: widget.font, currentUser: widget.currentUser);
                           }));
                         },
                         child: Text(
                           "SIGN UP",
-                          style: font.getPoppinsTextStyle(
-                              color: theme.primaryAccent3,
+                          style: widget.font.getPoppinsTextStyle(
+                              color: widget.theme.primaryAccent3,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0),

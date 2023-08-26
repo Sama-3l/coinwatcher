@@ -8,10 +8,15 @@ import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/expenseBox.dart';
+import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+
+import '../presentation/screens/dashboard.dart';
 
 class WidgetDecider {
-  List<Widget> getSpendingsWidgets(User currentUser, LightMode theme, FontFamily font) {
+  List<Widget> getSpendingsWidgets(
+      User currentUser, LightMode theme, FontFamily font) {
     List<Widget> columnChildren = [];
     Methods func = Methods();
 
@@ -30,7 +35,8 @@ class WidgetDecider {
           columnChildren.add(Padding(
             padding: const EdgeInsets.only(left: 8, bottom: 12),
             child: Text(
-              func.getMonthandYear(date: currentUser.recentExpenses.recentExpenses[0].date),
+              func.getMonthandYear(
+                  date: currentUser.recentExpenses.recentExpenses[0].date),
               style: font.getPoppinsTextStyle(
                   color: theme.textSecondary,
                   fontSize: 18,
@@ -51,7 +57,8 @@ class WidgetDecider {
             columnChildren.add(Padding(
               padding: const EdgeInsets.only(left: 8, top: 0, bottom: 12),
               child: Text(
-                func.getMonthandYear(date: currentUser.allExpenses.allExpenses[i].date),
+                func.getMonthandYear(
+                    date: currentUser.allExpenses.allExpenses[i].date),
                 style: font.getPoppinsTextStyle(
                     color: theme.textSecondary,
                     fontSize: 18,
@@ -117,7 +124,8 @@ class WidgetDecider {
     return children;
   }
 
-  Padding textWidget(String text, FontFamily font, LightMode theme, double fontSize) {
+  Padding textWidget(
+      String text, FontFamily font, LightMode theme, double fontSize) {
     return Padding(
       padding: const EdgeInsets.only(left: 7, bottom: 7),
       child: Text(

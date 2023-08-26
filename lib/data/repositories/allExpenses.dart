@@ -1,3 +1,4 @@
+import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:flutter/material.dart';
 
@@ -45,9 +46,22 @@ class AllExpenses {
     //     category: "Food n drinks"),
   ];
 
-  List<Map<String, dynamic>> toJSON(){
+  List<Expense> parse(List<dynamic> allExpenses) {
+    Methods func = Methods();
+    List<Expense> expenses = [];
+    for (var expense in allExpenses) {
+      expenses.add(Expense(
+          expenseName: expense['name'],
+          amount: double.parse(expense['amount']),
+          date: func.dateTimeObjectFormat(expense['date']),
+          category: expense['category']));
+    }
+    return expenses;
+  }
+
+  List<Map<String, dynamic>> toJSON() {
     List<Map<String, dynamic>> list = [];
-    for(int i = 0; i < allExpenses.length; i++){
+    for (int i = 0; i < allExpenses.length; i++) {
       list.add(allExpenses[i].toJSON());
     }
     return list;
