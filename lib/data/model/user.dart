@@ -41,8 +41,6 @@ class User {
     Days daysDB = Days();
 
     Methods func = Methods();
-    print("\n\n${userInfo['dailyBudget']}\n\n");
-
     return User(
         name: userInfo['name'],
         email: userInfo['email'],

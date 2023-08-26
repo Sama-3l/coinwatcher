@@ -21,14 +21,11 @@ class ServerAccess {
           body: jsonEncode(regBody));
       if (response.statusCode == 200) {
         // Request successful, handle the response data here
-        print('Status 200');
       } else {
         // Request failed, handle the error here
-        print('Error: ${response.statusCode}');
       }
     } catch (e) {
       // An error occurred while making the request
-      print('Error: $e');
     }
   }
 
@@ -48,7 +45,6 @@ class ServerAccess {
 
       if (response.statusCode == 200) {
         // Request successful, handle the response data here
-        print('Status 200');
         final appData = await http.post(getDataUrl,
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode(creds));
@@ -56,20 +52,16 @@ class ServerAccess {
         return decodedData;
       } else {
         // Request failed, handle the error here
-        print('Error: ${response.statusCode}');
         return null;
       }
     } catch (e) {
       // An error occurred while making the request
-      print('Error: $e');
     }
   }
 
   dynamic tokenLogin(Map<String, dynamic> creds) async {
     final url = Uri.parse('$serverUrl/login');
     final getDataUrl = Uri.parse('$serverUrl/getData');
-
-    print(creds);
 
     try {
       final response = await http.post(url,
@@ -81,7 +73,6 @@ class ServerAccess {
 
       if (response.statusCode == 200) {
         // Request successful, handle the response data here
-        print('Status 200');
         final appData = await http.post(getDataUrl,
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode(creds));
@@ -89,12 +80,10 @@ class ServerAccess {
         return decodedData;
       } else {
         // Request failed, handle the error here
-        print('Error: ${response.statusCode}');
         return null;
       }
     } catch (e) {
       // An error occurred while making the request
-      print('Error: $e');
     }
   }
 }

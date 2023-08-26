@@ -453,14 +453,21 @@ class Methods {
     }
   }
 
-  bool tokenIsExpired(String token, User currentUser, LightMode theme) {
+  Future<dynamic?> tokenIsExpired(
+      String token, User currentUser, LightMode theme) async {
     if (JwtDecoder.isExpired(token)) {
-      return true;
+      return null;
     } else {
       Map<String, dynamic> creds = JwtDecoder.decode(token);
-      tokenLogin(creds, currentUser, theme);
-      print(currentUser.toJSON());
-      return false;
+
+      ServerAccess sa = ServerAccess();
+      final response = await sa.tokenLogin(creds);
+      final data = response['data'];
+      if (data != null && data['status'] == null) {
+        currentUser = User.parse(data, theme);
+        currentUser.password = creds['password']!;
+      }
+      return currentUser;
     }
   }
 }

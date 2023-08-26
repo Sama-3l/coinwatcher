@@ -19,7 +19,11 @@ import '../widgets/fab.dart';
 import 'dashboard.dart';
 
 class Home extends StatefulWidget {
-  Home({super.key, required this.font, required this.theme, required this.currentUser});
+  Home(
+      {super.key,
+      required this.font,
+      required this.theme,
+      required this.currentUser});
 
   LightMode theme;
   FontFamily font;
@@ -57,10 +61,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           );
         },
       ),
-      bottomNavigationBar:
-          BottomNavBar(theme: widget.theme, font: widget.font, tabController: tabController),
-      floatingActionButton:
-          Fab(font: widget.font, theme: widget.theme, currentUser: widget.currentUser),
+      bottomNavigationBar: BottomNavBar(
+          theme: widget.theme, font: widget.font, tabController: tabController),
+      floatingActionButton: Fab(
+          font: widget.font,
+          theme: widget.theme,
+          currentUser: widget.currentUser),
     );
   }
 }

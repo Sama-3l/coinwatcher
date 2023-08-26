@@ -19,7 +19,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({required this.theme, required this.font, required this.currentUser});
+  LoginPage(
+      {required this.theme, required this.font, required this.currentUser});
 
   LightMode theme;
   FontFamily font;
@@ -41,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     initSharedPrefs();
   }
 
-  void initSharedPrefs()async{
+  void initSharedPrefs() async {
     prefs = await SharedPreferences.getInstance();
   }
 
@@ -101,19 +102,20 @@ class _LoginPageState extends State<LoginPage> {
                               final response = await sa.login(cred, prefs);
                               final data = response['data'];
                               if (data != null && data['status'] == null) {
-                                widget.currentUser = User.parse(data, widget.theme);
+                                widget.currentUser =
+                                    User.parse(data, widget.theme);
                                 widget.currentUser.password = cred['password']!;
-                                // prefs.setString('token', response['token']);
-                                // email.dispose();
-                                // password.dispose();
-                                // Navigator.of(context).pushReplacement(
-                                //     MaterialPageRoute(builder: (context) {
-                                //   return Home(
-                                //     font: font,
-                                //     theme: theme,
-                                //     currentUser: currentUser,
-                                //   );
-                                // }));
+                                prefs.setString('token', response['token']);
+                                email.dispose();
+                                password.dispose();
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(builder: (context) {
+                                  return Home(
+                                    font: widget.font,
+                                    theme: widget.theme,
+                                    currentUser: widget.currentUser,
+                                  );
+                                }));
                               } else {
                                 email.clear();
                                 password.clear();
@@ -170,7 +172,10 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
-                            return RegistrationPage(theme: widget.theme, font: widget.font, currentUser: widget.currentUser);
+                            return RegistrationPage(
+                                theme: widget.theme,
+                                font: widget.font,
+                                currentUser: widget.currentUser);
                           }));
                         },
                         child: Text(

@@ -43,6 +43,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late bool isExpired = true;
   Methods func = Methods();
   LightMode theme = LightMode();
   FontFamily font = FontFamily();
@@ -57,11 +58,15 @@ class _MyAppState extends State<MyApp> {
       monthsDB: Months(),
       daysDB: Days());
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    print(widget.token);
+  Future<void> checkValidity() async {
+    var tokenValidity = await func.tokenIsExpired(widget.token!, currentUser, theme);
+    if(tokenValidity == null){
+      isExpired = true;
+    }
+    else{
+      currentUser = tokenValidity;
+      isExpired = false;
+    }
   }
 
   @override
@@ -78,13 +83,23 @@ class _MyAppState extends State<MyApp> {
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: widget.token == null
-              ? LoginPage(theme: theme, font: font, currentUser: currentUser)
-              : func.tokenIsExpired(widget.token!, currentUser, theme)
-                  ? LoginPage(
-                      theme: theme, font: font, currentUser: currentUser)
-                  : Home(
-                      theme: theme, font: font, currentUser: currentUser),
+          home: FutureBuilder(
+            future: checkValidity(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator(); // Show a loading indicator
+              } else {
+                return widget.token == null
+                    ? LoginPage(
+                        theme: theme, font: font, currentUser: currentUser)
+                    : isExpired
+                        ? LoginPage(
+                            theme: theme, font: font, currentUser: currentUser)
+                        : Home(
+                            theme: theme, font: font, currentUser: currentUser);
+              }
+            },
+          ),
         ));
   }
 }
