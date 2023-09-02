@@ -11,6 +11,7 @@ import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
 import 'package:coinwatcher/presentation/widgets/passField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../alogrithms/method.dart';
 import '../../data/model/user.dart';
@@ -19,8 +20,9 @@ import '../../data/repositories/days.dart';
 import '../../data/repositories/months.dart';
 
 class RegistrationPage extends StatefulWidget {
-  RegistrationPage({required this.theme, required this.font, required this.currentUser});
-  
+  RegistrationPage(
+      {required this.theme, required this.font, required this.currentUser});
+
   LightMode theme;
   FontFamily font;
   User currentUser;
@@ -34,6 +36,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   bool isValid = false;
+  late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initSharedPrefs();
+  }
+
+  void initSharedPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -83,7 +98,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 EdgeInsets.only(top: 24, left: 48, right: 48),
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: widget.theme.primaryAccent2,
+                                    backgroundColor:
+                                        widget.theme.primaryAccent2,
                                     shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(30)),
@@ -96,6 +112,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     Days days = Days();
                                     Crypt crypt = Crypt();
                                     widget.currentUser = User(
+                                        id: "",
                                         name: username.text,
                                         email: email.text,
                                         password:
@@ -111,7 +128,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     email.clear();
                                     password.clear();
                                     ServerAccess sa = ServerAccess();
-                                    sa.register(widget.currentUser);
+                                    sa.register(widget.currentUser, prefs);
                                     // username.dispose();
                                     // password.dispose();
                                     // email.dispose();
@@ -156,7 +173,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             onPressed: () {
                               Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
-                                return LoginPage(theme: widget.theme, font: widget.font, currentUser: widget.currentUser);
+                                return LoginPage(
+                                    theme: widget.theme,
+                                    font: widget.font,
+                                    currentUser: widget.currentUser);
                               }));
                             },
                             child: Text(

@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
@@ -7,6 +9,8 @@ import 'package:coinwatcher/presentation/widgets/pieChartMenu.dart';
 import 'package:coinwatcher/presentation/widgets/piechart.dart';
 
 import 'package:flutter/material.dart';
+
+import '../../constants/constant.dart';
 
 class Analytics extends StatefulWidget {
   Analytics(
@@ -60,6 +64,7 @@ class _AnalyticsState extends State<Analytics> {
                   currentUser: widget.currentUser,
                 ),
               ),
+              SizedBox(height: pagePadding)
             ],
           ),
         ),

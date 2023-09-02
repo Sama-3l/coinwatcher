@@ -24,7 +24,7 @@ class _TrackerTextState extends State<TrackerText> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment:
-          widget.isTotal ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+          widget.isTotal ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         Row(mainAxisSize: MainAxisSize.min, children: [
           Padding(
@@ -48,7 +48,7 @@ class _TrackerTextState extends State<TrackerText> {
           ),
         ]),
         Text(
-          widget.isTotal ? 'Total Budget' : 'Spend so far',
+          widget.isTotal ? 'Total Budget' : 'Spent so far',
           style: widget.font.getPoppinsTextStyle(
               color: widget.theme.textPrimary,
               fontSize: 16,

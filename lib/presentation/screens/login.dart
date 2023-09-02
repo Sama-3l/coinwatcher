@@ -101,13 +101,11 @@ class _LoginPageState extends State<LoginPage> {
                               ServerAccess sa = ServerAccess();
                               final response = await sa.login(cred, prefs);
                               final data = response['data'];
-                              if (data != null && data['status'] == null) {
+                              if (data['error'] == null &&
+                                  data['status'] == null) {
                                 widget.currentUser =
                                     User.parse(data, widget.theme);
                                 widget.currentUser.password = cred['password']!;
-                                prefs.setString('token', response['token']);
-                                email.dispose();
-                                password.dispose();
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(builder: (context) {
                                   return Home(
@@ -120,25 +118,6 @@ class _LoginPageState extends State<LoginPage> {
                                 email.clear();
                                 password.clear();
                               }
-                              // AllExpenses allExpenses = AllExpenses();
-                              // Methods func = Methods();
-                              // Months month = Months();
-                              // Days days = Days();
-                              // User currentUser = User(
-                              //     name: 'Samael',
-                              //     email: email.text,
-                              //     password: password.text,
-                              //     dailyBudget: 250,
-                              //     thisMonthSpent: 0.0,
-                              //     allExpenses: allExpenses,
-                              //     recentExpenses:
-                              //         func.getRecentExpenses(allExpenses),
-                              //     monthsDB: month,
-                              //     daysDB: days);
-                              // Navigator.of(context)
-                              //     .push(MaterialPageRoute(builder: (context) {
-                              //   return Home(font: font, theme: theme, currentUser: currentUser);
-                              // }));
                             },
                             child: Padding(
                               padding:

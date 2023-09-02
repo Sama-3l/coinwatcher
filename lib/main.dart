@@ -48,6 +48,7 @@ class _MyAppState extends State<MyApp> {
   LightMode theme = LightMode();
   FontFamily font = FontFamily();
   late User currentUser = User(
+      id: "",
       name: "",
       email: "",
       password: "",
@@ -59,11 +60,12 @@ class _MyAppState extends State<MyApp> {
       daysDB: Days());
 
   Future<void> checkValidity() async {
-    var tokenValidity = await func.tokenIsExpired(widget.token!, currentUser, theme);
-    if(tokenValidity == null){
+    var tokenValidity =
+        await func.tokenIsExpired(widget.token!, currentUser, theme);
+    print(JwtDecoder.getExpirationDate(widget.token!));
+    if (tokenValidity == null) {
       isExpired = true;
-    }
-    else{
+    } else {
       currentUser = tokenValidity;
       isExpired = false;
     }

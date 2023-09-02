@@ -13,7 +13,8 @@ import '../repositories/days.dart';
 
 class User {
   User(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.email,
       required this.password,
       required this.dailyBudget,
@@ -23,6 +24,7 @@ class User {
       required this.monthsDB,
       required this.daysDB});
 
+  String id;
   String name;
   String email;
   String password;
@@ -42,11 +44,12 @@ class User {
 
     Methods func = Methods();
     return User(
+        id: userInfo['_id'],
         name: userInfo['name'],
         email: userInfo['email'],
         password: userInfo['password'],
         dailyBudget: double.parse(userInfo['dailyBudget']),
-        thisMonthSpent: double.parse(userInfo['thisMonthSpent']),
+        thisMonthSpent: 0.0,
         allExpenses: allExpenses,
         recentExpenses: func.getRecentExpenses(allExpenses),
         monthsDB: monthsDB,
@@ -55,11 +58,11 @@ class User {
 
   Map<String, dynamic> toJSON() {
     Map<String, dynamic> map = {
+      '_id': id,
       'name': name,
       'email': email,
       'password': password,
       'dailyBudget': dailyBudget.toString(),
-      'thisMonthSpent': thisMonthSpent.toString(),
       'allExpenses': allExpenses.toJSON(),
       'eachMonthDb': monthsDB.allMonthsJSON(),
       'eachDayDb': daysDB.allDaysToJSON(),

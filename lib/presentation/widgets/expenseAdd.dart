@@ -83,10 +83,11 @@ class ExpenseAdd extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        wd.textWidget('Amount', font, theme, 18),
+                                        wd.textWidget(
+                                            'Amount', font, theme, 18),
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 30),
+                                          padding:
+                                              const EdgeInsets.only(bottom: 30),
                                           child: ExpenseInputField(
                                               textEditingController: amount,
                                               hintText: '1500.00',
@@ -106,8 +107,8 @@ class ExpenseAdd extends StatelessWidget {
                                       children: [
                                         wd.textWidget('Date', font, theme, 18),
                                         Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 30),
+                                          padding:
+                                              const EdgeInsets.only(bottom: 30),
                                           child: Container(
                                             decoration: BoxDecoration(
                                               border: Border.all(
@@ -124,23 +125,22 @@ class ExpenseAdd extends StatelessWidget {
                                                     picked =
                                                         (await func.editDate(
                                                             context,
-                                                            DateTime.now()
-                                                                .add(Duration(
+                                                            DateTime.now().add(
+                                                                Duration(
                                                                     days: 2)),
                                                             theme))!;
                                                   },
                                                   textCapitalization:
                                                       TextCapitalization
                                                           .sentences,
-                                                  style: font
-                                                      .getPoppinsTextStyle(
-                                                          color: theme
-                                                              .textPrimary,
+                                                  style:
+                                                      font.getPoppinsTextStyle(
+                                                          color:
+                                                              theme.textPrimary,
                                                           fontSize: 18,
                                                           fontWeight:
                                                               FontWeight.w500,
-                                                          letterSpacing:
-                                                              -0.41),
+                                                          letterSpacing: -0.41),
                                                   decoration: InputDecoration(
                                                     hintStyle: font
                                                         .getPoppinsTextStyle(
@@ -148,13 +148,12 @@ class ExpenseAdd extends StatelessWidget {
                                                                 .textPrimary,
                                                             fontSize: 18,
                                                             fontWeight:
-                                                                FontWeight
-                                                                    .w500,
+                                                                FontWeight.w500,
                                                             letterSpacing:
                                                                 -0.41),
-                                                    hintText: DateFormat(
-                                                            'dd MMM, yy')
-                                                        .format(picked),
+                                                    hintText:
+                                                        DateFormat('dd MMM, yy')
+                                                            .format(picked),
                                                     border: InputBorder.none,
                                                     fillColor:
                                                         Colors.transparent,
@@ -207,15 +206,14 @@ class ExpenseAdd extends StatelessWidget {
                                                     const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   value,
-                                                  style: font
-                                                      .getPoppinsTextStyle(
-                                                          color: theme
-                                                              .textPrimary,
+                                                  style:
+                                                      font.getPoppinsTextStyle(
+                                                          color:
+                                                              theme.textPrimary,
                                                           fontSize: 17,
                                                           fontWeight:
                                                               FontWeight.w500,
-                                                          letterSpacing:
-                                                              -0.41),
+                                                          letterSpacing: -0.41),
                                                 ),
                                               ),
                                             );
@@ -232,12 +230,10 @@ class ExpenseAdd extends StatelessWidget {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                left:
-                                    MediaQuery.of(context).size.width * 0.25,
-                                right:
-                                    MediaQuery.of(context).size.width * 0.25,
-                                bottom: MediaQuery.of(context).size.height *
-                                    0.02),
+                                left: MediaQuery.of(context).size.width * 0.25,
+                                right: MediaQuery.of(context).size.width * 0.25,
+                                bottom:
+                                    MediaQuery.of(context).size.height * 0.02),
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     elevation: 0,
@@ -255,7 +251,8 @@ class ExpenseAdd extends StatelessWidget {
                                   func.addExpenseFab(
                                       currentUser, thisExpense, context, theme);
 
-                                  // ServerAccess sa = ServerAccess();
+                                  ServerAccess sa = ServerAccess();
+                                  sa.addExpense(currentUser, thisExpense);
                                   // sa.fetchDataFromServer(currentUser);
                                 },
                                 child: Padding(

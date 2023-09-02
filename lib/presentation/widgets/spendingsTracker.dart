@@ -43,6 +43,11 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              TrackerText(
+                  amount: widget.currentUser.thisMonthSpent,
+                  isTotal: false,
+                  theme: widget.theme,
+                  font: widget.font),
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(HeroDialogPoPRoute(
@@ -59,11 +64,7 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
                     theme: widget.theme,
                     font: widget.font),
               ),
-              TrackerText(
-                  amount: widget.currentUser.thisMonthSpent,
-                  isTotal: false,
-                  theme: widget.theme,
-                  font: widget.font)
+              
             ],
           ),
           Padding(

@@ -1,3 +1,5 @@
+// ignore_for_file: empty_catches
+
 import 'dart:convert';
 
 import 'package:coinwatcher/data/model/expense.dart';
@@ -10,17 +12,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ServerAccess {
   // String serverUrl = 'https://coinwatcherbackend-production.up.railway.app';
-  String serverUrl = 'http://172.17.0.200:3000';
+  String serverUrl = 'http://172.17.2.138:3000';
 
-  void register(User currentUser) async {
+  void register(User currentUser, SharedPreferences prefs) async {
     final url = Uri.parse('$serverUrl/post'); // Replace with your server URL
     try {
       var regBody = currentUser.toJSON();
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(regBody));
+      var responseBody = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        // Request successful, handle the response data here
+        if (responseBody['status'] == '200') {
+          prefs.setString("token", responseBody['token']);
+          currentUser.id = JwtDecoder.decode(responseBody['token'])['_id'];
+        }
       } else {
         // Request failed, handle the error here
       }
@@ -85,5 +91,34 @@ class ServerAccess {
     } catch (e) {
       // An error occurred while making the request
     }
+  }
+
+  dynamic updateDailyBudget(User currentUser) async {
+    final url = Uri.parse('$serverUrl/updateBudget');
+
+    try {
+      final response = await http.put(url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            '_id': currentUser.id,
+            'budget': currentUser.dailyBudget.toString()
+          }));
+
+      var responseBody = jsonDecode(response.body);
+    } catch (e) {}
+  }
+
+  dynamic addExpense(User currentUser, Expense expense) async {
+    final url = Uri.parse('$serverUrl/updateExpense');
+
+    try {
+      final response = await http.put(url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(
+              {'expense': expense.toJSON(), 'data': currentUser.toJSON()}));
+
+      var responseBody = jsonDecode(response.body);
+      print(responseBody);
+    } catch (e) {}
   }
 }

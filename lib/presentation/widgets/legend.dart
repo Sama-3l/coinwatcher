@@ -36,21 +36,18 @@ class _LegendState extends State<Legend> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 50),
-      child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: widget.theme.borderColor),
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: widget.theme.borderColor),
+        ),
+        child: Padding(
+          padding:
+              const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: generateLegendItems(),
           ),
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: generateLegendItems(),
-            ),
-          )),
-    );
+        ));
   }
 }

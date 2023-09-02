@@ -8,6 +8,7 @@ import 'package:coinwatcher/business_logic/blocs/updateExpense/update_expense_bl
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
+import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -86,6 +87,8 @@ class _ChangeBudgetState extends State<ChangeBudget> {
                                     widget.currentUser.dailyBudget =
                                         func.calculateDailyBudget(
                                             double.parse(controller.text));
+                                    ServerAccess sa = ServerAccess();
+                                    sa.updateDailyBudget(widget.currentUser);
                                     BlocProvider.of<UpdateExpenseBloc>(context)
                                         .add(ExpenseChangedEvent());
                                     Navigator.of(context).pop();

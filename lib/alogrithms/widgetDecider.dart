@@ -1,5 +1,7 @@
 //Add functions that decide what widget will be there in the UI
 
+// ignore_for_file: prefer_const_constructors
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/font.dart';
@@ -7,11 +9,17 @@ import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
+import 'package:coinwatcher/presentation/screens/login.dart';
 import 'package:coinwatcher/presentation/widgets/expenseBox.dart';
 import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../constants/constant.dart';
+import '../data/repositories/allExpenses.dart';
+import '../data/repositories/days.dart';
+import '../data/repositories/months.dart';
 import '../presentation/screens/dashboard.dart';
 
 class WidgetDecider {
@@ -74,6 +82,7 @@ class WidgetDecider {
             font: font));
       }
     }
+    columnChildren.add(SizedBox(height: pagePadding));
 
     return columnChildren;
   }
@@ -137,5 +146,65 @@ class WidgetDecider {
             letterSpacing: -0.41),
       ),
     );
+  }
+
+  Future<bool> showSignOutDialog(BuildContext context, SharedPreferences prefs,
+      FontFamily font, LightMode theme) async{
+    bool signOut = false;
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Sign Out Confirmation",
+            style: font.getPoppinsTextStyle(
+                color: theme.textPrimary,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.41),
+          ),
+          content: Text(
+            "Are you sure you want to sign out?",
+            style: font.getPoppinsTextStyle(
+                color: theme.textPrimary,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                letterSpacing: -0.41),
+          ),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () {
+                  // Close the dialog without signing out
+                  signOut = false;
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "Cancel",
+                  style: font.getPoppinsTextStyle(
+                      color: theme.primaryAccent3,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: -0.41),
+                )),
+            TextButton(
+              onPressed: () {
+                prefs.clear();
+                signOut = true;
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                "Sign Out",
+                style: font.getPoppinsTextStyle(
+                    color: theme.primaryAccent3,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: -0.41),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    return signOut;
   }
 }

@@ -7,9 +7,15 @@ import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
+import 'package:coinwatcher/presentation/screens/login.dart';
 import 'package:coinwatcher/presentation/widgets/expense_graph.dart';
 import 'package:coinwatcher/presentation/widgets/spendingsTracker.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../constants/constant.dart';
+import '../../data/repositories/days.dart';
+import '../../data/repositories/months.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard(
@@ -29,6 +35,18 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   Methods func = Methods();
   WidgetDecider wd = WidgetDecider();
+  late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initSharedPrefs();
+  }
+
+  void initSharedPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +60,61 @@ class _DashboardState extends State<Dashboard> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  GestureDetector(
+                    onTap: () async {
+                      var signOut = await wd.showSignOutDialog(
+                          context, prefs, widget.font, widget.theme);
+                      print(signOut);
+                      if (signOut) {
+                        User currentUser = User(
+                            id: "",
+                            name: "",
+                            email: "",
+                            password: "",
+                            dailyBudget: 250.0,
+                            thisMonthSpent: 0.0,
+                            allExpenses: AllExpenses(),
+                            recentExpenses:
+                                func.getRecentExpenses(AllExpenses()),
+                            monthsDB: Months(),
+                            daysDB: Days());
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => LoginPage(
+                                theme: widget.theme,
+                                font: widget.font,
+                                currentUser: currentUser)));
+                      }
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10, right: 10),
+                          child: Text(
+                            "Hi,",
+                            style: widget.font.getPoppinsTextStyle(
+                                color: widget.theme.textPrimary,
+                                fontSize: 25,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.41),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            "${widget.currentUser.name}!",
+                            style: widget.font.getPoppinsTextStyle(
+                                color: widget.theme.textPrimary,
+                                fontSize: 35,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.41),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Text(
@@ -100,7 +173,8 @@ class _DashboardState extends State<Dashboard> {
                       children: wd.getRecentSpendings(
                           widget.currentUser.recentExpenses,
                           widget.theme,
-                          widget.font))
+                          widget.font)),
+                  SizedBox(height: pagePadding)
                 ]),
           ),
         ),
