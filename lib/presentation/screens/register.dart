@@ -104,7 +104,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(30)),
                                     )),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (isValid) {
                                     AllExpenses allExpenses = AllExpenses();
                                     Methods func = Methods();
@@ -128,17 +128,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     email.clear();
                                     password.clear();
                                     ServerAccess sa = ServerAccess();
-                                    sa.register(widget.currentUser, prefs);
-                                    // username.dispose();
-                                    // password.dispose();
-                                    // email.dispose();
-                                    // Navigator.of(context).push(
-                                    //     MaterialPageRoute(builder: (context) {
-                                    //   return Home(
-                                    //       font: font,
-                                    //       theme: theme,
-                                    //       currentUser: currentUser);
-                                    // }));
+                                    bool success = false;
+                                    success = await sa.register(
+                                        widget.currentUser, prefs);
+                                    if (success == true) {
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(builder: (context) {
+                                        return Home(
+                                            font: widget.font,
+                                            theme: widget.theme,
+                                            currentUser: widget.currentUser);
+                                      }));
+                                    }
                                   }
                                 },
                                 child: Padding(

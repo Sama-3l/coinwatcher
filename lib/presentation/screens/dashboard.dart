@@ -153,8 +153,7 @@ class _DashboardState extends State<Dashboard> {
                           currentUser: widget.currentUser)),
                   //Analytics
                   //View more button -> Diverts to the analytics tab
-                  widget.currentUser.recentExpenses.recentExpenses.isNotEmpty
-                      ? Padding(
+                  Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
                             'Recent spendings',
@@ -164,10 +163,7 @@ class _DashboardState extends State<Dashboard> {
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1),
                           ),
-                        )
-                      : Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Container()),
+                        ),
                   Column(
                       mainAxisSize: MainAxisSize.min,
                       children: wd.getRecentSpendings(

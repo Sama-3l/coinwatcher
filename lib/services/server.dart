@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:coinwatcher/constants/env.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
@@ -11,10 +12,9 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ServerAccess {
-  // String serverUrl = 'https://coinwatcherbackend-production.up.railway.app';
-  String serverUrl = 'http://172.17.2.138:3000';
+  String serverUrl = serverURL;
 
-  void register(User currentUser, SharedPreferences prefs) async {
+  Future<bool> register(User currentUser, SharedPreferences prefs) async {
     final url = Uri.parse('$serverUrl/post'); // Replace with your server URL
     try {
       var regBody = currentUser.toJSON();
@@ -26,12 +26,15 @@ class ServerAccess {
         if (responseBody['status'] == '200') {
           prefs.setString("token", responseBody['token']);
           currentUser.id = JwtDecoder.decode(responseBody['token'])['_id'];
+          return true;
+        } else {
+          return false;
         }
       } else {
-        // Request failed, handle the error here
+        return false;
       }
     } catch (e) {
-      // An error occurred while making the request
+      rethrow;
     }
   }
 
@@ -118,7 +121,6 @@ class ServerAccess {
               {'expense': expense.toJSON(), 'data': currentUser.toJSON()}));
 
       var responseBody = jsonDecode(response.body);
-      print(responseBody);
     } catch (e) {}
   }
 }

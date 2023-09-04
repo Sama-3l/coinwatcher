@@ -62,7 +62,6 @@ class _MyAppState extends State<MyApp> {
   Future<void> checkValidity() async {
     var tokenValidity =
         await func.tokenIsExpired(widget.token!, currentUser, theme);
-    print(JwtDecoder.getExpirationDate(widget.token!));
     if (tokenValidity == null) {
       isExpired = true;
     } else {
@@ -89,7 +88,12 @@ class _MyAppState extends State<MyApp> {
             future: checkValidity(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator(); // Show a loading indicator
+                return Scaffold(
+                    backgroundColor: theme.mainBackground,
+                    body: Center(
+                        child: CircularProgressIndicator(
+                            color: theme
+                                .textPrimary))); // Show a loading indicator
               } else {
                 return widget.token == null
                     ? LoginPage(

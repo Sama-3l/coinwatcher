@@ -23,8 +23,8 @@ import '../data/repositories/months.dart';
 import '../presentation/screens/dashboard.dart';
 
 class WidgetDecider {
-  List<Widget> getSpendingsWidgets(
-      User currentUser, LightMode theme, FontFamily font) {
+  List<Widget> getSpendingsWidgets(User currentUser, LightMode theme,
+      FontFamily font, BuildContext context) {
     List<Widget> columnChildren = [];
     Methods func = Methods();
 
@@ -130,6 +130,22 @@ class WidgetDecider {
           font: font,
           forDashboard: true));
     }
+    if (children.isEmpty) {
+      children.add(Padding(
+        padding: const EdgeInsets.only(top: 45),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            "No recent spendings",
+            style: font.getPoppinsTextStyle(
+                color: theme.textHint,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                letterSpacing: -0.41),
+          ),
+        ),
+      ));
+    }
     return children;
   }
 
@@ -149,7 +165,7 @@ class WidgetDecider {
   }
 
   Future<bool> showSignOutDialog(BuildContext context, SharedPreferences prefs,
-      FontFamily font, LightMode theme) async{
+      FontFamily font, LightMode theme) async {
     bool signOut = false;
     await showDialog(
       context: context,
