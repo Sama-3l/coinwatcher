@@ -42,8 +42,6 @@ class ServerAccess {
     final url = Uri.parse('$serverUrl/login');
     final getDataUrl = Uri.parse('$serverUrl/getData');
 
-    print(creds);
-
     try {
       final response = await http.post(url,
           headers: {'Content-Type': 'application/json'},
