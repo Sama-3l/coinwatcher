@@ -2,6 +2,7 @@
 
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
+import 'package:coinwatcher/business_logic/blocs/bloc/loading_bloc.dart';
 import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
@@ -80,7 +81,8 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(create: (context) => UpdateExpenseBloc()),
           BlocProvider(create: (context) => ChangeMonthBloc()),
           BlocProvider(create: (context) => BarGraphChangeBloc()),
-          BlocProvider(create: (context) => PasswordVisibilityBloc())
+          BlocProvider(create: (context) => PasswordVisibilityBloc()),
+          BlocProvider(create: (context) => LoadingBloc())
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

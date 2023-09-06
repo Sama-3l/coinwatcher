@@ -44,7 +44,7 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TrackerText(
-                  amount: widget.currentUser.thisMonthSpent,
+                  amount: func.currentMonthSpent(widget.currentUser),
                   isTotal: false,
                   theme: widget.theme,
                   font: widget.font),
@@ -64,7 +64,6 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
                     theme: widget.theme,
                     font: widget.font),
               ),
-              
             ],
           ),
           Padding(
@@ -72,7 +71,7 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
             child: LinearPercentIndicator(
               padding: EdgeInsets.zero,
               lineHeight: 14.0,
-              percent: (widget.currentUser.thisMonthSpent /
+              percent: (func.currentMonthSpent(widget.currentUser) /
                           (func.monthlyBudget(widget.currentUser.dailyBudget) ==
                                   0
                               ? 1
@@ -80,13 +79,13 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
                                   widget.currentUser.dailyBudget))) >
                       1
                   ? 1
-                  : widget.currentUser.thisMonthSpent /
+                  : func.currentMonthSpent(widget.currentUser) /
                       (func.monthlyBudget(widget.currentUser.dailyBudget) == 0
                           ? 1
                           : func.monthlyBudget(widget.currentUser.dailyBudget)),
               barRadius: Radius.circular(7),
               backgroundColor: widget.theme.mainBackground,
-              progressColor: (widget.currentUser.thisMonthSpent /
+              progressColor: (func.currentMonthSpent(widget.currentUser) /
                           (func.monthlyBudget(widget.currentUser.dailyBudget) ==
                                   0
                               ? 1

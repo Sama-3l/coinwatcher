@@ -202,7 +202,12 @@ class Methods {
           addMonthnCategories(currentUser, allExpenses[i], theme);
         }
       }
-    } else {}
+    } else {
+      currentUser.monthsDB.allMonths[monthCommaYear(DateTime.now())] = Month(
+          date: DateTime(DateTime.now().year, DateTime.now().month),
+          totalSpent: 0.0,
+          categories: Categories(theme: theme));
+    }
   }
 
   void addToMonthDB(User currentUser, Expense expense, LightMode theme) {
@@ -231,7 +236,8 @@ class Methods {
   }
 
   void loadDays(User currentUser) {
-    List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
+    List<Expense> allExpenses =
+        currentUser.allExpenses.allExpenses.reversed.toList();
     if (allExpenses.isNotEmpty) {
       currentUser.daysDB
               .allDays[allExpenses[0].date.day.toString().padLeft(2, '0')] =
@@ -258,10 +264,15 @@ class Methods {
                   .difference(allExpenses[i].date)
                   .inDays ==
               0) {
+            double currentAmount = currentUser
+                .daysDB
+                .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
+                .amount;
             currentUser.daysDB.allDays[
                     allExpenses[i].date.day.toString().padLeft(2, '0')] =
                 DayExpense(
-                    date: allExpenses[i].date, amount: allExpenses[i].amount);
+                    date: allExpenses[i].date,
+                    amount: currentAmount + allExpenses[i].amount);
           }
         }
       }
@@ -413,6 +424,7 @@ class Methods {
 
   String getDropDownDefaultValue(RecentExpenses recentExpenses) {
     if (recentExpenses.recentExpenses.isEmpty) {
+      print(DateFormat('MMMM, y').format(DateTime.now()));
       return DateFormat('MMMM, y').format(DateTime.now());
     } else {
       if (recentExpenses.recentExpenses[0].date.month == DateTime.now().month &&
@@ -470,5 +482,10 @@ class Methods {
       }
       return currentUser;
     }
+  }
+
+  double currentMonthSpent(User currentUser) {
+    return currentUser
+        .monthsDB.allMonths[monthCommaYear(DateTime.now())]!.totalSpent;
   }
 }

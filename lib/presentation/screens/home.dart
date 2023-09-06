@@ -41,7 +41,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     tabController = TabController(length: 3, vsync: this);
-    func.loadMonths(widget.currentUser, widget.theme);
+    if(widget.currentUser.monthsDB.allMonths.isEmpty){
+      func.loadMonths(widget.currentUser, widget.theme);
+    }
     func.loadDays(widget.currentUser);
   }
 

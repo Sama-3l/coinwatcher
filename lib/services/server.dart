@@ -1,7 +1,6 @@
 // ignore_for_file: empty_catches
 
 import 'dart:convert';
-
 import 'package:coinwatcher/constants/env.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/user.dart';
@@ -12,7 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ServerAccess {
   String serverUrl = serverURL;
 
-  Future<bool> register(User currentUser, SharedPreferences prefs) async {
+  Future<Map<String, dynamic>> register(
+      User currentUser, SharedPreferences prefs) async {
     final url = Uri.parse('$serverUrl/post'); // Replace with your server URL
     try {
       var regBody = currentUser.toJSON();
@@ -24,12 +24,12 @@ class ServerAccess {
         if (responseBody['status'] == '200') {
           prefs.setString("token", responseBody['token']);
           currentUser.id = JwtDecoder.decode(responseBody['token'])['_id'];
-          return true;
+          return {"success": true, "code": responseBody['status']};
         } else {
-          return false;
+          return {"success": false, "code": responseBody['status']};
         }
       } else {
-        return false;
+        return {"success": false, "code": responseBody['status']};
       }
     } catch (e) {
       rethrow;
