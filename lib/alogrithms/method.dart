@@ -488,4 +488,21 @@ class Methods {
     return currentUser
         .monthsDB.allMonths[monthCommaYear(DateTime.now())]!.totalSpent;
   }
+
+  void categoriesPatch(
+      AllExpenses allExpenses, Categories categories, String month) {
+    DateTime currentMonth = DateTime(
+        int.parse(month.split('-')[0]), int.parse(month.split('-')[1]));
+    int p = 0;
+    for (var expense in allExpenses.allExpenses) {
+      if (expense.date.month == currentMonth.month &&
+          expense.date.year == currentMonth.year) {
+        p = 1;
+        categories.categories[expense.category]!.amount =
+            categories.categories[expense.category]!.amount + expense.amount;
+      } else if (p == 1) {
+        break;
+      }
+    }
+  }
 }
