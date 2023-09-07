@@ -39,7 +39,6 @@ class User {
     AllExpenses allExpenses = AllExpenses();
     allExpenses.allExpenses = allExpenses.parse(userInfo['allExpenses']);
     Months monthsDB = Months();
-    print(userInfo['eachMonthDb']);
     monthsDB.parse(userInfo['eachMonthDb'], theme, allExpenses);
     Days daysDB = Days();
 

@@ -13,6 +13,7 @@ import 'package:coinwatcher/presentation/screens/login.dart';
 import 'package:coinwatcher/presentation/widgets/expenseBox.dart';
 import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,7 +28,7 @@ class WidgetDecider {
       FontFamily font, BuildContext context) {
     List<Widget> columnChildren = [];
     Methods func = Methods();
-
+    DateTime? temp;
     for (int i = 0; i < currentUser.allExpenses.allExpenses.length; i++) {
       if (i < currentUser.recentExpenses.recentExpenses.length) {
         if (i == 0) {
@@ -54,11 +55,30 @@ class WidgetDecider {
           ));
         }
 
+        if (temp == null ||
+            currentUser.recentExpenses.recentExpenses[i].date != temp) {
+          columnChildren.add(Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              DateFormat('MMMM, dd')
+                  .format(currentUser.recentExpenses.recentExpenses[i].date)
+                  .toUpperCase(),
+              style: font.getPoppinsTextStyle(
+                  color: theme.textPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0),
+            ),
+          ));
+          temp = currentUser.recentExpenses.recentExpenses[i].date;
+        }
+
         columnChildren.add(ExpenseBox(
             currentExpense: currentUser.recentExpenses.recentExpenses[i],
             theme: theme,
             font: font));
       } else {
+        temp = null;
         if (i != 0) {
           if (currentUser.allExpenses.allExpenses[i - 1].date.month !=
               currentUser.allExpenses.allExpenses[i].date.month) {
@@ -76,6 +96,25 @@ class WidgetDecider {
             ));
           }
         }
+
+        if (temp == null ||
+            currentUser.recentExpenses.recentExpenses[i].date != temp) {
+          columnChildren.add(Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Text(
+              DateFormat('MMMM, dd')
+                  .format(currentUser.recentExpenses.recentExpenses[i].date)
+                  .toUpperCase(),
+              style: font.getPoppinsTextStyle(
+                  color: theme.textPrimary,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0),
+            ),
+          ));
+          temp = currentUser.recentExpenses.recentExpenses[i].date;
+        }
+
         columnChildren.add(ExpenseBox(
             currentExpense: currentUser.allExpenses.allExpenses[i],
             theme: theme,
@@ -123,7 +162,24 @@ class WidgetDecider {
   List<Widget> getRecentSpendings(
       RecentExpenses recentExpenses, LightMode theme, FontFamily font) {
     List<Widget> children = [];
+    DateTime? temp;
     for (int i = 0; i < recentExpenses.recentExpenses.length; i++) {
+      if (temp == null || recentExpenses.recentExpenses[i].date != temp) {
+        children.add(Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Text(
+            DateFormat('MMMM, dd')
+                .format(recentExpenses.recentExpenses[i].date)
+                .toUpperCase(),
+            style: font.getPoppinsTextStyle(
+                color: theme.textPrimary,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0),
+          ),
+        ));
+        temp = recentExpenses.recentExpenses[i].date;
+      }
       children.add(ExpenseBox(
           currentExpense: recentExpenses.recentExpenses[i],
           theme: theme,

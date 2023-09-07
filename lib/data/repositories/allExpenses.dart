@@ -56,7 +56,7 @@ class AllExpenses {
           date: func.dateTimeObjectFormat(expense['date']),
           category: expense['category']));
     }
-    return expenses;
+    return expenses.reversed.toList();
   }
 
   List<Map<String, dynamic>> toJSON() {

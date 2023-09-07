@@ -64,7 +64,6 @@ class _DashboardState extends State<Dashboard> {
                     onTap: () async {
                       var signOut = await wd.showSignOutDialog(
                           context, prefs, widget.font, widget.theme);
-                      print(signOut);
                       if (signOut) {
                         User currentUser = User(
                             id: "",
@@ -91,7 +90,7 @@ class _DashboardState extends State<Dashboard> {
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10, right: 10),
+                          padding: const EdgeInsets.only(bottom: 15, right: 10),
                           child: Text(
                             "Hi,",
                             style: widget.font.getPoppinsTextStyle(
@@ -102,7 +101,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 15),
                           child: Text(
                             "${widget.currentUser.name}!",
                             style: widget.font.getPoppinsTextStyle(
@@ -116,7 +115,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 15),
                     child: Text(
                       func.getMonthandYear(date: DateTime.now()),
                       style: widget.font.getPoppinsTextStyle(
@@ -135,7 +134,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 15),
                     child: Text(
                       'Analytics',
                       style: widget.font.getPoppinsTextStyle(
@@ -151,10 +150,8 @@ class _DashboardState extends State<Dashboard> {
                           theme: widget.theme,
                           font: widget.font,
                           currentUser: widget.currentUser)),
-                  //Analytics
-                  //View more button -> Diverts to the analytics tab
                   Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(bottom: 15),
                           child: Text(
                             'Recent spendings',
                             style: widget.font.getPoppinsTextStyle(
@@ -166,6 +163,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                   Column(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: wd.getRecentSpendings(
                           widget.currentUser.recentExpenses,
                           widget.theme,

@@ -90,8 +90,8 @@ class Methods {
       ),
       firstDate: DateTime(
         initialDate.year,
-        initialDate.month - 1,
-        initialDate.day,
+        initialDate.month,
+        1,
       ),
       lastDate: DateTime(
         initialDate.year + 5,
@@ -236,8 +236,7 @@ class Methods {
   }
 
   void loadDays(User currentUser) {
-    List<Expense> allExpenses =
-        currentUser.allExpenses.allExpenses.reversed.toList();
+    List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
     if (allExpenses.isNotEmpty) {
       currentUser.daysDB
               .allDays[allExpenses[0].date.day.toString().padLeft(2, '0')] =
@@ -323,7 +322,19 @@ class Methods {
       currentUser.thisMonthSpent =
           currentUser.thisMonthSpent + thisExpense.amount;
     }
-    currentUser.allExpenses.allExpenses.insert(0, thisExpense);
+    int datePositionRelation = 0;
+    int dateIndex = currentUser.allExpenses.allExpenses.indexWhere((element) {
+      datePositionRelation = element.date.difference(thisExpense.date).inDays;
+      return element.date.difference(thisExpense.date).inDays == 0;
+    });
+    if (dateIndex == -1) {
+      if (datePositionRelation < 0) {
+        dateIndex = 0;
+      } else {
+        dateIndex = currentUser.allExpenses.allExpenses.length;
+      }
+    }
+    currentUser.allExpenses.allExpenses.insert(dateIndex, thisExpense);
     currentUser.recentExpenses = getRecentExpenses(currentUser.allExpenses);
     addToMonthDB(currentUser, thisExpense, theme);
     addToDayDb(currentUser);

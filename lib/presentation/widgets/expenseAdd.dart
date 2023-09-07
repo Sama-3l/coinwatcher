@@ -253,7 +253,6 @@ class ExpenseAdd extends StatelessWidget {
 
                                   ServerAccess sa = ServerAccess();
                                   sa.addExpense(currentUser, thisExpense);
-                                  // sa.fetchDataFromServer(currentUser);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(

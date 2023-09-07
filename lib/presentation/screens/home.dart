@@ -16,7 +16,6 @@ import '../../business_logic/blocs/changeMonth/change_month_bloc.dart';
 import '../../business_logic/blocs/tabTextBloc/tab_text_color_bloc.dart';
 import '../widgets/bottomNavBar.dart';
 import '../widgets/fab.dart';
-import 'dashboard.dart';
 
 class Home extends StatefulWidget {
   Home(

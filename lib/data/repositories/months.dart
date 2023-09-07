@@ -11,6 +11,7 @@ class Months {
 
   void parse(List<dynamic> monthsDB, LightMode theme, AllExpenses allExpenses) {
     Methods func = Methods();
+    int p = 0;
     for (var month in monthsDB) {
       double sumCheck = 0.0;
       Categories categories = Categories(theme: theme);
@@ -26,7 +27,12 @@ class Months {
           categories: categories);
           
       if (sumCheck != double.parse(month['totalSpent'])) {
-        func.categoriesPatch(allExpenses, categories, month['date']);
+        Categories newCategories = Categories(theme: theme);
+        func.categoriesPatch(allExpenses, newCategories, month['date']);
+        allMonths[month['month']] = Month(
+            date: func.dateTimeObjectFormat(month['date']),
+            totalSpent: sumCheck,
+            categories: newCategories);
       }
     }
   }

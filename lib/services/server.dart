@@ -109,7 +109,6 @@ class ServerAccess {
 
   dynamic addExpense(User currentUser, Expense expense) async {
     final url = Uri.parse('$serverUrl/updateExpense');
-
     try {
       final response = await http.put(url,
           headers: {'Content-Type': 'application/json'},

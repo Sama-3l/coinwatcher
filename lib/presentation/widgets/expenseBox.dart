@@ -46,58 +46,58 @@ class _ExpenseBoxState extends State<ExpenseBox> {
                   color: Color(0xffd9d9d9),
                   borderRadius: BorderRadius.circular(4)),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(widget.currentExpense.expenseName,
-                        style: widget.font.getPoppinsTextStyle(
-                            color: widget.theme.textPrimary,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: -0.41)),
-                    Row(
-                      children: [
-                        Text(widget.currentExpense.category,
-                            style: widget.font.getPoppinsTextStyle(
-                                color: widget.theme.textSecondary,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: -0.41)),
-                        widget.forDashboard
-                            ? Container()
-                            : Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 5, right: 5),
-                                child: Container(
-                                  height: 3,
-                                  width: 3,
-                                  decoration: BoxDecoration(
-                                      color: widget.theme.textSecondary,
-                                      borderRadius: BorderRadius.circular(4)),
-                                ),
-                              ),
-                        widget.forDashboard
-                            ? Container()
-                            : Text(
-                                func.getMonthandYear(
-                                    date: widget.currentExpense.date,
-                                    commaReq: false),
-                                style: widget.font.getPoppinsTextStyle(
-                                    color: widget.theme.textSecondary,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: -0.41)),
-                      ],
-                    )
-                  ]),
-            ),
             Expanded(
-                child: Align(
-                    alignment: Alignment.centerRight,
-                    child: wd.showAmount(
-                        widget.currentExpense, widget.font, widget.theme)))
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(widget.currentExpense.expenseName,
+                          style: widget.font.getPoppinsTextStyle(
+                              color: widget.theme.textPrimary,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: -0.41)),
+                      Row(
+                        children: [
+                          Text(widget.currentExpense.category,
+                              style: widget.font.getPoppinsTextStyle(
+                                  color: widget.theme.textSecondary,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: -0.41)),
+                          widget.forDashboard
+                              ? Container()
+                              : Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 5, right: 5),
+                                  child: Container(
+                                    height: 3,
+                                    width: 3,
+                                    decoration: BoxDecoration(
+                                        color: widget.theme.textSecondary,
+                                        borderRadius: BorderRadius.circular(4)),
+                                  ),
+                                ),
+                          widget.forDashboard
+                              ? Container()
+                              : Text(
+                                  func.getMonthandYear(
+                                      date: widget.currentExpense.date,
+                                      commaReq: false),
+                                  style: widget.font.getPoppinsTextStyle(
+                                      color: widget.theme.textSecondary,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: -0.41)),
+                        ],
+                      )
+                    ]),
+              ),
+            ),
+            Center(
+                child: wd.showAmount(
+                    widget.currentExpense, widget.font, widget.theme))
           ]),
         ),
       ),
