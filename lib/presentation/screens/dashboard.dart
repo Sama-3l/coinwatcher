@@ -151,23 +151,21 @@ class _DashboardState extends State<Dashboard> {
                           font: widget.font,
                           currentUser: widget.currentUser)),
                   Padding(
-                          padding: const EdgeInsets.only(bottom: 15),
-                          child: Text(
-                            'Recent spendings',
-                            style: widget.font.getPoppinsTextStyle(
-                                color: widget.theme.textSecondary,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 1),
-                          ),
-                        ),
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Text(
+                      'Recent spendings',
+                      style: widget.font.getPoppinsTextStyle(
+                          color: widget.theme.textSecondary,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1),
+                    ),
+                  ),
                   Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: wd.getRecentSpendings(
-                          widget.currentUser.recentExpenses,
-                          widget.theme,
-                          widget.font)),
+                          widget.currentUser, widget.theme, widget.font)),
                   SizedBox(height: pagePadding)
                 ]),
           ),

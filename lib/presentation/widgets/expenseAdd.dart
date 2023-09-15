@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'package:carbon_icons/carbon_icons.dart';
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/business_logic/blocs/updateExpense/update_expense_bloc.dart';
@@ -18,16 +19,26 @@ import 'package:intl/intl.dart';
 import '../../business_logic/blocs/datePicker/date_picker_bloc.dart';
 import '../../business_logic/blocs/dropDownMenu/drop_down_menu_bloc.dart';
 
-class ExpenseAdd extends StatelessWidget {
+class ExpenseAdd extends StatefulWidget {
   ExpenseAdd(
       {super.key,
       required this.currentUser,
       required this.theme,
-      required this.font});
+      required this.font,
+      this.expense = null,
+      this.edit = false});
 
   User currentUser;
   LightMode theme;
   FontFamily font;
+  bool edit;
+  Expense? expense;
+
+  @override
+  State<ExpenseAdd> createState() => _ExpenseAddState();
+}
+
+class _ExpenseAddState extends State<ExpenseAdd> {
   TextEditingController expenseName = TextEditingController();
   TextEditingController amount = TextEditingController();
   Methods func = Methods();
@@ -38,9 +49,21 @@ class ExpenseAdd extends StatelessWidget {
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.expense != null) {
+      expenseName.text = widget.expense!.expenseName;
+      amount.text = widget.expense!.amount.toString();
+      dropDownValue = widget.expense!.category;
+      picked = widget.expense!.date;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Hero(
-        tag: currentUser.allExpenses,
+        tag: widget.currentUser.allExpenses,
         child: Material(
             color: Colors.transparent,
             borderRadius: BorderRadius.only(
@@ -51,7 +74,7 @@ class ExpenseAdd extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                     decoration: BoxDecoration(
-                      color: theme.mainBackground,
+                      color: widget.theme.mainBackground,
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20)),
@@ -60,19 +83,46 @@ class ExpenseAdd extends StatelessWidget {
                       padding: EdgeInsets.only(
                           left: 21,
                           right: 21,
-                          top: MediaQuery.of(context).size.height * 0.05),
+                          top: widget.edit
+                              ? 0
+                              : MediaQuery.of(context).size.height * 0.05),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          wd.textWidget('Expense Name', font, theme, 18),
+                          widget.edit
+                              ? Padding(
+                                  padding: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height *
+                                          0.02),
+                                  child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: IconButton(
+                                          onPressed: () {
+                                            func.deleteExpense(
+                                                widget.currentUser,
+                                                widget.expense,
+                                                context);
+
+                                            ServerAccess sa = ServerAccess();
+                                            sa.deleteExpense(
+                                                widget.currentUser.id,
+                                                widget.expense);
+                                          },
+                                          icon: Icon(CarbonIcons.trash_can,
+                                              color: widget.theme.error,
+                                              size: 30))),
+                                )
+                              : Container(),
+                          wd.textWidget(
+                              'Expense Name', widget.font, widget.theme, 18),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 30),
                             child: ExpenseInputField(
                                 textEditingController: expenseName,
                                 hintText: 'Shoes',
-                                font: font,
-                                theme: theme),
+                                font: widget.font,
+                                theme: widget.theme),
                           ),
                           Row(
                             children: [
@@ -83,17 +133,17 @@ class ExpenseAdd extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        wd.textWidget(
-                                            'Amount', font, theme, 18),
+                                        wd.textWidget('Amount', widget.font,
+                                            widget.theme, 18),
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 30),
                                           child: ExpenseInputField(
                                               textEditingController: amount,
                                               hintText: '1500.00',
-                                              font: font,
+                                              font: widget.font,
                                               currency: true,
-                                              theme: theme),
+                                              theme: widget.theme),
                                         ),
                                       ]),
                                 ),
@@ -105,7 +155,8 @@ class ExpenseAdd extends StatelessWidget {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        wd.textWidget('Date', font, theme, 18),
+                                        wd.textWidget('Date', widget.font,
+                                            widget.theme, 18),
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(bottom: 30),
@@ -128,23 +179,23 @@ class ExpenseAdd extends StatelessWidget {
                                                             DateTime.now().add(
                                                                 Duration(
                                                                     days: 2)),
-                                                            theme))!;
+                                                            widget.theme))!;
                                                   },
                                                   textCapitalization:
                                                       TextCapitalization
                                                           .sentences,
-                                                  style:
-                                                      font.getPoppinsTextStyle(
-                                                          color:
-                                                              theme.textPrimary,
+                                                  style: widget.font
+                                                      .getPoppinsTextStyle(
+                                                          color: widget.theme
+                                                              .textPrimary,
                                                           fontSize: 18,
                                                           fontWeight:
                                                               FontWeight.w500,
                                                           letterSpacing: -0.41),
                                                   decoration: InputDecoration(
-                                                    hintStyle: font
+                                                    hintStyle: widget.font
                                                         .getPoppinsTextStyle(
-                                                            color: theme
+                                                            color: widget.theme
                                                                 .textPrimary,
                                                             fontSize: 18,
                                                             fontWeight:
@@ -169,7 +220,8 @@ class ExpenseAdd extends StatelessWidget {
                               )
                             ],
                           ),
-                          wd.textWidget('Category name', font, theme, 18),
+                          wd.textWidget(
+                              'Category name', widget.font, widget.theme, 18),
                           Padding(
                             padding: EdgeInsets.only(bottom: 18),
                             child: BlocBuilder<DropDownMenuBloc,
@@ -178,7 +230,7 @@ class ExpenseAdd extends StatelessWidget {
                                 return Container(
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: theme.borderColor,
+                                      color: widget.theme.borderColor,
                                       width: 1.0,
                                     ),
                                     borderRadius: BorderRadius.circular(8),
@@ -206,10 +258,10 @@ class ExpenseAdd extends StatelessWidget {
                                                     const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   value,
-                                                  style:
-                                                      font.getPoppinsTextStyle(
-                                                          color:
-                                                              theme.textPrimary,
+                                                  style: widget.font
+                                                      .getPoppinsTextStyle(
+                                                          color: widget.theme
+                                                              .textPrimary,
                                                           fontSize: 17,
                                                           fontWeight:
                                                               FontWeight.w500,
@@ -221,7 +273,7 @@ class ExpenseAdd extends StatelessWidget {
                                         ),
                                       ),
                                       Icon(Icons.arrow_drop_down_sharp,
-                                          color: theme.textPrimary)
+                                          color: widget.theme.textPrimary)
                                     ],
                                   ),
                                 );
@@ -237,30 +289,51 @@ class ExpenseAdd extends StatelessWidget {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                     elevation: 0,
-                                    backgroundColor: theme.primaryAccent4,
+                                    backgroundColor:
+                                        widget.theme.primaryAccent4,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(50))),
                                 onPressed: () {
-                                  Expense thisExpense = Expense(
-                                      expenseName: expenseName.text,
-                                      amount: double.parse(amount.text),
-                                      date: picked,
-                                      category: dropDownValue);
+                                  if (widget.edit) {
+                                    Expense thisExpense = Expense(
+                                        expenseName: expenseName.text,
+                                        amount: double.parse(amount.text),
+                                        date: picked,
+                                        category: dropDownValue);
 
-                                  func.addExpenseFab(
-                                      currentUser, thisExpense, context, theme);
+                                    func.updateExpenseFab(
+                                        widget.expense,
+                                        widget.currentUser,
+                                        thisExpense,
+                                        context,
+                                        widget.theme);
 
-                                  ServerAccess sa = ServerAccess();
-                                  sa.addExpense(currentUser, thisExpense);
+                                    ServerAccess sa = ServerAccess();
+                                    sa.editExpense(widget.expense, thisExpense,
+                                        widget.currentUser);
+                                  } else {
+                                    Expense thisExpense = Expense(
+                                        expenseName: expenseName.text,
+                                        amount: double.parse(amount.text),
+                                        date: picked,
+                                        category: dropDownValue);
+
+                                    func.addExpenseFab(widget.currentUser,
+                                        thisExpense, context, widget.theme);
+
+                                    ServerAccess sa = ServerAccess();
+                                    sa.addExpense(
+                                        widget.currentUser, thisExpense);
+                                  }
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       top: 10, bottom: 10),
                                   child: Text(
                                     'Add',
-                                    style: font.getPoppinsTextStyle(
-                                        color: theme.textPrimary,
+                                    style: widget.font.getPoppinsTextStyle(
+                                        color: widget.theme.textPrimary,
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
                                         letterSpacing: 1),

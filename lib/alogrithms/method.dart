@@ -14,6 +14,7 @@ import 'package:coinwatcher/data/model/pieData.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/categories.dart';
+import 'package:coinwatcher/data/repositories/days.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -323,13 +324,16 @@ class Methods {
           currentUser.thisMonthSpent + thisExpense.amount;
     }
     int datePositionRelation = 0;
+    List<int> indices = [];
     int dateIndex = currentUser.allExpenses.allExpenses.indexWhere((element) {
       datePositionRelation = element.date.difference(thisExpense.date).inDays;
+      indices.add(datePositionRelation);
       return element.date.difference(thisExpense.date).inDays == 0;
     });
+    int middleDate = indices.indexWhere((element) => element > 0);
     if (dateIndex == -1) {
       if (datePositionRelation < 0) {
-        dateIndex = 0;
+        dateIndex = middleDate + 1;
       } else {
         dateIndex = currentUser.allExpenses.allExpenses.length;
       }
@@ -337,6 +341,53 @@ class Methods {
     currentUser.allExpenses.allExpenses.insert(dateIndex, thisExpense);
     currentUser.recentExpenses = getRecentExpenses(currentUser.allExpenses);
     addToMonthDB(currentUser, thisExpense, theme);
+    addToDayDb(currentUser);
+    Navigator.of(context).pop();
+    BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
+  }
+
+  void removeFromMonthDb(Months monthsDB, Expense? expense) {
+    monthsDB.allMonths[getMonthandYear(date: expense!.date)]!.totalSpent -=
+        expense.amount;
+    monthsDB.allMonths[getMonthandYear(date: expense.date)]!.categories
+        .categories[expense.category]!.amount -= expense.amount;
+  }
+
+  void updateExpenseFab(Expense? originalExpense, User currentUser,
+      Expense thisExpense, BuildContext context, LightMode theme) {
+    currentUser.allExpenses.allExpenses.remove(originalExpense);
+    removeFromMonthDb(currentUser.monthsDB, originalExpense);
+    if (DateTime.now().month == thisExpense.date.month) {
+      currentUser.thisMonthSpent =
+          currentUser.thisMonthSpent + thisExpense.amount;
+    }
+    int datePositionRelation = 0;
+    List<int> indices = [];
+    int dateIndex = currentUser.allExpenses.allExpenses.indexWhere((element) {
+      datePositionRelation = element.date.difference(thisExpense.date).inDays;
+      indices.add(datePositionRelation);
+      return element.date.difference(thisExpense.date).inDays == 0;
+    });
+    int middleDate = indices.indexWhere((element) => element > 0);
+    if (dateIndex == -1) {
+      if (datePositionRelation < 0) {
+        dateIndex = middleDate + 1;
+      } else {
+        dateIndex = currentUser.allExpenses.allExpenses.length;
+      }
+    }
+    currentUser.allExpenses.allExpenses.insert(dateIndex, thisExpense);
+    currentUser.recentExpenses = getRecentExpenses(currentUser.allExpenses);
+    addToMonthDB(currentUser, thisExpense, theme);
+    addToDayDb(currentUser);
+    Navigator.of(context).pop();
+    BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
+  }
+
+  void deleteExpense(User currentUser, Expense? expense, BuildContext context) {
+    currentUser.allExpenses.allExpenses.remove(expense);
+    currentUser.recentExpenses = getRecentExpenses(currentUser.allExpenses);
+    removeFromMonthDb(currentUser.monthsDB, expense);
     addToDayDb(currentUser);
     Navigator.of(context).pop();
     BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
@@ -435,7 +486,6 @@ class Methods {
 
   String getDropDownDefaultValue(RecentExpenses recentExpenses) {
     if (recentExpenses.recentExpenses.isEmpty) {
-      print(DateFormat('MMMM, y').format(DateTime.now()));
       return DateFormat('MMMM, y').format(DateTime.now());
     } else {
       if (recentExpenses.recentExpenses[0].date.month == DateTime.now().month &&

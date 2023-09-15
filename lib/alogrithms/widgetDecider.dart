@@ -74,6 +74,7 @@ class WidgetDecider {
         }
 
         columnChildren.add(ExpenseBox(
+          currentUser: currentUser,
             currentExpense: currentUser.recentExpenses.recentExpenses[i],
             theme: theme,
             font: font));
@@ -116,6 +117,7 @@ class WidgetDecider {
         }
 
         columnChildren.add(ExpenseBox(
+          currentUser: currentUser,
             currentExpense: currentUser.allExpenses.allExpenses[i],
             theme: theme,
             font: font));
@@ -159,10 +161,10 @@ class WidgetDecider {
         ]);
   }
 
-  List<Widget> getRecentSpendings(
-      RecentExpenses recentExpenses, LightMode theme, FontFamily font) {
+  List<Widget> getRecentSpendings(User currentUser, LightMode theme, FontFamily font) {
     List<Widget> children = [];
     DateTime? temp;
+    RecentExpenses recentExpenses = currentUser.recentExpenses;
     for (int i = 0; i < recentExpenses.recentExpenses.length; i++) {
       if (temp == null || recentExpenses.recentExpenses[i].date != temp) {
         children.add(Padding(
@@ -181,6 +183,7 @@ class WidgetDecider {
         temp = recentExpenses.recentExpenses[i].date;
       }
       children.add(ExpenseBox(
+        currentUser: currentUser,
           currentExpense: recentExpenses.recentExpenses[i],
           theme: theme,
           font: font,

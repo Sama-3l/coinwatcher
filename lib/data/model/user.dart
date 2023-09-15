@@ -41,7 +41,6 @@ class User {
     Months monthsDB = Months();
     monthsDB.parse(userInfo['eachMonthDb'], theme, allExpenses);
     Days daysDB = Days();
-
     Methods func = Methods();
     return User(
         id: userInfo['_id'],

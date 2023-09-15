@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:coinwatcher/constants/env.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/user.dart';
+import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,9 +74,6 @@ class ServerAccess {
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(creds));
 
-      var responseBody = jsonDecode(response.body);
-      Map<String, dynamic> data = JwtDecoder.decode(responseBody['token']);
-
       if (response.statusCode == 200) {
         // Request successful, handle the response data here
         final appData = await http.post(getDataUrl,
@@ -108,7 +106,7 @@ class ServerAccess {
   }
 
   dynamic addExpense(User currentUser, Expense expense) async {
-    final url = Uri.parse('$serverUrl/updateExpense');
+    final url = Uri.parse('$serverUrl/addExpense');
     try {
       final response = await http.put(url,
           headers: {'Content-Type': 'application/json'},
@@ -116,6 +114,34 @@ class ServerAccess {
               {'expense': expense.toJSON(), 'data': currentUser.toJSON()}));
 
       var responseBody = jsonDecode(response.body);
+    } catch (e) {}
+  }
+
+  dynamic editExpense(Expense? originalExpense, Expense? currentExpense, User currentUser) async {
+    final url = Uri.parse('$serverUrl/updateExpense');
+    AllExpenses reversedAllExpenses = AllExpenses();
+    reversedAllExpenses.allExpenses = currentUser.allExpenses.allExpenses.reversed.toList();
+    try {
+      final response = await http.put(url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            '_id': currentUser.id,
+            'originalExpense': originalExpense!.toJSON(),
+            'currentExpense': currentExpense!.toJSON(),
+            'allExpenses' : reversedAllExpenses.toJSON()
+          }));
+    } catch (e) {}
+  }
+
+  dynamic deleteExpense(String id, Expense? expense) async {
+    final url = Uri.parse('$serverUrl/deleteExpense');
+    try {
+      final response = await http.put(url,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            '_id': id,
+            'expense': expense!.toJSON(),
+          }));
     } catch (e) {}
   }
 }
