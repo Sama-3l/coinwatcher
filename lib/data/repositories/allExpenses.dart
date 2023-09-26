@@ -9,41 +9,6 @@ class AllExpenses {
     //     amount: 3000.00,
     //     date: DateTime(2023, 7, 8),
     //     category: "Misc"),
-    // Expense(
-    //     expenseName: "My Protein",
-    //     amount: 1500.00,
-    //     date: DateTime(2023, 7, 7),
-    //     category: "Health n Fitness"),
-    // Expense(
-    //     expenseName: "Udemy",
-    //     amount: 700.00,
-    //     date: DateTime(2023, 6, 25),
-    //     category: "Education"),
-    // Expense(
-    //     expenseName: "Veg puff",
-    //     amount: 15.00,
-    //     date: DateTime(2023, 6, 23),
-    //     category: "Food n drinks"),
-    // Expense(
-    //     expenseName: "Dominoes",
-    //     amount: 1000.00,
-    //     date: DateTime(2023, 6, 23),
-    //     category: "Food n drinks"),
-    // Expense(
-    //     expenseName: "Jio",
-    //     amount: 450.00,
-    //     date: DateTime(2023, 6, 21),
-    //     category: "Essentials"),
-    // Expense(
-    //     expenseName: "Facewash",
-    //     amount: 500.00,
-    //     date: DateTime(2023, 6, 21),
-    //     category: "Personal care"),
-    // Expense(
-    //     expenseName: "Burger King",
-    //     amount: 200.00,
-    //     date: DateTime(2023, 6, 20),
-    //     category: "Food n drinks"),
   ];
 
   List<Expense> parse(List<dynamic> allExpenses) {
