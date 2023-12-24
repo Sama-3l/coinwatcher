@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:coinwatcher/alogrithms/crypt.dart';
 import 'package:coinwatcher/business_logic/blocs/bloc/loading_bloc.dart';

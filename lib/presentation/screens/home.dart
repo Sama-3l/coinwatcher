@@ -7,7 +7,6 @@ import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../widgets/bottomNavBar.dart';
 import '../widgets/fab.dart';
 
@@ -48,7 +47,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       extendBody: true,
       body: BlocBuilder<UpdateExpenseBloc, UpdateExpenseState>(
         builder: (context, state) {
-        vBarTabs(
+          return BottomNavBarTabs(
             theme: widget.theme,
             font: widget.font,
             tabController: tabController,
