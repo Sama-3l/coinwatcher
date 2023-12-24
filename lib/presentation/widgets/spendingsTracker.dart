@@ -4,8 +4,6 @@ import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
-import 'package:coinwatcher/data/repositories/allExpenses.dart';
-import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/changeMonthlyBudget.dart';
 import 'package:coinwatcher/presentation/widgets/trackerText.dart';
 import 'package:coinwatcher/routes/monthlyPopUpRoute.dart';

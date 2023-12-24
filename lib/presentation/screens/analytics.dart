@@ -1,12 +1,10 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/presentation/widgets/expense_graph.dart';
-import 'package:coinwatcher/presentation/widgets/legend.dart';
 import 'package:coinwatcher/presentation/widgets/pieChartMenu.dart';
-import 'package:coinwatcher/presentation/widgets/piechart.dart';
 
 import 'package:flutter/material.dart';
 
@@ -30,8 +28,6 @@ class Analytics extends StatefulWidget {
 class _AnalyticsState extends State<Analytics> {
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.only(left: 21, right: 21, top: 15),

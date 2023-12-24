@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
@@ -6,7 +8,6 @@ import 'package:coinwatcher/data/repositories/categories.dart';
 import 'package:coinwatcher/presentation/widgets/piechart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 import '../../business_logic/blocs/changeMonth/change_month_bloc.dart';
 import 'legend.dart';

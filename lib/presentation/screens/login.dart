@@ -1,21 +1,16 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, must_be_immutable
 
 import 'package:coinwatcher/alogrithms/crypt.dart';
-import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/business_logic/blocs/bloc/loading_bloc.dart';
 import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
-import 'package:coinwatcher/data/repositories/allExpenses.dart';
-import 'package:coinwatcher/data/repositories/days.dart';
-import 'package:coinwatcher/data/repositories/months.dart';
 import 'package:coinwatcher/presentation/screens/home.dart';
 import 'package:coinwatcher/presentation/screens/register.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
 import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
-import 'package:coinwatcher/presentation/widgets/passField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

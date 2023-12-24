@@ -1,8 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
-import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/expenseAdd.dart';
 import 'package:coinwatcher/routes/popUpAnimateRoute.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
@@ -6,7 +6,6 @@ import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
-import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:coinwatcher/presentation/screens/login.dart';
 import 'package:coinwatcher/presentation/widgets/expense_graph.dart';
 import 'package:coinwatcher/presentation/widgets/spendingsTracker.dart';

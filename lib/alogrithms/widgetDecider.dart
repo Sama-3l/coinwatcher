@@ -9,19 +9,12 @@ import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
-import 'package:coinwatcher/presentation/screens/login.dart';
 import 'package:coinwatcher/presentation/widgets/expenseBox.dart';
-import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/constant.dart';
-import '../data/repositories/allExpenses.dart';
-import '../data/repositories/days.dart';
-import '../data/repositories/months.dart';
-import '../presentation/screens/dashboard.dart';
 
 class WidgetDecider {
   List<Widget> getSpendingsWidgets(User currentUser, LightMode theme,
@@ -32,17 +25,27 @@ class WidgetDecider {
     for (int i = 0; i < currentUser.allExpenses.allExpenses.length; i++) {
       if (i < currentUser.recentExpenses.recentExpenses.length) {
         if (i == 0) {
-          columnChildren.add(Text(
-            "Recent spendings",
-            style: font.getPoppinsTextStyle(
-                color: theme.textPrimary,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1),
+          columnChildren.add(Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Recent spendings",
+                style: font.getPoppinsTextStyle(
+                    color: theme.textPrimary,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    func.availableFilters(currentUser, theme);
+                  },
+                  child: Icon(Icons.add))
+            ],
           ));
 
           columnChildren.add(Padding(
-            padding: const EdgeInsets.only(left: 8, bottom: 12),
+            padding: const EdgeInsets.only(top: 16, bottom: 8),
             child: Text(
               func.getMonthandYear(
                   date: currentUser.recentExpenses.recentExpenses[0].date),
@@ -74,7 +77,7 @@ class WidgetDecider {
         }
 
         columnChildren.add(ExpenseBox(
-          currentUser: currentUser,
+            currentUser: currentUser,
             currentExpense: currentUser.recentExpenses.recentExpenses[i],
             theme: theme,
             font: font));
@@ -84,7 +87,7 @@ class WidgetDecider {
           if (currentUser.allExpenses.allExpenses[i - 1].date.month !=
               currentUser.allExpenses.allExpenses[i].date.month) {
             columnChildren.add(Padding(
-              padding: const EdgeInsets.only(left: 8, top: 0, bottom: 12),
+              padding: const EdgeInsets.only(top: 16, bottom: 8),
               child: Text(
                 func.getMonthandYear(
                     date: currentUser.allExpenses.allExpenses[i].date),
@@ -98,26 +101,8 @@ class WidgetDecider {
           }
         }
 
-        if (temp == null ||
-            currentUser.recentExpenses.recentExpenses[i].date != temp) {
-          columnChildren.add(Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Text(
-              DateFormat('MMMM, dd')
-                  .format(currentUser.recentExpenses.recentExpenses[i].date)
-                  .toUpperCase(),
-              style: font.getPoppinsTextStyle(
-                  color: theme.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0),
-            ),
-          ));
-          temp = currentUser.recentExpenses.recentExpenses[i].date;
-        }
-
         columnChildren.add(ExpenseBox(
-          currentUser: currentUser,
+            currentUser: currentUser,
             currentExpense: currentUser.allExpenses.allExpenses[i],
             theme: theme,
             font: font));
@@ -161,7 +146,8 @@ class WidgetDecider {
         ]);
   }
 
-  List<Widget> getRecentSpendings(User currentUser, LightMode theme, FontFamily font) {
+  List<Widget> getRecentSpendings(
+      User currentUser, LightMode theme, FontFamily font) {
     List<Widget> children = [];
     DateTime? temp;
     RecentExpenses recentExpenses = currentUser.recentExpenses;
@@ -183,7 +169,7 @@ class WidgetDecider {
         temp = recentExpenses.recentExpenses[i].date;
       }
       children.add(ExpenseBox(
-        currentUser: currentUser,
+          currentUser: currentUser,
           currentExpense: recentExpenses.recentExpenses[i],
           theme: theme,
           font: font,

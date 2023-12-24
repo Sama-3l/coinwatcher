@@ -1,17 +1,15 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/business_logic/blocs/barGraphChange/bar_graph_change_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
-import 'package:coinwatcher/data/model/bar_data.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/presentation/widgets/appButton.dart';
 import 'package:coinwatcher/presentation/widgets/daily_graph.dart';
 import 'package:coinwatcher/presentation/widgets/monthly_graph.dart';
 
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ExpenseGraph extends StatefulWidget {

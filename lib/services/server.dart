@@ -1,4 +1,4 @@
-// ignore_for_file: empty_catches
+// ignore_for_file: empty_catches, unused_local_variable
 
 import 'dart:convert';
 import 'package:coinwatcher/constants/env.dart';

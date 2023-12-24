@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:ffi';
-
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/business_logic/blocs/updateExpense/update_expense_bloc.dart';

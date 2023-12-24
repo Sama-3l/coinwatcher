@@ -2,9 +2,7 @@
 
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unrelated_type_equality_checks
 
-import 'dart:math';
 
-import 'package:coinwatcher/business_logic/blocs/barGraphChange/bar_graph_change_bloc.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/bar_data.dart';
 import 'package:coinwatcher/data/model/dayExpense.dart';
@@ -14,14 +12,11 @@ import 'package:coinwatcher/data/model/pieData.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/categories.dart';
-import 'package:coinwatcher/data/repositories/days.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../business_logic/blocs/datePicker/date_picker_bloc.dart';
 import '../business_logic/blocs/updateExpense/update_expense_bloc.dart';
@@ -527,7 +522,7 @@ class Methods {
     }
   }
 
-  Future<dynamic?> tokenIsExpired(
+  Future<dynamic> tokenIsExpired(
       String token, User currentUser, LightMode theme) async {
     if (JwtDecoder.isExpired(token)) {
       return null;
@@ -565,5 +560,19 @@ class Methods {
         break;
       }
     }
+  }
+
+  List<String> availableFilters(User currentUser, LightMode theme){
+    List<String> a = [];
+    a.add("All");
+    Categories categories = Categories(theme: theme);
+    for(var category in categories.categories.entries){
+      a.add(category.key);
+    }
+    for(var month in currentUser.monthsDB.allMonths.entries){
+      a.add(month.key);
+    }
+    print(a);
+    return a;
   }
 }

@@ -1,10 +1,8 @@
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
-import 'package:coinwatcher/data/model/category.dart';
 import 'package:coinwatcher/data/repositories/categories.dart';
 import 'package:coinwatcher/presentation/widgets/legendItems.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Legend extends StatefulWidget {

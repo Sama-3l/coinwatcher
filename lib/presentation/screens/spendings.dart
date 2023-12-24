@@ -4,8 +4,6 @@ import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
-import 'package:coinwatcher/data/repositories/allExpenses.dart';
-import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:flutter/material.dart';
 
 class Spendings extends StatefulWidget {

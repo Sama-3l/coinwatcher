@@ -1,19 +1,13 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:coinwatcher/alogrithms/method.dart';
-import 'package:coinwatcher/business_logic/blocs/datePicker/date_picker_bloc.dart';
-import 'package:coinwatcher/business_logic/blocs/dropDownMenu/drop_down_menu_bloc.dart';
 import 'package:coinwatcher/business_logic/blocs/updateExpense/update_expense_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
-import 'package:coinwatcher/data/repositories/allExpenses.dart';
-import 'package:coinwatcher/data/repositories/days.dart';
-import 'package:coinwatcher/data/repositories/months.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../business_logic/blocs/barGraphChange/bar_graph_change_bloc.dart';
-import '../../business_logic/blocs/changeMonth/change_month_bloc.dart';
-import '../../business_logic/blocs/tabTextBloc/tab_text_color_bloc.dart';
 import '../widgets/bottomNavBar.dart';
 import '../widgets/fab.dart';
 
@@ -54,7 +48,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       extendBody: true,
       body: BlocBuilder<UpdateExpenseBloc, UpdateExpenseState>(
         builder: (context, state) {
-          return BottomNavBarTabs(
+        vBarTabs(
             theme: widget.theme,
             font: widget.font,
             tabController: tabController,
