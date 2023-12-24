@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class DayExpense{
   DayExpense({required this.date, required this.amount});
 

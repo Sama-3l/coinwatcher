@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/data/repositories/categories.dart';
-import 'package:flutter/material.dart';
 
 class Month{
   Month({required this.date, required this.totalSpent, required this.categories});
