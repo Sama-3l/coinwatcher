@@ -1,6 +1,5 @@
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/data/model/expense.dart';
-import 'package:flutter/material.dart';
 
 class AllExpenses {
   List<Expense> allExpenses = [

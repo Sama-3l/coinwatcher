@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import "package:coinwatcher/constants/themes.dart";
 import 'package:coinwatcher/data/model/category.dart';
-import 'package:flutter/material.dart';
 
 class Categories {
 

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:coinwatcher/business_logic/blocs/passwordVisibility/password_visibility_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';

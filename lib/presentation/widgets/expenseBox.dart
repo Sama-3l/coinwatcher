@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/constants/font.dart';

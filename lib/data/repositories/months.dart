@@ -2,7 +2,6 @@ import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/month.dart';
 import 'package:coinwatcher/data/repositories/categories.dart';
-import 'package:flutter/material.dart';
 
 import 'allExpenses.dart';
 
@@ -11,7 +10,6 @@ class Months {
 
   void parse(List<dynamic> monthsDB, LightMode theme, AllExpenses allExpenses) {
     Methods func = Methods();
-    int p = 0;
     for (var month in monthsDB) {
       double sumCheck = 0.0;
       Categories categories = Categories(theme: theme);
@@ -39,7 +37,6 @@ class Months {
 
   List<Map<String, dynamic>> allMonthsJSON() {
     List<Map<String, dynamic>> monthJson = [];
-    Methods func = Methods();
 
     allMonths.forEach((key, value) {
       monthJson.add(value.toJSON());
