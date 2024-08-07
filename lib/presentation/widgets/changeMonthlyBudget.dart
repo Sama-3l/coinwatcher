@@ -15,11 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'expenseInputField.dart';
 
 class ChangeBudget extends StatefulWidget {
-  ChangeBudget(
-      {super.key,
-      required this.currentUser,
-      required this.theme,
-      required this.font});
+  ChangeBudget({super.key, required this.currentUser, required this.theme, required this.font});
 
   User currentUser;
   LightMode theme;
@@ -53,59 +49,32 @@ class _ChangeBudgetState extends State<ChangeBudget> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Padding(
-                          padding:
-                              EdgeInsets.only(left: 17, right: 17, top: 24),
-                          child:
-                              Column(mainAxisSize: MainAxisSize.min, children: [
+                          padding: EdgeInsets.only(left: 17, right: 17, top: 24),
+                          child: Column(mainAxisSize: MainAxisSize.min, children: [
                             Padding(
                               padding: EdgeInsets.only(bottom: 24),
-                              child: wd.textWidget('Monthly Budget',
-                                  widget.font, widget.theme, 20),
+                              child: wd.textWidget('Monthly Budget', widget.font, widget.theme, 20),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 21),
-                              child: ExpenseInputField(
-                                  textEditingController: controller,
-                                  currency: true,
-                                  hintText:
-                                      '${func.monthlyBudget(widget.currentUser.dailyBudget)}',
-                                  font: widget.font,
-                                  theme: widget.theme,
-                                  fontSize: 24),
+                              child: ExpenseInputField(textEditingController: controller, currency: true, hintText: '${func.monthlyBudget(widget.currentUser.dailyBudget)}', font: widget.font, theme: widget.theme, fontSize: 24),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 16),
                               child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      backgroundColor:
-                                          widget.theme.primaryAccent4,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50))),
+                                  style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: widget.theme.primaryAccent4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
                                   onPressed: () {
-                                    widget.currentUser.dailyBudget =
-                                        func.calculateDailyBudget(
-                                            double.parse(controller.text));
-                                    ServerAccess sa = ServerAccess();
-                                    sa.updateDailyBudget(widget.currentUser);
-                                    BlocProvider.of<UpdateExpenseBloc>(context)
-                                        .add(ExpenseChangedEvent());
+                                    widget.currentUser.dailyBudget = func.calculateDailyBudget(double.parse(controller.text));
+                                    // ServerAccess sa = ServerAccess();
+                                    // sa.updateDailyBudget(widget.currentUser);
+                                    BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
                                     Navigator.of(context).pop();
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 24,
-                                        right: 24,
-                                        top: 10,
-                                        bottom: 10),
+                                    padding: const EdgeInsets.only(left: 24, right: 24, top: 10, bottom: 10),
                                     child: Text(
                                       'Add',
-                                      style: widget.font.getPoppinsTextStyle(
-                                          color: widget.theme.textPrimary,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w500,
-                                          letterSpacing: 1),
+                                      style: widget.font.getPoppinsTextStyle(color: widget.theme.textPrimary, fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 1),
                                     ),
                                   )),
                             )

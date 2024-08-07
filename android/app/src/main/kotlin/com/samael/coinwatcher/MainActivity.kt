@@ -1,4 +1,4 @@
-package com.example.coinwatcher
+package com.samael.coinwatcher
 
 import io.flutter.embedding.android.FlutterActivity
 

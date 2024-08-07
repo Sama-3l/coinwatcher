@@ -2,39 +2,31 @@
 
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unrelated_type_equality_checks
 
-import 'dart:math';
-
-import 'package:coinwatcher/business_logic/blocs/barGraphChange/bar_graph_change_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/bar_data.dart';
 import 'package:coinwatcher/data/model/dayExpense.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/month.dart';
 import 'package:coinwatcher/data/model/pieData.dart';
-import 'package:coinwatcher/data/model/user.dart';
+import 'package:coinwatcher/data/model/user.dart' as UserModel;
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
 import 'package:coinwatcher/data/repositories/categories.dart';
 import 'package:coinwatcher/data/repositories/days.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../business_logic/blocs/datePicker/date_picker_bloc.dart';
 import '../business_logic/blocs/updateExpense/update_expense_bloc.dart';
 import '../data/repositories/months.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-import '../services/server.dart';
-
 class Methods {
   String getMonthandYear({required DateTime date, bool commaReq = true}) {
-    return commaReq
-        ? DateFormat('MMMM, yyyy').format(date)
-        : DateFormat('MMMM d').format(date);
+    return commaReq ? DateFormat('MMMM, yyyy').format(date) : DateFormat('MMMM d').format(date);
   }
 
   String decimalPart(double amount) {
@@ -76,12 +68,10 @@ class Methods {
   }
 
   double monthlyBudget(double dailyBudget) {
-    return dailyBudget *
-        DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day;
+    return dailyBudget * DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day;
   }
 
-  Future<DateTime?> editDate(
-      BuildContext context, DateTime initialDate, LightMode theme) async {
+  Future<DateTime?> editDate(BuildContext context, DateTime initialDate, LightMode theme) async {
     DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime(
@@ -110,7 +100,7 @@ class Methods {
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                primary: theme.activeNavBarButton,
+                foregroundColor: theme.activeNavBarButton,
               ),
             ),
           ),
@@ -128,200 +118,98 @@ class Methods {
     return DateFormat('MMMM, yyyy').format(date);
   }
 
-  void addMonthnCategories(User currentUser, Expense expense, LightMode theme) {
+  void addMonthnCategories(UserModel.User currentUser, Expense expense, LightMode theme) {
     // Check if month exists
     if (currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] != null) {
-      currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.totalSpent =
-          currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!
-                  .totalSpent +
-              expense.amount;
+      currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.totalSpent = currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.totalSpent + expense.amount;
 
-      currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.categories
-          .categories[expense.category]!.amount = currentUser
-              .monthsDB
-              .allMonths[monthCommaYear(expense.date)]!
-              .categories
-              .categories[expense.category]!
-              .amount +
-          expense.amount;
+      currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.categories.categories[expense.category]!.amount = currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.categories.categories[expense.category]!.amount + expense.amount;
     } else {
-      currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] = Month(
-          date: DateTime(expense.date.year, expense.date.month),
-          totalSpent: expense.amount,
-          categories: Categories(theme: theme));
+      currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] = Month(date: DateTime(expense.date.year, expense.date.month), totalSpent: expense.amount, categories: Categories(theme: theme));
     }
   }
 
-  void loadCategories(User currentUser, Expense expense) {
-    currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.categories
-        .categories[expense.category]!.amount = currentUser
-            .monthsDB
-            .allMonths[monthCommaYear(expense.date)]!
-            .categories
-            .categories[expense.category]!
-            .amount +
-        expense.amount;
+  void loadCategories(UserModel.User currentUser, Expense expense) {
+    currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.categories.categories[expense.category]!.amount = currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.categories.categories[expense.category]!.amount + expense.amount;
   }
 
   //To initialize months can remove later it's better to just add a single entry as we actually need to do.
-  void loadMonths(User currentUser, LightMode theme) {
+  void loadMonths(UserModel.User currentUser, LightMode theme) {
     List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
     if (allExpenses.isNotEmpty) {
       for (int i = allExpenses.length - 1; i >= 0; i--) {
         if (DateTime.now().month == allExpenses[i].date.month) {
-          currentUser.thisMonthSpent =
-              currentUser.thisMonthSpent + allExpenses[i].amount;
+          currentUser.thisMonthSpent = currentUser.thisMonthSpent + allExpenses[i].amount;
         }
         if (currentUser.monthsDB.allMonths.isNotEmpty) {
-          if (currentUser
-                  .monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] !=
-              null) {
-            currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)]!
-                .totalSpent = currentUser
-                    .monthsDB
-                    .allMonths[monthCommaYear(allExpenses[i].date)]!
-                    .totalSpent +
-                allExpenses[i].amount;
+          if (currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] != null) {
+            currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)]!.totalSpent = currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)]!.totalSpent + allExpenses[i].amount;
             loadCategories(currentUser, allExpenses[i]);
           } else {
-            currentUser
-                    .monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] =
-                Month(
-                    date: DateTime(
-                        allExpenses[i].date.year, allExpenses[i].date.month),
-                    totalSpent: allExpenses[i].amount,
-                    categories: Categories(theme: theme));
+            currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] = Month(date: DateTime(allExpenses[i].date.year, allExpenses[i].date.month), totalSpent: allExpenses[i].amount, categories: Categories(theme: theme));
             addMonthnCategories(currentUser, allExpenses[i], theme);
           }
         } else {
-          currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] =
-              Month(
-                  date: DateTime(
-                      allExpenses[i].date.year, allExpenses[i].date.month),
-                  totalSpent: allExpenses[i].amount,
-                  categories: Categories(theme: theme));
+          currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] = Month(date: DateTime(allExpenses[i].date.year, allExpenses[i].date.month), totalSpent: allExpenses[i].amount, categories: Categories(theme: theme));
           addMonthnCategories(currentUser, allExpenses[i], theme);
         }
       }
     } else {
-      currentUser.monthsDB.allMonths[monthCommaYear(DateTime.now())] = Month(
-          date: DateTime(DateTime.now().year, DateTime.now().month),
-          totalSpent: 0.0,
-          categories: Categories(theme: theme));
+      currentUser.monthsDB.allMonths[monthCommaYear(DateTime.now())] = Month(date: DateTime(DateTime.now().year, DateTime.now().month), totalSpent: 0.0, categories: Categories(theme: theme));
     }
   }
 
-  void addToMonthDB(User currentUser, Expense expense, LightMode theme) {
+  void addToMonthDB(UserModel.User currentUser, Expense expense, LightMode theme) {
     if (currentUser.monthsDB.allMonths.isNotEmpty) {
-      if (currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] !=
-          null) {
-        currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!
-            .totalSpent = currentUser
-                .monthsDB.allMonths[monthCommaYear(expense.date)]!.totalSpent +
-            expense.amount;
+      if (currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] != null) {
+        currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.totalSpent = currentUser.monthsDB.allMonths[monthCommaYear(expense.date)]!.totalSpent + expense.amount;
         loadCategories(currentUser, expense);
       } else {
-        currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] = Month(
-            date: DateTime(expense.date.year, expense.date.month),
-            totalSpent: expense.amount,
-            categories: Categories(theme: theme));
+        currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] = Month(date: DateTime(expense.date.year, expense.date.month), totalSpent: expense.amount, categories: Categories(theme: theme));
         addMonthnCategories(currentUser, expense, theme);
       }
     } else {
-      currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] = Month(
-          date: DateTime(expense.date.year, expense.date.month),
-          totalSpent: expense.amount,
-          categories: Categories(theme: theme));
+      currentUser.monthsDB.allMonths[monthCommaYear(expense.date)] = Month(date: DateTime(expense.date.year, expense.date.month), totalSpent: expense.amount, categories: Categories(theme: theme));
       addMonthnCategories(currentUser, expense, theme);
     }
   }
 
-  void loadDays(User currentUser) {
+  void loadDays(UserModel.User currentUser) {
     List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
     if (allExpenses.isNotEmpty) {
-      currentUser.daysDB
-              .allDays[allExpenses[0].date.day.toString().padLeft(2, '0')] =
-          DayExpense(date: allExpenses[0].date, amount: allExpenses[0].amount);
+      currentUser.daysDB.allDays[allExpenses[0].date.day.toString().padLeft(2, '0')] = DayExpense(date: allExpenses[0].date, amount: allExpenses[0].amount);
       for (int i = 0; i < 10; i++) {
-        currentUser.daysDB.allDays[allExpenses[0]
-                .date
-                .subtract(Duration(days: i))
-                .day
-                .toString()
-                .padLeft(2, '0')] =
-            DayExpense(
-                date: allExpenses[0].date.subtract(Duration(days: i)),
-                amount: 0.0);
+        currentUser.daysDB.allDays[allExpenses[0].date.subtract(Duration(days: i)).day.toString().padLeft(2, '0')] = DayExpense(date: allExpenses[0].date.subtract(Duration(days: i)), amount: 0.0);
       }
       for (int i = 0; i < allExpenses.length; i++) {
-        if (currentUser.daysDB
-                .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] !=
-            null) {
-          if (currentUser
-                  .daysDB
-                  .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
-                  .date
-                  .difference(allExpenses[i].date)
-                  .inDays ==
-              0) {
-            double currentAmount = currentUser
-                .daysDB
-                .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
-                .amount;
-            currentUser.daysDB.allDays[
-                    allExpenses[i].date.day.toString().padLeft(2, '0')] =
-                DayExpense(
-                    date: allExpenses[i].date,
-                    amount: currentAmount + allExpenses[i].amount);
+        if (currentUser.daysDB.allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] != null) {
+          if (currentUser.daysDB.allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!.date.difference(allExpenses[i].date).inDays == 0) {
+            double currentAmount = currentUser.daysDB.allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!.amount;
+            currentUser.daysDB.allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] = DayExpense(date: allExpenses[i].date, amount: currentAmount + allExpenses[i].amount);
           }
         }
       }
     }
   }
 
-  void addToDayDb(User currentUser) {
+  void addToDayDb(UserModel.User currentUser) {
     List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
     currentUser.daysDB.allDays.clear();
     for (int i = 0; i < 10; i++) {
-      currentUser.daysDB.allDays[allExpenses[0]
-              .date
-              .subtract(Duration(days: i))
-              .day
-              .toString()
-              .padLeft(2, '0')] =
-          DayExpense(
-              date: allExpenses[0].date.subtract(Duration(days: i)),
-              amount: 0.0);
+      currentUser.daysDB.allDays[allExpenses[0].date.subtract(Duration(days: i)).day.toString().padLeft(2, '0')] = DayExpense(date: allExpenses[0].date.subtract(Duration(days: i)), amount: 0.0);
     }
     for (int i = 0; i < allExpenses.length; i++) {
-      if (currentUser.daysDB
-              .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] !=
-          null) {
-        if (currentUser
-                .daysDB
-                .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
-                .date
-                .difference(allExpenses[i].date)
-                .inDays ==
-            0) {
-          currentUser
-              .daysDB
-              .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
-              .amount = currentUser
-                  .daysDB
-                  .allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!
-                  .amount +
-              allExpenses[i].amount;
+      if (currentUser.daysDB.allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] != null) {
+        if (currentUser.daysDB.allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!.date.difference(allExpenses[i].date).inDays == 0) {
+          currentUser.daysDB.allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!.amount = currentUser.daysDB.allDays[allExpenses[i].date.day.toString().padLeft(2, '0')]!.amount + allExpenses[i].amount;
         }
       }
     }
   }
 
-  void addExpenseFab(User currentUser, Expense thisExpense,
-      BuildContext context, LightMode theme) {
+  void addExpenseFab(UserModel.User currentUser, Expense thisExpense, BuildContext context, LightMode theme) {
     if (DateTime.now().month == thisExpense.date.month) {
-      currentUser.thisMonthSpent =
-          currentUser.thisMonthSpent + thisExpense.amount;
+      currentUser.thisMonthSpent = currentUser.thisMonthSpent + thisExpense.amount;
     }
     int datePositionRelation = 0;
     List<int> indices = [];
@@ -347,19 +235,15 @@ class Methods {
   }
 
   void removeFromMonthDb(Months monthsDB, Expense? expense) {
-    monthsDB.allMonths[getMonthandYear(date: expense!.date)]!.totalSpent -=
-        expense.amount;
-    monthsDB.allMonths[getMonthandYear(date: expense.date)]!.categories
-        .categories[expense.category]!.amount -= expense.amount;
+    monthsDB.allMonths[getMonthandYear(date: expense!.date)]!.totalSpent -= expense.amount;
+    monthsDB.allMonths[getMonthandYear(date: expense.date)]!.categories.categories[expense.category]!.amount -= expense.amount;
   }
 
-  void updateExpenseFab(Expense? originalExpense, User currentUser,
-      Expense thisExpense, BuildContext context, LightMode theme) {
+  void updateExpenseFab(Expense? originalExpense, UserModel.User currentUser, Expense thisExpense, BuildContext context, LightMode theme) {
     currentUser.allExpenses.allExpenses.remove(originalExpense);
     removeFromMonthDb(currentUser.monthsDB, originalExpense);
     if (DateTime.now().month == thisExpense.date.month) {
-      currentUser.thisMonthSpent =
-          currentUser.thisMonthSpent + thisExpense.amount;
+      currentUser.thisMonthSpent = currentUser.thisMonthSpent + thisExpense.amount;
     }
     int datePositionRelation = 0;
     List<int> indices = [];
@@ -384,7 +268,7 @@ class Methods {
     BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
   }
 
-  void deleteExpense(User currentUser, Expense? expense, BuildContext context) {
+  void deleteExpense(UserModel.User currentUser, Expense? expense, BuildContext context) {
     currentUser.allExpenses.allExpenses.remove(expense);
     currentUser.recentExpenses = getRecentExpenses(currentUser.allExpenses);
     removeFromMonthDb(currentUser.monthsDB, expense);
@@ -393,8 +277,7 @@ class Methods {
     BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
   }
 
-  List<barDataMonthly> initializeMonthlyGraphDatabase(
-      User currentUser, LightMode theme) {
+  List<barDataMonthly> initializeMonthlyGraphDatabase(UserModel.User currentUser, LightMode theme) {
     List<barDataMonthly> data = [];
     currentUser.monthsDB.allMonths.forEach((key, value) {
       data.add(barDataMonthly(
@@ -413,8 +296,7 @@ class Methods {
     return data;
   }
 
-  List<barDataDaily> initializeDailyGraphDatabase(
-      User currentUser, LightMode theme) {
+  List<barDataDaily> initializeDailyGraphDatabase(UserModel.User currentUser, LightMode theme) {
     List<barDataDaily> data = [];
     currentUser.daysDB.allDays.forEach((key, value) {
       data.add(
@@ -429,11 +311,7 @@ class Methods {
       for (int i = 0; i < 10; i++) {
         data.add(
           barDataDaily(
-            day: DateTime.now()
-                .subtract(Duration(days: i))
-                .day
-                .toString()
-                .padLeft(2, '0'),
+            day: DateTime.now().subtract(Duration(days: i)).day.toString().padLeft(2, '0'),
             spent: 0,
             color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
           ),
@@ -453,7 +331,7 @@ class Methods {
     return list;
   }
 
-  List<String> analyticsMenu(User currentUser) {
+  List<String> analyticsMenu(UserModel.User currentUser) {
     List<String> list = [];
 
     currentUser.monthsDB.allMonths.forEach((key, value) {
@@ -468,10 +346,7 @@ class Methods {
   List<PieData> generatePieGraphData(Categories categories, LightMode theme) {
     List<PieData> pieData = [];
     categories.categories.forEach((key, value) {
-      pieData.add(PieData(
-          category: value.name,
-          spent: value.amount.ceil(),
-          color: value.color));
+      pieData.add(PieData(category: value.name, spent: value.amount.ceil(), color: value.color));
     });
     return pieData;
   }
@@ -488,19 +363,16 @@ class Methods {
     if (recentExpenses.recentExpenses.isEmpty) {
       return DateFormat('MMMM, y').format(DateTime.now());
     } else {
-      if (recentExpenses.recentExpenses[0].date.month == DateTime.now().month &&
-          recentExpenses.recentExpenses[0].date.year == DateTime.now().year) {
+      if (recentExpenses.recentExpenses[0].date.month == DateTime.now().month && recentExpenses.recentExpenses[0].date.year == DateTime.now().year) {
         return DateFormat('MMMM, y').format(DateTime.now());
       } else {
-        return DateFormat('MMMM, y')
-            .format(recentExpenses.recentExpenses[0].date);
+        return DateFormat('MMMM, y').format(recentExpenses.recentExpenses[0].date);
       }
     }
   }
 
   double calculateDailyBudget(double monthlyBudget) {
-    return monthlyBudget /
-        DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day;
+    return monthlyBudget / DateTime(DateTime.now().year, DateTime.now().month + 1, 0).day;
   }
 
   DateTime dateTimeObjectFormat(String date) {
@@ -511,59 +383,178 @@ class Methods {
     for (Match match in matches) {
       numbers.add(int.parse(match.group(0)!));
     }
-    return numbers.length == 3
-        ? DateTime(numbers[0], numbers[1], numbers[2])
-        : DateTime(numbers[0], numbers[1]);
+    return numbers.length == 3 ? DateTime(numbers[0], numbers[1], numbers[2]) : DateTime(numbers[0], numbers[1]);
   }
 
-  void tokenLogin(
-      Map<String, dynamic> creds, User currentUser, LightMode theme) async {
-    ServerAccess sa = ServerAccess();
-    final response = await sa.tokenLogin(creds);
-    final data = response['data'];
-    if (data != null && data['status'] == null) {
-      currentUser = User.parse(data, theme);
-      currentUser.password = creds['password']!;
-    }
-  }
+  Future<UserModel.User?> loginUser(String email, String password, LightMode theme) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    try {
+      // Sign in with email and password
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-  Future<dynamic?> tokenIsExpired(
-      String token, User currentUser, LightMode theme) async {
-    if (JwtDecoder.isExpired(token)) {
-      return null;
-    } else {
-      Map<String, dynamic> creds = JwtDecoder.decode(token);
+      // Get the signed-in user
+      User? user = userCredential.user;
+      UserModel.User? currentUserData;
 
-      ServerAccess sa = ServerAccess();
-      final response = await sa.tokenLogin(creds);
-      final data = response['data'];
-      if (data != null && data['status'] == null) {
-        currentUser = User.parse(data, theme);
-        currentUser.password = creds['password']!;
+      // Fetch user data from Firestore
+      if (user != null) {
+        DocumentSnapshot userData = await _firestore.collection('users').doc(user.uid).get();
+
+        // Assuming you want to return the user data
+        if (userData.exists) {
+          currentUserData = UserModel.User.parse(userData.data() as Map<String, dynamic>, theme);
+        }
       }
-      return currentUser;
+      return currentUserData;
+    } on FirebaseAuthException catch (e) {
+      print('Error: $e');
+      return null;
+    } catch (e) {
+      print('Error: $e');
+      return null;
     }
   }
 
-  double currentMonthSpent(User currentUser) {
-    return currentUser
-        .monthsDB.allMonths[monthCommaYear(DateTime.now())]!.totalSpent;
+  Future<UserModel.User> signUpUser(String email, String password, String userName) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    try {
+      // Sign in with email and password
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Get the signed-in user
+      User? user = userCredential.user;
+      UserModel.User currentUser = UserModel.User(
+        id: user!.uid,
+        name: userName,
+        email: user.email!,
+        recentExpenses: RecentExpenses(),
+        dailyBudget: 0.0,
+        thisMonthSpent: 0.0,
+        allExpenses: AllExpenses(),
+        monthsDB: Months(),
+        daysDB: Days(),
+      );
+
+      // Fetch user data from Firestore
+      await _firestore.collection('users').doc(user.uid).set(currentUser.toJSON());
+
+      return currentUser;
+    } on FirebaseAuthException catch (e) {
+      print('Error: $e');
+      return UserModel.User(
+        id: "",
+        name: "",
+        email: "",
+        recentExpenses: RecentExpenses(),
+        dailyBudget: 0.0,
+        thisMonthSpent: 0.0,
+        allExpenses: AllExpenses(),
+        monthsDB: Months(),
+        daysDB: Days(),
+      );
+    } catch (e) {
+      print('Error: $e');
+      return UserModel.User(
+        id: "",
+        name: "",
+        email: "",
+        recentExpenses: RecentExpenses(),
+        dailyBudget: 0.0,
+        thisMonthSpent: 0.0,
+        allExpenses: AllExpenses(),
+        monthsDB: Months(),
+        daysDB: Days(),
+      );
+    }
   }
 
-  void categoriesPatch(
-      AllExpenses allExpenses, Categories categories, String month) {
-    DateTime currentMonth = DateTime(
-        int.parse(month.split('-')[0]), int.parse(month.split('-')[1]));
+  // void tokenLogin(Map<String, dynamic> creds, User currentUser, LightMode theme) async {
+  //   ServerAccess sa = ServerAccess();
+  //   final response = await sa.tokenLogin(creds);
+  //   final data = response['data'];
+  //   if (data != null && data['status'] == null) {
+  //     currentUser = User.parse(data, theme);
+  //     currentUser.password = creds['password']!;
+  //   }
+  // }
+
+  // Future<dynamic> tokenIsExpired(String token, User currentUser, LightMode theme) async {
+  //   if (JwtDecoder.isExpired(token)) {
+  //     return null;
+  //   } else {
+  //     Map<String, dynamic> creds = JwtDecoder.decode(token);
+
+  //     ServerAccess sa = ServerAccess();
+  //     final response = await sa.tokenLogin(creds);
+  //     final data = response['data'];
+  //     if (data != null && data['status'] == null) {
+  //       currentUser = User.parse(data, theme);
+  //       currentUser.password = creds['password']!;
+  //     }
+  //     return currentUser;
+  //   }
+  // }
+
+  double currentMonthSpent(UserModel.User currentUser) {
+    return currentUser.monthsDB.allMonths[monthCommaYear(DateTime.now())]!.totalSpent;
+  }
+
+  void categoriesPatch(AllExpenses allExpenses, Categories categories, String month) {
+    DateTime currentMonth = DateTime(int.parse(month.split('-')[0]), int.parse(month.split('-')[1]));
     int p = 0;
     for (var expense in allExpenses.allExpenses) {
-      if (expense.date.month == currentMonth.month &&
-          expense.date.year == currentMonth.year) {
+      if (expense.date.month == currentMonth.month && expense.date.year == currentMonth.year) {
         p = 1;
-        categories.categories[expense.category]!.amount =
-            categories.categories[expense.category]!.amount + expense.amount;
+        categories.categories[expense.category]!.amount = categories.categories[expense.category]!.amount + expense.amount;
       } else if (p == 1) {
         break;
       }
     }
+  }
+
+  Future<UserModel.User> getLogInUserData(LightMode theme) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    UserModel.User? currentUserData;
+    if (_auth.currentUser != null) {
+      DocumentSnapshot userData = await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
+
+      // Assuming you want to return the user data
+      if (userData.exists) {
+        currentUserData = UserModel.User.parse(userData.data() as Map<String, dynamic>, theme);
+        return currentUserData;
+      } else {
+        return UserModel.User(
+          id: "",
+          name: "",
+          email: "",
+          recentExpenses: RecentExpenses(),
+          dailyBudget: 0.0,
+          thisMonthSpent: 0.0,
+          allExpenses: AllExpenses(),
+          monthsDB: Months(),
+          daysDB: Days(),
+        );
+      }
+    }
+    return UserModel.User(
+      id: "",
+      name: "",
+      email: "",
+      recentExpenses: RecentExpenses(),
+      dailyBudget: 0.0,
+      thisMonthSpent: 0.0,
+      allExpenses: AllExpenses(),
+      monthsDB: Months(),
+      daysDB: Days(),
+    );
   }
 }
