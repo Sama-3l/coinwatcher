@@ -2,6 +2,7 @@
 
 import 'dart:ffi';
 
+import 'package:carbon_icons/carbon_icons.dart';
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
 import 'package:coinwatcher/business_logic/blocs/updateExpense/update_expense_bloc.dart';
@@ -52,8 +53,19 @@ class _ChangeBudgetState extends State<ChangeBudget> {
                           padding: EdgeInsets.only(left: 17, right: 17, top: 24),
                           child: Column(mainAxisSize: MainAxisSize.min, children: [
                             Padding(
-                              padding: EdgeInsets.only(bottom: 24),
-                              child: wd.textWidget('Monthly Budget', widget.font, widget.theme, 20),
+                              padding: const EdgeInsets.only(bottom: 24.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => Navigator.of(context).pop(),
+                                    child: Icon(CarbonIcons.arrow_left),
+                                  ),
+                                  Spacer(),
+                                  wd.textWidget('Monthly Budget', widget.font, widget.theme, 20),
+                                  Spacer()
+                                ],
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 21),
@@ -65,8 +77,8 @@ class _ChangeBudgetState extends State<ChangeBudget> {
                                   style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: widget.theme.primaryAccent4, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50))),
                                   onPressed: () {
                                     widget.currentUser.dailyBudget = func.calculateDailyBudget(double.parse(controller.text));
-                                    // ServerAccess sa = ServerAccess();
-                                    // sa.updateDailyBudget(widget.currentUser);
+                                    ServerAccess sa = ServerAccess();
+                                    sa.updateDailyBudget(widget.currentUser);
                                     BlocProvider.of<UpdateExpenseBloc>(context).add(ExpenseChangedEvent());
                                     Navigator.of(context).pop();
                                   },

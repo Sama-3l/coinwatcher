@@ -31,7 +31,17 @@ class User {
     monthsDB.parse(userInfo['eachMonthDb'], theme, allExpenses);
     Days daysDB = Days();
     Methods func = Methods();
-    return User(id: userInfo['_id'], name: userInfo['name'], email: userInfo['email'], dailyBudget: double.parse(userInfo['dailyBudget']), thisMonthSpent: 0.0, allExpenses: allExpenses, recentExpenses: func.getRecentExpenses(allExpenses), monthsDB: monthsDB, daysDB: daysDB);
+    return User(
+      id: userInfo['_id'],
+      name: userInfo['name'],
+      email: userInfo['email'],
+      dailyBudget: userInfo['dailyBudget'],
+      thisMonthSpent: 0.0,
+      allExpenses: allExpenses,
+      recentExpenses: func.getRecentExpenses(allExpenses),
+      monthsDB: monthsDB,
+      daysDB: daysDB,
+    );
   }
 
   Map<String, dynamic> toJSON() {

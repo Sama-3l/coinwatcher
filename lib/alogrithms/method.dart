@@ -419,7 +419,7 @@ class Methods {
     }
   }
 
-  Future<UserModel.User> signUpUser(String email, String password, String userName) async {
+  Future<UserModel.User?> signUpUser(String email, String password, String userName) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     try {
@@ -436,7 +436,7 @@ class Methods {
         name: userName,
         email: user.email!,
         recentExpenses: RecentExpenses(),
-        dailyBudget: 0.0,
+        dailyBudget: 250.0,
         thisMonthSpent: 0.0,
         allExpenses: AllExpenses(),
         monthsDB: Months(),
@@ -449,59 +449,12 @@ class Methods {
       return currentUser;
     } on FirebaseAuthException catch (e) {
       print('Error: $e');
-      return UserModel.User(
-        id: "",
-        name: "",
-        email: "",
-        recentExpenses: RecentExpenses(),
-        dailyBudget: 0.0,
-        thisMonthSpent: 0.0,
-        allExpenses: AllExpenses(),
-        monthsDB: Months(),
-        daysDB: Days(),
-      );
+      return null;
     } catch (e) {
       print('Error: $e');
-      return UserModel.User(
-        id: "",
-        name: "",
-        email: "",
-        recentExpenses: RecentExpenses(),
-        dailyBudget: 0.0,
-        thisMonthSpent: 0.0,
-        allExpenses: AllExpenses(),
-        monthsDB: Months(),
-        daysDB: Days(),
-      );
+      return null;
     }
   }
-
-  // void tokenLogin(Map<String, dynamic> creds, User currentUser, LightMode theme) async {
-  //   ServerAccess sa = ServerAccess();
-  //   final response = await sa.tokenLogin(creds);
-  //   final data = response['data'];
-  //   if (data != null && data['status'] == null) {
-  //     currentUser = User.parse(data, theme);
-  //     currentUser.password = creds['password']!;
-  //   }
-  // }
-
-  // Future<dynamic> tokenIsExpired(String token, User currentUser, LightMode theme) async {
-  //   if (JwtDecoder.isExpired(token)) {
-  //     return null;
-  //   } else {
-  //     Map<String, dynamic> creds = JwtDecoder.decode(token);
-
-  //     ServerAccess sa = ServerAccess();
-  //     final response = await sa.tokenLogin(creds);
-  //     final data = response['data'];
-  //     if (data != null && data['status'] == null) {
-  //       currentUser = User.parse(data, theme);
-  //       currentUser.password = creds['password']!;
-  //     }
-  //     return currentUser;
-  //   }
-  // }
 
   double currentMonthSpent(UserModel.User currentUser) {
     return currentUser.monthsDB.allMonths[monthCommaYear(DateTime.now())]!.totalSpent;

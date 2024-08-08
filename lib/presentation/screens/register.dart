@@ -99,14 +99,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       onPressed: () async {
                                         if (isValid) {
                                           Crypt crypt = Crypt();
-                                          bool success = false;
                                           loading = true;
                                           BlocProvider.of<LoadingBloc>(context).add(LoadingNowEvent());
-                                          UserModel.User currentUser = await func.signUpUser(email.text, crypt.encodeToSha256(password.text), username.text);
+                                          UserModel.User? currentUser = await func.signUpUser(email.text, crypt.encodeToSha256(password.text), username.text);
                                           loading = false;
                                           BlocProvider.of<LoadingBloc>(context).add(LoadingNowEvent());
-                                          success = true;
-                                          if (success == true) {
+                                          if (currentUser != null) {
                                             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
                                               return Home(
                                                 font: widget.font,

@@ -1,15 +1,12 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, must_be_immutable
 
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/alogrithms/widgetDecider.dart';
-import 'package:coinwatcher/business_logic/blocs/updateExpense/update_expense_bloc.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/user.dart';
-import 'package:coinwatcher/data/repositories/allExpenses.dart';
-import 'package:coinwatcher/presentation/widgets/expenseBox.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
 import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
@@ -84,10 +81,8 @@ class _ExpenseAddState extends State<ExpenseAdd> {
                                           onPressed: () {
                                             func.deleteExpense(widget.currentUser, widget.expense, context);
 
-                                            // ServerAccess sa = ServerAccess();
-                                            // sa.deleteExpense(
-                                            //     widget.currentUser.id,
-                                            //     widget.expense);
+                                            ServerAccess sa = ServerAccess();
+                                            sa.editExpenseList(widget.currentUser);
                                           },
                                           icon: Icon(CarbonIcons.trash_can, color: widget.theme.error, size: 30))),
                                 )
@@ -204,17 +199,15 @@ class _ExpenseAddState extends State<ExpenseAdd> {
 
                                     func.updateExpenseFab(widget.expense, widget.currentUser, thisExpense, context, widget.theme);
 
-                                    // ServerAccess sa = ServerAccess();
-                                    // sa.editExpense(widget.expense, thisExpense,
-                                    //     widget.currentUser);
+                                    ServerAccess sa = ServerAccess();
+                                    sa.editExpenseList(widget.currentUser);
                                   } else {
                                     Expense thisExpense = Expense(expenseName: expenseName.text, amount: double.parse(amount.text), date: picked, category: dropDownValue);
 
                                     func.addExpenseFab(widget.currentUser, thisExpense, context, widget.theme);
 
-                                    // ServerAccess sa = ServerAccess();
-                                    // sa.addExpense(
-                                    //     widget.currentUser, thisExpense);
+                                    ServerAccess sa = ServerAccess();
+                                    sa.editExpenseList(widget.currentUser);
                                   }
                                 },
                                 child: Padding(
