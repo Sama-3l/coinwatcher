@@ -12,22 +12,11 @@ import 'package:flutter/material.dart';
 import '../repositories/days.dart';
 
 class User {
-  User(
-      {required this.id,
-      required this.name,
-      required this.email,
-      required this.password,
-      required this.dailyBudget,
-      required this.thisMonthSpent,
-      required this.allExpenses,
-      required this.recentExpenses,
-      required this.monthsDB,
-      required this.daysDB});
+  User({required this.id, required this.name, required this.email, required this.dailyBudget, required this.thisMonthSpent, required this.allExpenses, required this.recentExpenses, required this.monthsDB, required this.daysDB});
 
   String id;
   String name;
   String email;
-  String password;
   double dailyBudget;
   double thisMonthSpent; //remove this
   AllExpenses allExpenses;
@@ -43,16 +32,16 @@ class User {
     Days daysDB = Days();
     Methods func = Methods();
     return User(
-        id: userInfo['_id'],
-        name: userInfo['name'],
-        email: userInfo['email'],
-        password: userInfo['password'],
-        dailyBudget: double.parse(userInfo['dailyBudget']),
-        thisMonthSpent: 0.0,
-        allExpenses: allExpenses,
-        recentExpenses: func.getRecentExpenses(allExpenses),
-        monthsDB: monthsDB,
-        daysDB: daysDB);
+      id: userInfo['_id'],
+      name: userInfo['name'],
+      email: userInfo['email'],
+      dailyBudget: userInfo['dailyBudget'],
+      thisMonthSpent: 0.0,
+      allExpenses: allExpenses,
+      recentExpenses: func.getRecentExpenses(allExpenses),
+      monthsDB: monthsDB,
+      daysDB: daysDB,
+    );
   }
 
   Map<String, dynamic> toJSON() {
@@ -60,7 +49,6 @@ class User {
       '_id': id,
       'name': name,
       'email': email,
-      'password': password,
       'dailyBudget': dailyBudget.toString(),
       'allExpenses': allExpenses.toJSON(),
       'eachMonthDb': monthsDB.allMonthsJSON(),

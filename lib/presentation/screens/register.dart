@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:coinwatcher/alogrithms/crypt.dart';
 import 'package:coinwatcher/business_logic/blocs/bloc/loading_bloc.dart';
@@ -8,31 +8,29 @@ import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/presentation/screens/home.dart';
 import 'package:coinwatcher/presentation/screens/login.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
-import 'package:coinwatcher/services/server.dart';
 import 'package:flutter/material.dart';
 import 'package:coinwatcher/presentation/widgets/passField.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../alogrithms/method.dart';
-import '../../data/model/user.dart';
-import '../../data/repositories/allExpenses.dart';
-import '../../data/repositories/days.dart';
-import '../../data/repositories/months.dart';
+import '../../data/model/user.dart' as UserModel;
 
 class RegistrationPage extends StatefulWidget {
-  RegistrationPage(
-      {required this.theme, required this.font, required this.currentUser});
+  RegistrationPage({
+    required this.theme,
+    required this.font,
+  });
 
   LightMode theme;
   FontFamily font;
-  User currentUser;
 
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  Methods func = Methods();
   TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -68,22 +66,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
-                      child: ExpenseInputField(
-                          textEditingController: username,
-                          hintText: "Username",
-                          theme: widget.theme,
-                          font: widget.font),
+                      child: ExpenseInputField(textEditingController: username, hintText: "Username", theme: widget.theme, font: widget.font),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10),
-                      child: ExpenseInputField(
-                          textEditingController: email,
-                          hintText: "Email address",
-                          theme: widget.theme,
-                          font: widget.font),
+                      child: ExpenseInputField(textEditingController: email, hintText: "Email address", theme: widget.theme, font: widget.font),
                     ),
-                    BlocBuilder<PasswordVisibilityBloc,
-                        PasswordVisibilityState>(
+                    BlocBuilder<PasswordVisibilityBloc, PasswordVisibilityState>(
                       builder: (context, state) {
                         return PasswordTextField(
                           onPasswordValidityChanged: (isValid) {
@@ -100,80 +89,37 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 24, left: 48, right: 48),
+                                  padding: EdgeInsets.only(top: 24, left: 48, right: 48),
                                   child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              widget.theme.primaryAccent2,
+                                          backgroundColor: widget.theme.primaryAccent2,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(30)),
+                                            borderRadius: BorderRadius.all(Radius.circular(30)),
                                           )),
                                       onPressed: () async {
                                         if (isValid) {
-                                          AllExpenses allExpenses =
-                                              AllExpenses();
-                                          Methods func = Methods();
-                                          Months month = Months();
-                                          Days days = Days();
                                           Crypt crypt = Crypt();
-                                          widget.currentUser = User(
-                                              id: "",
-                                              name: username.text,
-                                              email: email.text,
-                                              password: crypt.encodeToSha256(
-                                                  password.text),
-                                              dailyBudget: 250,
-                                              thisMonthSpent: 0.0,
-                                              allExpenses: allExpenses,
-                                              recentExpenses:
-                                                  func.getRecentExpenses(
-                                                      allExpenses),
-                                              monthsDB: month,
-                                              daysDB: days);
-                                          username.clear();
-                                          email.clear();
-                                          password.clear();
-                                          ServerAccess sa = ServerAccess();
-                                          bool success = false;
                                           loading = true;
-                                          BlocProvider.of<LoadingBloc>(context)
-                                              .add(LoadingNowEvent());
-                                          var serverResponse =
-                                              await sa.register(
-                                                  widget.currentUser, prefs);
+                                          BlocProvider.of<LoadingBloc>(context).add(LoadingNowEvent());
+                                          UserModel.User? currentUser = await func.signUpUser(email.text, crypt.encodeToSha256(password.text), username.text);
                                           loading = false;
-                                          password = TextEditingController();
-                                          BlocProvider.of<LoadingBloc>(context)
-                                              .add(LoadingNowEvent());
-                                          success = serverResponse['success'];
-                                          if (success == true) {
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) {
+                                          BlocProvider.of<LoadingBloc>(context).add(LoadingNowEvent());
+                                          if (currentUser != null) {
+                                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
                                               return Home(
-                                                  font: widget.font,
-                                                  theme: widget.theme,
-                                                  currentUser:
-                                                      widget.currentUser);
+                                                font: widget.font,
+                                                theme: widget.theme,
+                                                currentUser: currentUser,
+                                              );
                                             }));
                                           }
                                         }
                                       },
                                       child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 15, bottom: 15),
+                                        padding: const EdgeInsets.only(top: 15, bottom: 15),
                                         child: Text(
                                           "SIGN UP",
-                                          style: widget.font
-                                              .getPoppinsTextStyle(
-                                                  color:
-                                                      widget.theme.textPrimary,
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w500,
-                                                  letterSpacing: 0),
+                                          style: widget.font.getPoppinsTextStyle(color: widget.theme.textPrimary, fontSize: 17, fontWeight: FontWeight.w500, letterSpacing: 0),
                                         ),
                                       )),
                                 ),
@@ -186,29 +132,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("ALREADY HAVE AN ACCOUNT?",
-                                  style: widget.font.getPoppinsTextStyle(
-                                      color: widget.theme.borderColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: 0)),
+                              Text("ALREADY HAVE AN ACCOUNT?", style: widget.font.getPoppinsTextStyle(color: widget.theme.borderColor, fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0)),
                               TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(builder: (context) {
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                                       return LoginPage(
-                                          theme: widget.theme,
-                                          font: widget.font,
-                                          currentUser: widget.currentUser);
+                                        theme: widget.theme,
+                                        font: widget.font,
+                                      );
                                     }));
                                   },
                                   child: Text(
                                     "LOG IN",
-                                    style: widget.font.getPoppinsTextStyle(
-                                        color: widget.theme.primaryAccent3,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        letterSpacing: 0),
+                                    style: widget.font.getPoppinsTextStyle(color: widget.theme.primaryAccent3, fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 0),
                                   ))
                             ],
                           ),
@@ -220,11 +156,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
             );
           } else {
-            return Scaffold(
-                backgroundColor: widget.theme.mainBackground,
-                body: Center(
-                    child: CircularProgressIndicator(
-                        color: widget.theme.textPrimary)));
+            return Scaffold(backgroundColor: widget.theme.mainBackground, body: Center(child: CircularProgressIndicator(color: widget.theme.textPrimary)));
           }
         },
       ),
