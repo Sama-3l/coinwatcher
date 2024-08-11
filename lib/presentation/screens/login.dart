@@ -101,6 +101,13 @@ class _LoginPageState extends State<LoginPage> {
                                   } else {
                                     email.clear();
                                     password.clear();
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      backgroundColor: widget.theme.error,
+                                      content: Text(
+                                        "Error: Invalid password or username",
+                                        style: widget.font.getPoppinsTextStyle(color: widget.theme.textPrimary, fontSize: 17, fontWeight: FontWeight.w500, letterSpacing: 0),
+                                      ),
+                                    ));
                                   }
                                 },
                                 child: Padding(

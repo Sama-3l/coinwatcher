@@ -1,18 +1,23 @@
-import 'dart:convert';
-
 import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/themes.dart';
-import 'package:coinwatcher/data/model/month.dart';
 import 'package:coinwatcher/data/repositories/allExpenses.dart';
-import 'package:coinwatcher/data/repositories/categories.dart';
 import 'package:coinwatcher/data/repositories/months.dart';
 import 'package:coinwatcher/data/repositories/recentExpenses.dart';
-import 'package:flutter/material.dart';
 
 import '../repositories/days.dart';
 
 class User {
-  User({required this.id, required this.name, required this.email, required this.dailyBudget, required this.thisMonthSpent, required this.allExpenses, required this.recentExpenses, required this.monthsDB, required this.daysDB});
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.dailyBudget,
+    required this.thisMonthSpent,
+    required this.allExpenses,
+    required this.recentExpenses,
+    required this.monthsDB,
+    required this.daysDB,
+  });
 
   String id;
   String name;

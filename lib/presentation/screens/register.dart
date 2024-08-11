@@ -112,6 +112,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                                 currentUser: currentUser,
                                               );
                                             }));
+                                          } else {
+                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                              backgroundColor: widget.theme.error,
+                                              content: Text(
+                                                "Error: Invalid password or username",
+                                                style: widget.font.getPoppinsTextStyle(color: widget.theme.textPrimary, fontSize: 17, fontWeight: FontWeight.w500, letterSpacing: 0),
+                                              ),
+                                            ));
                                           }
                                         }
                                       },

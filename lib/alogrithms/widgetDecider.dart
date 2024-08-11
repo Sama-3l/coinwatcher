@@ -31,10 +31,10 @@ class WidgetDecider {
           ));
 
           columnChildren.add(Padding(
-            padding: const EdgeInsets.only(left: 8, bottom: 12),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
             child: Text(
               func.getMonthandYear(date: currentUser.recentExpenses.recentExpenses[0].date),
-              style: font.getPoppinsTextStyle(color: theme.textSecondary, fontSize: 18, fontWeight: FontWeight.w600, letterSpacing: 1),
+              style: font.getPoppinsTextStyle(color: theme.textSecondary, fontSize: 24, fontWeight: FontWeight.w600, letterSpacing: 1),
             ),
           ));
         }

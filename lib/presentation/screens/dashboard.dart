@@ -47,7 +47,7 @@ class _DashboardState extends State<Dashboard> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(top: 30, left: 21, right: 21),
+            padding: const EdgeInsets.only(top: 16, left: 21, right: 21),
             child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.min, children: [
               GestureDetector(
                 onTap: () async {

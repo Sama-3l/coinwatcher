@@ -9,6 +9,7 @@ import 'package:coinwatcher/data/model/expense.dart';
 import 'package:coinwatcher/data/model/user.dart';
 import 'package:coinwatcher/presentation/widgets/expenseInputField.dart';
 import 'package:coinwatcher/services/server.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -67,26 +68,33 @@ class _ExpenseAddState extends State<ExpenseAdd> {
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.only(left: 21, right: 21, top: widget.edit ? 0 : MediaQuery.of(context).size.height * 0.05),
+                      padding: EdgeInsets.only(left: 16, right: 21, top: MediaQuery.of(context).size.height * 0.02),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          widget.edit
-                              ? Padding(
-                                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02),
-                                  child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: IconButton(
-                                          onPressed: () {
-                                            func.deleteExpense(widget.currentUser, widget.expense, context);
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => Navigator.of(context).pop(),
+                                  child: Icon(CupertinoIcons.back, color: widget.theme.textPrimary, size: 30),
+                                ),
+                                widget.edit ? Spacer() : Container(),
+                                widget.edit
+                                    ? IconButton(
+                                        onPressed: () {
+                                          func.deleteExpense(widget.currentUser, widget.expense, context);
 
-                                            ServerAccess sa = ServerAccess();
-                                            sa.editExpenseList(widget.currentUser);
-                                          },
-                                          icon: Icon(CarbonIcons.trash_can, color: widget.theme.error, size: 30))),
-                                )
-                              : Container(),
+                                          ServerAccess sa = ServerAccess();
+                                          sa.editExpenseList(widget.currentUser);
+                                        },
+                                        icon: Icon(CarbonIcons.trash_can, color: widget.theme.error, size: 30))
+                                    : Container(),
+                              ],
+                            ),
+                          ),
                           wd.textWidget('Expense Name', widget.font, widget.theme, 18),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 30),
@@ -213,7 +221,7 @@ class _ExpenseAddState extends State<ExpenseAdd> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                                   child: Text(
-                                    'Add',
+                                    'add',
                                     style: widget.font.getPoppinsTextStyle(color: widget.theme.textPrimary, fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 1),
                                   ),
                                 )),
