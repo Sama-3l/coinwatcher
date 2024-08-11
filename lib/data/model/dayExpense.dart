@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: file_names
 
-class DayExpense{
+class DayExpense {
   DayExpense({required this.date, required this.amount});
 
   DateTime date;
   double amount;
 
-  Map<String, String> toJSON(){
+  Map<String, String> toJSON() {
     return {
-      "date" : '${date.year}-${date.month}-${date.day}',
-      "amount" : amount.toString()
+      "date": '${date.year}-${date.month}-${date.day}',
+      "amount": amount.toString()
     };
   }
 }

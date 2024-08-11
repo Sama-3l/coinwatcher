@@ -11,15 +11,13 @@ class PasswordTextField extends StatefulWidget {
   final void Function(bool isValid) onPasswordValidityChanged;
   TextEditingController password;
 
-  PasswordTextField(
-      {required this.onPasswordValidityChanged, required this.password});
+  PasswordTextField({required this.onPasswordValidityChanged, required this.password});
 
   @override
   _PasswordTextFieldState createState() => _PasswordTextFieldState();
 }
 
-class _PasswordTextFieldState extends State<PasswordTextField>
-    with TickerProviderStateMixin {
+class _PasswordTextFieldState extends State<PasswordTextField> with TickerProviderStateMixin {
   late final _passwordController = widget.password;
   final _focusNode = FocusNode();
   late AnimationController _animationController;
@@ -67,7 +65,6 @@ class _PasswordTextFieldState extends State<PasswordTextField>
 
   @override
   void dispose() {
-    _passwordController.dispose();
     _focusNode.dispose();
     _animationController.dispose();
     super.dispose();
@@ -88,11 +85,7 @@ class _PasswordTextFieldState extends State<PasswordTextField>
   void _checkPasswordValidity(String value) {
     setState(() {
       // Check if the password meets all the conditions
-      _isPasswordValid = value.length >= 8 &&
-          value.contains(RegExp(r'[A-Z]')) &&
-          value.contains(RegExp(r'[a-z]')) &&
-          value.contains(RegExp(r'[0-9]')) &&
-          value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+      _isPasswordValid = value.length >= 8 && value.contains(RegExp(r'[A-Z]')) && value.contains(RegExp(r'[a-z]')) && value.contains(RegExp(r'[0-9]')) && value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
 
       conditionsMet[0] = value.contains(RegExp(r'[A-Z]'));
       conditionsMet[1] = value.contains(RegExp(r'[a-z]'));
@@ -106,8 +99,7 @@ class _PasswordTextFieldState extends State<PasswordTextField>
 
   void _togglePasswordVisibility() {
     _isPasswordVisible = !_isPasswordVisible;
-    BlocProvider.of<PasswordVisibilityBloc>(context)
-        .add(VisibilityChangedEvent());
+    BlocProvider.of<PasswordVisibilityBloc>(context).add(VisibilityChangedEvent());
   }
 
   void _showPasswordConditions() {
@@ -119,8 +111,7 @@ class _PasswordTextFieldState extends State<PasswordTextField>
   void _hidePasswordConditions() {
     // Hide the password conditions
     setState(() {
-      _isPasswordValid =
-          true; // Set to true so that it won't show the error state immediately after losing focus
+      _isPasswordValid = true; // Set to true so that it won't show the error state immediately after losing focus
     });
   }
 
@@ -139,19 +130,11 @@ class _PasswordTextFieldState extends State<PasswordTextField>
             focusNode: _focusNode,
             obscureText: !_isPasswordVisible,
             onChanged: _checkPasswordValidity,
-            style: font.getPoppinsTextStyle(
-                color: theme.textPrimary,
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-                letterSpacing: -0.41),
+            style: font.getPoppinsTextStyle(color: theme.textPrimary, fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: -0.41),
             decoration: InputDecoration(
               hintText: "Password",
               border: InputBorder.none,
-              hintStyle: font.getPoppinsTextStyle(
-                  color: theme.textHint,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: -0.41),
+              hintStyle: font.getPoppinsTextStyle(color: theme.textHint, fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: -0.41),
               fillColor: Colors.transparent,
               filled: true,
               suffixIcon: IconButton(
@@ -192,44 +175,21 @@ class _PasswordTextFieldState extends State<PasswordTextField>
                                     padding: const EdgeInsets.only(bottom: 4),
                                     child: Text(
                                       "Password must contain:",
-                                      style: font.getPoppinsTextStyle(
-                                          color: theme.textPrimary,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: -0.41),
+                                      style: font.getPoppinsTextStyle(color: theme.textPrimary, fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: -0.41),
                                     ),
                                   ),
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: List.generate(conditions.length,
-                                        (index) {
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: List.generate(conditions.length, (index) {
                                       return Row(
                                         mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 10),
-                                            child: Text(
-                                                "${conditionsMet[index] ? '✓' : '❌'}",
-                                                style: font.getPoppinsTextStyle(
-                                                    fontSize: 11,
-                                                    fontWeight: FontWeight.w500,
-                                                    letterSpacing: -0.41,
-                                                    color: conditionsMet[index]
-                                                        ? Colors.green
-                                                        : theme.error)),
+                                            padding: const EdgeInsets.only(right: 10),
+                                            child: Text("${conditionsMet[index] ? '✓' : '❌'}", style: font.getPoppinsTextStyle(fontSize: 11, fontWeight: FontWeight.w500, letterSpacing: -0.41, color: conditionsMet[index] ? Colors.green : theme.error)),
                                           ),
-                                          Text("${conditions[index]}",
-                                              style: font.getPoppinsTextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w500,
-                                                  letterSpacing: -0.41,
-                                                  color: conditionsMet[index]
-                                                      ? Colors.green
-                                                      : theme.error)),
+                                          Text("${conditions[index]}", style: font.getPoppinsTextStyle(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: -0.41, color: conditionsMet[index] ? Colors.green : theme.error)),
                                         ],
                                       );
                                     }),

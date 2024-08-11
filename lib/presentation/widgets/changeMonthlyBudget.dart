@@ -1,6 +1,4 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:ffi';
+// ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:coinwatcher/alogrithms/method.dart';
@@ -85,7 +83,7 @@ class _ChangeBudgetState extends State<ChangeBudget> {
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 24, right: 24, top: 10, bottom: 10),
                                     child: Text(
-                                      'Add',
+                                      'add',
                                       style: widget.font.getPoppinsTextStyle(color: widget.theme.textPrimary, fontSize: 20, fontWeight: FontWeight.w500, letterSpacing: 1),
                                     ),
                                   )),
