@@ -4,8 +4,6 @@ import 'package:coinwatcher/alogrithms/method.dart';
 import 'package:coinwatcher/constants/font.dart';
 import 'package:coinwatcher/constants/themes.dart';
 import 'package:coinwatcher/data/model/user.dart';
-import 'package:coinwatcher/data/repositories/allExpenses.dart';
-import 'package:coinwatcher/data/repositories/recentExpenses.dart';
 import 'package:coinwatcher/presentation/widgets/changeMonthlyBudget.dart';
 import 'package:coinwatcher/presentation/widgets/trackerText.dart';
 import 'package:coinwatcher/routes/monthlyPopUpRoute.dart';
@@ -13,11 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class SpendingsTracker extends StatefulWidget {
-  SpendingsTracker(
-      {super.key,
-      required this.theme,
-      required this.font,
-      required this.currentUser});
+  SpendingsTracker({super.key, required this.theme, required this.font, required this.currentUser});
 
   LightMode theme;
   FontFamily font;
@@ -33,36 +27,19 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          color: widget.theme.primaryAccent2,
-          borderRadius: BorderRadius.circular(15)),
+      decoration: BoxDecoration(color: widget.theme.primaryAccent2, borderRadius: BorderRadius.circular(15)),
       child: Padding(
-        padding:
-            const EdgeInsets.only(top: 20, right: 30, left: 30, bottom: 30),
+        padding: const EdgeInsets.only(top: 20, right: 30, left: 30, bottom: 30),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TrackerText(
-                  amount: func.currentMonthSpent(widget.currentUser),
-                  isTotal: false,
-                  theme: widget.theme,
-                  font: widget.font),
+              TrackerText(amount: func.currentMonthSpent(widget.currentUser), isTotal: false, theme: widget.theme, font: widget.font),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(HeroDialogPoPRoute(
-                      builder: (context) => Align(
-                          alignment: Alignment.bottomCenter,
-                          child: ChangeBudget(
-                              currentUser: widget.currentUser,
-                              theme: widget.theme,
-                              font: widget.font))));
+                  Navigator.of(context).push(HeroDialogPoPRoute(builder: (context) => Align(alignment: Alignment.bottomCenter, child: ChangeBudget(currentUser: widget.currentUser, theme: widget.theme, font: widget.font))));
                 },
-                child: TrackerText(
-                    amount: func.monthlyBudget(widget.currentUser.dailyBudget),
-                    isTotal: true,
-                    theme: widget.theme,
-                    font: widget.font),
+                child: TrackerText(amount: func.monthlyBudget(widget.currentUser.dailyBudget), isTotal: true, theme: widget.theme, font: widget.font),
               ),
             ],
           ),
@@ -71,29 +48,10 @@ class _SpendingsTrackerState extends State<SpendingsTracker> {
             child: LinearPercentIndicator(
               padding: EdgeInsets.zero,
               lineHeight: 14.0,
-              percent: (func.currentMonthSpent(widget.currentUser) /
-                          (func.monthlyBudget(widget.currentUser.dailyBudget) ==
-                                  0
-                              ? 1
-                              : func.monthlyBudget(
-                                  widget.currentUser.dailyBudget))) >
-                      1
-                  ? 1
-                  : func.currentMonthSpent(widget.currentUser) /
-                      (func.monthlyBudget(widget.currentUser.dailyBudget) == 0
-                          ? 1
-                          : func.monthlyBudget(widget.currentUser.dailyBudget)),
+              percent: (func.currentMonthSpent(widget.currentUser) / (func.monthlyBudget(widget.currentUser.dailyBudget) == 0 ? 1 : func.monthlyBudget(widget.currentUser.dailyBudget))) > 1 ? 1 : func.currentMonthSpent(widget.currentUser) / (func.monthlyBudget(widget.currentUser.dailyBudget) == 0 ? 1 : func.monthlyBudget(widget.currentUser.dailyBudget)),
               barRadius: Radius.circular(7),
               backgroundColor: widget.theme.mainBackground,
-              progressColor: (func.currentMonthSpent(widget.currentUser) /
-                          (func.monthlyBudget(widget.currentUser.dailyBudget) ==
-                                  0
-                              ? 1
-                              : func.monthlyBudget(
-                                  widget.currentUser.dailyBudget))) >
-                      1
-                  ? widget.theme.error
-                  : widget.theme.primaryAccent3,
+              progressColor: (func.currentMonthSpent(widget.currentUser) / (func.monthlyBudget(widget.currentUser.dailyBudget) == 0 ? 1 : func.monthlyBudget(widget.currentUser.dailyBudget))) > 1 ? widget.theme.error : widget.theme.primaryAccent3,
             ),
           ),
         ]),

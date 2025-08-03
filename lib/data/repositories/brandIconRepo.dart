@@ -18,7 +18,6 @@ class Brands {
       "Target": SimpleIcons.target,
       "Samsung": SimpleIcons.samsung,
       "Apple": SimpleIcons.apple,
-      "Microsoft": SimpleIcons.microsoft,
       "Sony": SimpleIcons.sony,
       "HP": SimpleIcons.hp,
       "Dell": SimpleIcons.dell,
@@ -30,7 +29,6 @@ class Brands {
       "Coursera": SimpleIcons.coursera,
       "Pluralsight": SimpleIcons.pluralsight,
       "edX": SimpleIcons.edx,
-      "LinkedIn": SimpleIcons.linkedin,
     };
   }
 }

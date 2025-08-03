@@ -22,7 +22,6 @@ import 'package:intl/intl.dart';
 import '../business_logic/blocs/datePicker/date_picker_bloc.dart';
 import '../business_logic/blocs/updateExpense/update_expense_bloc.dart';
 import '../data/repositories/months.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 class Methods {
   String getMonthandYear({required DateTime date, bool commaReq = true}) {
@@ -141,16 +140,21 @@ class Methods {
         if (DateTime.now().month == allExpenses[i].date.month) {
           currentUser.thisMonthSpent = currentUser.thisMonthSpent + allExpenses[i].amount;
         }
+
         if (currentUser.monthsDB.allMonths.isNotEmpty) {
           if (currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] != null) {
-            currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)]!.totalSpent = currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)]!.totalSpent + allExpenses[i].amount;
+            currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)]!.totalSpent = currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)]!.totalSpent;
             loadCategories(currentUser, allExpenses[i]);
           } else {
             currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] = Month(date: DateTime(allExpenses[i].date.year, allExpenses[i].date.month), totalSpent: allExpenses[i].amount, categories: Categories(theme: theme));
             addMonthnCategories(currentUser, allExpenses[i], theme);
           }
         } else {
-          currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] = Month(date: DateTime(allExpenses[i].date.year, allExpenses[i].date.month), totalSpent: allExpenses[i].amount, categories: Categories(theme: theme));
+          currentUser.monthsDB.allMonths[monthCommaYear(allExpenses[i].date)] = Month(
+            date: DateTime(allExpenses[i].date.year, allExpenses[i].date.month),
+            totalSpent: 0,
+            categories: Categories(theme: theme),
+          );
           addMonthnCategories(currentUser, allExpenses[i], theme);
         }
       }
@@ -195,8 +199,10 @@ class Methods {
   void addToDayDb(UserModel.User currentUser) {
     List<Expense> allExpenses = currentUser.allExpenses.allExpenses;
     currentUser.daysDB.allDays.clear();
-    for (int i = 0; i < 10; i++) {
-      currentUser.daysDB.allDays[allExpenses[0].date.subtract(Duration(days: i)).day.toString().padLeft(2, '0')] = DayExpense(date: allExpenses[0].date.subtract(Duration(days: i)), amount: 0.0);
+    if (allExpenses.isNotEmpty) {
+      for (int i = 0; i < 10; i++) {
+        currentUser.daysDB.allDays[allExpenses[0].date.subtract(Duration(days: i)).day.toString().padLeft(2, '0')] = DayExpense(date: allExpenses[0].date.subtract(Duration(days: i)), amount: 0.0);
+      }
     }
     for (int i = 0; i < allExpenses.length; i++) {
       if (currentUser.daysDB.allDays[allExpenses[i].date.day.toString().padLeft(2, '0')] != null) {
@@ -283,14 +289,14 @@ class Methods {
       data.add(barDataMonthly(
         month: DateFormat.MMM().format(value.date),
         spent: value.totalSpent.ceil(),
-        color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+        color: theme.foodNDrinks,
       ));
     });
     if (data.isEmpty) {
       data.add(barDataMonthly(
         month: DateFormat.MMM().format(DateTime.now()),
         spent: 0,
-        color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+        color: theme.foodNDrinks,
       ));
     }
     return data;
@@ -303,7 +309,7 @@ class Methods {
         barDataDaily(
           day: key,
           spent: value.amount.ceil(),
-          color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+          color: theme.foodNDrinks,
         ),
       );
     });
@@ -313,7 +319,7 @@ class Methods {
           barDataDaily(
             day: DateTime.now().subtract(Duration(days: i)).day.toString().padLeft(2, '0'),
             spent: 0,
-            color: charts.ColorUtil.fromDartColor(theme.foodNDrinks),
+            color: theme.foodNDrinks,
           ),
         );
       }
@@ -406,6 +412,7 @@ class Methods {
 
         // Assuming you want to return the user data
         if (userData.exists) {
+          print("HELLO");
           currentUserData = UserModel.User.parse(userData.data() as Map<String, dynamic>, theme);
         }
       }
@@ -424,9 +431,11 @@ class Methods {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     try {
       // Sign in with email and password
+      print(email);
+      print(password);
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+        email: email.toString().trim(),
+        password: password.toString().trim(),
       );
 
       // Get the signed-in user

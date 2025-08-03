@@ -40,7 +40,7 @@ class User {
       id: userInfo['_id'],
       name: userInfo['name'],
       email: userInfo['email'],
-      dailyBudget: userInfo['dailyBudget'],
+      dailyBudget: double.parse(userInfo['dailyBudget']),
       thisMonthSpent: 0.0,
       allExpenses: allExpenses,
       recentExpenses: func.getRecentExpenses(allExpenses),

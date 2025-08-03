@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
                   future: func.getLogInUserData(theme),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      return snapshot.data!.id == ""
+                      return snapshot.data == null || snapshot.data!.id == ""
                           ? LoginPage(theme: theme, font: font)
                           : Home(
                               theme: theme,

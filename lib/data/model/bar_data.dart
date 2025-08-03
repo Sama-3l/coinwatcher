@@ -1,9 +1,9 @@
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'dart:ui';
 
 class barDataMonthly {
   final String month;
   final int spent;
-  final charts.Color color;
+  final Color color;
 
   barDataMonthly({
     required this.month,
@@ -15,7 +15,7 @@ class barDataMonthly {
 class barDataDaily {
   final String day;
   final int spent;
-  final charts.Color color;
+  final Color color;
 
   barDataDaily({
     required this.day,
